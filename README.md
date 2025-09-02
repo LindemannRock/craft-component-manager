@@ -17,6 +17,17 @@ Advanced Twig component management plugin for Craft CMS 5.x with comprehensive C
 - ✅ **Console Commands** - Sync and refresh components via CLI
 - ✅ **Usage Tracking** - Track component usage and statistics
 
+## Development Status
+
+⚠️ **Active Development** - This plugin is currently in active development with some features still being refined:
+
+- **Documentation Generation** - Advanced doc parsing and CP presentation being finalized
+- **Live Preview System** - Component preview interface still in development
+- **Usage Analytics** - Component usage tracking and statistics in development
+- **Performance Optimization** - Caching and performance features being refined
+
+Core component functionality (parsing, rendering, prop validation) is stable and ready for use.
+
 ## Requirements
 
 - Craft CMS 5.0.0 or later
