@@ -1,0 +1,70 @@
+{% extends "twig-component-manager/_layouts/settings" %}
+{% set title = "Paths & Files"|t('twig-component-manager') %}
+{% set fullPageForm = true %}
+{% set selectedSubnavItem = 'paths' %}
+
+{% set crumbs = [
+    {
+        label: pluginName ?? 'Twig Component Manager',
+        url: url('twig-component-manager'),
+    },
+    {
+        label: 'Settings'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings'),
+    },
+    {
+        label: 'Paths & Files'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings/paths'),
+    },
+] %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    <h2>{{ 'Paths & Files'|t('twig-component-manager') }}</h2>
+    
+    <form method="post" accept-charset="UTF-8">
+        {{ csrfInput() }}
+        {{ actionInput('twig-component-manager/settings/save') }}
+        {{ redirectInput('twig-component-manager/settings/paths') }}
+        
+        {{ forms.textareaField({
+            label: 'Component Paths'|t('twig-component-manager'),
+            instructions: 'Paths to search for components (one per line, relative to templates folder)'|t('twig-component-manager'),
+            id: 'componentPaths',
+            name: 'componentPaths',
+            value: settings.componentPaths|join("\n"),
+            rows: 4,
+            placeholder: "_components\ncomponents\nsrc/components",
+            warning: settings.isOverridden('componentPaths') ? 'This is being overridden by the `componentPaths` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('componentPaths'),
+            errors: settings.getErrors('componentPaths')
+        }) }}
+
+        {{ forms.autosuggestField({
+            label: 'Default Path'|t('twig-component-manager'),
+            instructions: 'Default path for components (relative to templates folder)'|t('twig-component-manager'),
+            id: 'defaultPath',
+            name: 'defaultPath',
+            value: settings.defaultPath,
+            placeholder: '_components',
+            suggestEnvVars: true,
+            suggestAliases: true,
+            warning: settings.isOverridden('defaultPath') ? 'This is being overridden by the `defaultPath` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('defaultPath'),
+            errors: settings.getErrors('defaultPath')
+        }) }}
+
+        {{ forms.textField({
+            label: 'Component Extension'|t('twig-component-manager'),
+            instructions: 'File extension for component files'|t('twig-component-manager'),
+            id: 'componentExtension',
+            name: 'componentExtension',
+            value: settings.componentExtension,
+            placeholder: 'twig',
+            warning: settings.isOverridden('componentExtension') ? 'This is being overridden by the `componentExtension` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('componentExtension'),
+            errors: settings.getErrors('componentExtension')
+        }) }}
+    </form>
+{% endblock %}

@@ -1,0 +1,1211 @@
+{% extends "_layouts/cp" %}
+{% set selectedSubnavItem = 'components' %}
+
+{# Create nice display name from component name #}
+{% set displayName = component.name|split('/')|last|split('-')|map(word => word|capitalize)|join(' ') %}
+
+{% set title = (component.category ?? 'Component') ~ ': ' ~ displayName %}
+
+{% set crumbs = [
+    {
+        label: pluginName ?? 'Twig Component Manager',
+        url: url('twig-component-manager'),
+    },
+    {
+        label: 'Components'|t('twig-component-manager'),
+        url: url('twig-component-manager/components'),
+    },
+    {
+        label: displayName,
+        url: url('twig-component-manager/component/' ~ component.name),
+    },
+] %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <button class="btn" onclick="navigator.clipboard.writeText('{% verbatim %}{% x:{% endverbatim %}{{ component.name }}{% verbatim %} %}{% endx %}{% endverbatim %}')">
+            {{ 'Copy Usage'|t('twig-component-manager') }}
+        </button>
+    </div>
+{% endblock %}
+
+{# Define tabs for Craft's native tabs system #}
+{% set tabs = {} %}
+
+{# Always show preview first #}
+{% set tabs = tabs|merge({
+    preview: {
+        label: 'Live Preview'|t('twig-component-manager'),
+        url: '#preview'
+    }
+}) %}
+
+{% if documentation.examples|length > 0 %}
+    {% set tabs = tabs|merge({
+        examples: {
+            label: 'Examples'|t('twig-component-manager'),
+            url: '#examples'
+        }
+    }) %}
+{% endif %}
+
+{% if documentation.props|length > 0 %}
+    {% set tabs = tabs|merge({
+        props: {
+            label: 'Props'|t('twig-component-manager'),
+            url: '#props'
+        }
+    }) %}
+{% endif %}
+
+{% if documentation.slots|length > 0 %}
+    {% set tabs = tabs|merge({
+        slots: {
+            label: 'Slots'|t('twig-component-manager'),
+            url: '#slots'
+        }
+    }) %}
+{% endif %}
+
+{% set tabs = tabs|merge({
+    source: {
+        label: 'Source Code'|t('twig-component-manager'),
+        url: '#source'
+    }
+}) %}
+
+{% if documentation.usage|length > 0 %}
+    {% set tabs = tabs|merge({
+        usage: {
+            label: 'Usage Notes'|t('twig-component-manager'),
+            url: '#usage'
+        }
+    }) %}
+{% endif %}
+
+{% import "_includes/forms" as forms %}
+
+
+{% block content %}
+    <div class="component-detail">
+        {# Component Header #}
+        <div class="component-header">
+            {% if component.description %}
+                <p class="component-description">{{ component.description }}</p>
+            {% endif %}
+            
+            {# Metadata badges #}
+            <div class="component-meta">
+                {% if component.category %}
+                    <span class="meta-badge category">{{ component.category }}</span>
+                {% endif %}
+                {% if component.metadata is defined %}
+                    {% if component.metadata.version is defined %}
+                        <span class="meta-badge version">v{{ component.metadata.version }}</span>
+                    {% endif %}
+                    {% if component.metadata.author is defined %}
+                        <span class="meta-badge author">{{ component.metadata.author }}</span>
+                    {% endif %}
+                    {% if component.metadata.tags is defined and component.metadata.tags %}
+                        {% for tag in component.metadata.tags %}
+                            <span class="meta-badge tag">{{ tag }}</span>
+                        {% endfor %}
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <div class="component-path">
+                <strong>Path:</strong> <code>{{ component.relativePath }}</code>
+            </div>
+        </div>
+        
+        <hr>
+        
+        {# Tab Content #}
+        <div>
+            {# Preview is always first #}
+            {% set firstTab = 'preview' %}
+            
+            {# Live Preview Tab #}
+            <div id="preview">
+                <div class="preview-controls">
+                    {# Top control bar #}
+                    <div class="preview-top-bar">
+                        {# Variant selector #}
+                        {% if documentation.examples|length > 0 %}
+                            <div class="preview-variant-select">
+                                <label for="variant-select">{{ 'Example'|t('twig-component-manager') }}:</label>
+                                <select id="variant-select" class="select">
+                                    <option value="default">{{ 'Default'|t('twig-component-manager') }}</option>
+                                    {% for example in documentation.examples %}
+                                        <option value="{{ example.id ?? ('example-' ~ loop.index) }}">{{ example.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+                        
+                        {# Device viewport buttons - using custom SVG icons #}
+                        <div class="preview-device-buttons">
+                            <button class="device-btn active" data-viewport="desktop" title="Desktop">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                                </svg>
+                            </button>
+                            <button class="device-btn" data-viewport="tablet" title="Tablet (768px)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </button>
+                            <button class="device-btn" data-viewport="mobile" title="Mobile (375px)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        {# Width display #}
+                        <div class="preview-width-display">
+                            <span id="preview-width">100%</span>
+                        </div>
+                        
+                        {# Additional controls #}
+                        <div class="preview-extra-controls">
+                            {# Theme toggle #}
+                            <button id="theme-toggle" class="icon-btn" title="Toggle dark mode">
+                                <svg class="theme-light-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                </svg>
+                                <svg class="theme-dark-icon" style="display: none;" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                            </button>
+                            
+                            {# Refresh button #}
+                            <button id="refresh-preview" class="icon-btn" title="Refresh preview">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                {# Preview iframe with resizable container #}
+                <div class="preview-wrapper">
+                    <div class="preview-frame-container resizable" id="preview-container">
+                        {# Resize handle on the right side #}
+                        <div class="resize-handle" id="resize-handle" title="Drag to resize">
+                            <div class="resize-handle-bar"></div>
+                        </div>
+                        
+                        {% set defaultProps = documentation.examples[0].props ?? {} %}
+                        {% set defaultPropsJson = defaultProps|json_encode %}
+                        {# Use actionUrl properly with parameters #}
+                        {% set iframeUrl = actionUrl('twig-component-manager/preview/iframe', {
+                            component: component.name,
+                            props: defaultPropsJson,
+                            content: ''
+                        }) %}
+                        <iframe 
+                            id="component-preview"
+                            src="{{ iframeUrl }}"
+                            style="width: 100%; height: 500px; border: none; background: white;">
+                        </iframe>
+                    </div>
+                </div>
+                
+                {# Interactive prop editor #}
+                {% if documentation.props|length > 0 %}
+                    <div class="prop-editor" style="margin-top: 20px;">
+                        <h3>{{ 'Edit Props'|t('twig-component-manager') }}</h3>
+                        <div class="prop-fields">
+                            {% for prop in documentation.props %}
+                                <div class="field" style="margin-bottom: 12px;">
+                                    <div class="heading">
+                                        <label for="prop-{{ prop.name }}">
+                                            {{ prop.name }}
+                                            {% if prop.required %}
+                                                <span class="required">*</span>
+                                            {% endif %}
+                                        </label>
+                                        {% if prop.description %}
+                                            <div class="instructions">{{ prop.description }}</div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="input">
+                                        {% if prop.enum is defined and prop.enum %}
+                                            <select id="prop-{{ prop.name }}" class="prop-input select" data-prop="{{ prop.name }}">
+                                                <option value="">—</option>
+                                                {% for value in prop.enum %}
+                                                    <option value="{{ value }}" {% if value == prop.default %}selected{% endif %}>{{ value }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        {% elseif prop.type == 'boolean' %}
+                                            <input type="checkbox" id="prop-{{ prop.name }}" class="prop-input" data-prop="{{ prop.name }}" {% if prop.default %}checked{% endif %}>
+                                        {% elseif prop.type == 'number' %}
+                                            <input type="number" id="prop-{{ prop.name }}" class="prop-input text" data-prop="{{ prop.name }}" value="{{ prop.default ?? '' }}">
+                                        {% else %}
+                                            <input type="text" id="prop-{{ prop.name }}" class="prop-input text" data-prop="{{ prop.name }}" value="{{ prop.default ?? '' }}">
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <button id="apply-props" class="btn submit">{{ 'Apply Changes'|t('twig-component-manager') }}</button>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {# Examples Tab #}
+            {% if documentation.examples|length > 0 %}
+                <div id="examples" {% if firstTab != 'examples' %}class="hidden"{% endif %}>
+                    <h2>{{ 'Examples'|t('twig-component-manager') }}</h2>
+                    {% for example in documentation.examples %}
+                        <div class="example-block">
+                            <h3>{{ example.title }}</h3>
+                            <div class="code-example">
+                                <pre><code class="twig-code">{{ example.code|e }}</code></pre>
+                                <button class="btn small secondary copy-code" data-code="{{ example.code|e('html_attr') }}">
+                                    {{ 'Copy'|t('twig-component-manager') }}
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            {# Props Tab #}
+            {% if documentation.props|length > 0 %}
+                <div id="props" {% if firstTab != 'props' %}class="hidden"{% endif %}>
+                    <h2>{{ 'Props'|t('twig-component-manager') }}</h2>
+                    <table class="data fullwidth">
+                        <thead>
+                            <tr>
+                                <th>{{ 'Name'|t('twig-component-manager') }}</th>
+                                <th>{{ 'Type'|t('twig-component-manager') }}</th>
+                                <th>{{ 'Required'|t('twig-component-manager') }}</th>
+                                <th>{{ 'Default'|t('twig-component-manager') }}</th>
+                                <th>{{ 'Description'|t('twig-component-manager') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prop in documentation.props %}
+                                <tr>
+                                    <td>
+                                        <code class="prop-name">{{ prop.name }}</code>
+                                    </td>
+                                    <td>
+                                        <span class="prop-type">{{ prop.type }}</span>
+                                        {% if prop.enum is defined %}
+                                            <div class="prop-enum">
+                                                {% for value in prop.enum %}
+                                                    <code class="small">{{ value }}</code>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if prop.required %}
+                                            <span class="status orange"></span> {{ 'Yes'|t('twig-component-manager') }}
+                                        {% else %}
+                                            <span class="status light"></span> {{ 'No'|t('twig-component-manager') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if prop.default is defined and prop.default is not null %}
+                                            <code>{{ prop.default }}</code>
+                                        {% else %}
+                                            <span class="light">—</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if prop.description %}
+                                            {{ prop.description }}
+                                        {% else %}
+                                            <span class="light">—</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+            
+            {# Slots Tab #}
+            {% if documentation.slots|length > 0 %}
+                <div id="slots" {% if firstTab != 'slots' %}class="hidden"{% endif %}>
+                    <h2>{{ 'Slots'|t('twig-component-manager') }}</h2>
+                    <div class="slots-list">
+                        {% for slot in documentation.slots %}
+                            <div class="slot-item">
+                                <h3>
+                                    <code>{{ slot.name }}</code>
+                                    {% if slot.required %}
+                                        <span class="status orange small">{{ 'Required'|t('twig-component-manager') }}</span>
+                                    {% endif %}
+                                </h3>
+                                {% if slot.description %}
+                                    <p>{{ slot.description }}</p>
+                                {% endif %}
+                                <div class="slot-usage">
+                                    <pre><code class="twig-code">{% verbatim %}{% slot {% endverbatim %}{{ slot.name }}{% verbatim %} %}
+    {# Your content here #}
+{% endslot %}{% endverbatim %}</code></pre>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            
+            {# Source Code Tab #}
+            <div id="source" {% if firstTab != 'source' %}class="hidden"{% endif %}>
+                <h2>{{ 'Source Code'|t('twig-component-manager') }}</h2>
+                <div class="source-code">
+                    <pre><code class="twig-code">{{ source|e }}</code></pre>
+                </div>
+            </div>
+            
+            {# Usage Notes Tab #}
+            {% if documentation.usage|length > 0 %}
+                <div id="usage" {% if firstTab != 'usage' %}class="hidden"{% endif %}>
+                    <h2>{{ 'Usage Notes'|t('twig-component-manager') }}</h2>
+                    <ul class="usage-notes">
+                        {% for note in documentation.usage %}
+                            <li>{{ note }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% css %}
+.component-detail {
+    max-width: 1400px;
+}
+
+/* Preview Controls - Modern UI like Craft & Tailwind */
+.preview-controls {
+    margin-bottom: 0;
+}
+
+.preview-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 16px;
+    background: #f7f7f8;
+    border: 1px solid #e3e5e8;
+    border-radius: 8px 8px 0 0;
+}
+
+.preview-variant-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.preview-variant-select label {
+    font-size: 13px;
+    color: #596673;
+    font-weight: 500;
+}
+
+.preview-variant-select select {
+    min-width: 200px;
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 1px solid #dcdee2;
+    border-radius: 4px;
+    background: white;
+    color: #29323d;
+}
+
+/* Device viewport buttons */
+.preview-device-buttons {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #dcdee2;
+}
+
+.device-btn {
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: #596673;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.device-btn:hover {
+    background: #f0f1f4;
+    color: #29323d;
+}
+
+.device-btn.active {
+    background: #0d78f2;
+    color: white;
+}
+
+.device-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Width display */
+.preview-width-display {
+    padding: 6px 12px;
+    background: white;
+    border: 1px solid #dcdee2;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #596673;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+}
+
+/* Extra controls */
+.preview-extra-controls {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: white;
+    border: 1px solid #dcdee2;
+    border-radius: 6px;
+    color: #596673;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background: #f0f1f4;
+    border-color: #c5c7cc;
+    color: #29323d;
+}
+
+.icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Preview wrapper and resizable container */
+.preview-wrapper {
+    background: #f7f7f8;
+    padding: 20px;
+    border: 1px solid #e3e5e8;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.preview-frame-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    background: white;
+    border: 1px solid #dcdee2;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: width 0.3s ease;
+}
+
+.preview-frame-container.resizable {
+    margin: 0 auto;
+}
+
+/* Resize handle */
+/* Modern floating resize handle */
+.resize-handle {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 80px;
+    cursor: ew-resize;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95));
+    border: 1px solid rgba(203,213,225,0.5);
+    border-radius: 20px;
+    box-shadow: 
+        0 4px 12px rgba(0,0,0,0.08), 
+        0 2px 4px rgba(0,0,0,0.04),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+}
+
+.resize-handle:hover {
+    background: linear-gradient(135deg, rgba(13,120,242,0.08), rgba(59,130,246,0.05));
+    border-color: rgba(13,120,242,0.3);
+    box-shadow: 
+        0 8px 24px rgba(13,120,242,0.12), 
+        0 4px 8px rgba(13,120,242,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.resize-handle-bar {
+    width: 2px;
+    height: 24px;
+    background: linear-gradient(to bottom, #cbd5e1, #94a3b8);
+    border-radius: 1px;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.resize-handle-bar::before,
+.resize-handle-bar::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 24px;
+    background: linear-gradient(to bottom, #cbd5e1, #94a3b8);
+    border-radius: 1px;
+    top: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.resize-handle-bar::before {
+    left: -6px;
+}
+
+.resize-handle-bar::after {
+    left: 6px;
+}
+
+.resize-handle:hover .resize-handle-bar,
+.resize-handle:hover .resize-handle-bar::before,
+.resize-handle:hover .resize-handle-bar::after {
+    background: linear-gradient(to bottom, #3b82f6, #1d4ed8);
+    height: 28px;
+    box-shadow: 0 2px 4px rgba(13,120,242,0.2);
+}
+
+.resize-handle.dragging {
+    background: linear-gradient(135deg, rgba(13,120,242,0.15), rgba(59,130,246,0.1));
+    border-color: #0d78f2;
+    box-shadow: 
+        0 12px 32px rgba(13,120,242,0.2), 
+        0 6px 12px rgba(13,120,242,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.9);
+    transform: translateY(-50%) scale(1.12);
+}
+
+.resize-handle.dragging .resize-handle-bar,
+.resize-handle.dragging .resize-handle-bar::before,
+.resize-handle.dragging .resize-handle-bar::after {
+    background: linear-gradient(to bottom, #1d4ed8, #1e40af);
+    height: 32px;
+    box-shadow: 0 3px 6px rgba(13,120,242,0.3);
+}
+
+/* Viewport presets */
+.preview-frame-container[data-viewport="mobile"] {
+    width: 375px;
+}
+
+.preview-frame-container[data-viewport="tablet"] {
+    width: 768px;
+}
+
+.preview-frame-container[data-viewport="desktop"] {
+    width: 100%;
+}
+
+.component-header {
+    margin-bottom: 30px;
+}
+
+.component-description {
+    font-size: 16px;
+    color: #3f4a5c;
+    margin-bottom: 20px;
+}
+
+.component-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.meta-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.meta-badge.category {
+    background: #e8f5ff;
+    color: #0073e6;
+}
+
+.meta-badge.version {
+    background: #f0f9ff;
+    color: #0369a1;
+}
+
+.meta-badge.author {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.meta-badge.tag {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.component-path {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+/* Examples */
+.example-block {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.example-block h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.code-example {
+    position: relative;
+    margin: 16px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.code-example h4 {
+    margin: 0 0 12px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.code-example pre,
+.code-example pre[class*="language-"] {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    margin: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.6;
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+.code-example code {
+    white-space: pre;
+    overflow-wrap: normal;
+}
+
+/* Clean code formatting with subtle highlighting via CSS */
+.twig-code {
+    color: #d4d4d4 !important;
+}
+
+.copy-code {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #d4d4d4;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-code:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+/* Props */
+.prop-name {
+    font-weight: 600;
+    color: #0d78f2;
+}
+
+.prop-type {
+    padding: 2px 6px;
+    background: #e8f5ff;
+    color: #0073e6;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.prop-enum {
+    margin-top: 5px;
+}
+
+.prop-enum code {
+    margin-right: 5px;
+    background: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: 2px;
+}
+
+/* Slots */
+.slots-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.slot-item {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.slot-item h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slot-usage pre,
+.slot-usage pre[class*="language-"] {
+    background: #2d2d30;
+    color: #d4d4d4;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 10px 0 0 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 13px;
+}
+
+/* Source Code */
+.source-code pre,
+.source-code pre[class*="language-"] {
+    background: #2d2d30;
+    color: #d4d4d4;
+    padding: 20px;
+    padding-left: 3.8em !important;
+    border-radius: 4px;
+    max-height: 600px;
+    overflow-y: auto;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.source-code code {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Usage Notes */
+.usage-notes {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.usage-notes li {
+    margin-bottom: 10px;
+}
+{% endcss %}
+
+{% js %}
+(function() {
+    // Ensure we're in the right context
+    if (!document.getElementById('component-preview')) {
+        return; // Not on component detail page
+    }
+    
+    // Wait for page to be ready
+    function initializeComponentDetail() {
+    
+    // Server-side syntax highlighting is now handled by Twig filter
+    
+    // Copy code functionality
+    document.querySelectorAll('.copy-code').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.dataset.code;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+    });
+    
+    // Store component name globally
+    const COMPONENT_NAME = '{{ component.name|e('js') }}';
+    
+    // Preview functionality
+    const previewFrame = document.getElementById('component-preview');
+    const previewContainer = document.getElementById('preview-container');
+    const variantSelect = document.getElementById('variant-select');
+    const refreshBtn = document.getElementById('refresh-preview');
+    const widthDisplay = document.getElementById('preview-width');
+    const themeToggle = document.getElementById('theme-toggle');
+    const resizeHandle = document.getElementById('resize-handle');
+    
+    let currentTheme = 'light';
+    let isResizing = false;
+    let startX = 0;
+    let startWidth = 0;
+    
+    function updatePreview() {
+        // Ensure component name is available
+        if (!COMPONENT_NAME) {
+            console.error('Component name is not defined');
+            return;
+        }
+        
+        const props = {};
+        
+        // Collect prop values
+        document.querySelectorAll('.prop-input').forEach(input => {
+            const propName = input.dataset.prop;
+            if (input.type === 'checkbox') {
+                props[propName] = input.checked;
+            } else if (input.value) {
+                props[propName] = input.value;
+            }
+        });
+        
+        console.log('Collected props for preview:', props);
+        
+        // Use Craft's actionUrl function properly
+        const params = {
+            component: COMPONENT_NAME,
+            props: JSON.stringify(props),
+            variant: variantSelect ? variantSelect.value : 'default',
+            theme: currentTheme
+        };
+        
+        console.log('Sending params to iframe:', params);
+        
+        // Build the URL using Craft's format
+        const baseUrl = '{{ cpUrl('twig-component-manager/preview/iframe')|raw }}';
+        const queryString = new URLSearchParams(params).toString();
+        
+        // The baseUrl from cpUrl already includes the proper base path
+        // We need to use the action format
+        const actionPath = '{{ actionUrl('twig-component-manager/preview/iframe')|raw }}';
+        
+        // Parse the existing URL to get base components
+        const url = new URL(actionPath, window.location.origin);
+        
+        // Add our parameters
+        Object.keys(params).forEach(key => {
+            url.searchParams.set(key, params[key]);
+        });
+        
+        console.log('Final iframe URL:', url.toString());
+        previewFrame.src = url.toString();
+    }
+    
+    function updateWidth() {
+        const width = previewContainer.offsetWidth;
+        const parentWidth = previewContainer.parentElement.offsetWidth;
+        const percentage = Math.round((width / parentWidth) * 100);
+        widthDisplay.textContent = width + 'px';
+    }
+    
+    // Device viewport buttons
+    document.querySelectorAll('.device-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            const viewport = this.dataset.viewport;
+            previewContainer.style.transition = 'width 0.3s ease';
+            
+            switch(viewport) {
+                case 'mobile':
+                    previewContainer.style.width = '375px';
+                    break;
+                case 'tablet':
+                    previewContainer.style.width = '768px';
+                    break;
+                default:
+                    previewContainer.style.width = '100%';
+            }
+            
+            setTimeout(updateWidth, 300);
+        });
+    });
+    
+    // Event listeners
+    if (variantSelect) {
+        variantSelect.addEventListener('change', function() {
+            // Load example props when variant changes
+            const variant = this.value;
+            const examples = {{ documentation.examples|json_encode|raw }};
+            
+            console.log('Selected variant:', variant);
+            console.log('Available examples:', examples);
+            
+            // Clear all props first
+            document.querySelectorAll('.prop-input').forEach(input => {
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            
+            if (variant !== 'default') {
+                // Find example data - match by ID
+                let example = null;
+                for (let i = 0; i < examples.length; i++) {
+                    const exampleId = examples[i].id || 'example-' + (i + 1);
+                    console.log('Checking example ID:', exampleId, 'against variant:', variant);
+                    if (exampleId === variant) {
+                        example = examples[i];
+                        console.log('Found matching example:', example);
+                        break;
+                    }
+                }
+                
+                if (example && example.props) {
+                    console.log('Setting props:', example.props);
+                    // Set prop values from the example
+                    Object.entries(example.props).forEach(([key, value]) => {
+                        const input = document.querySelector(`[data-prop="${key}"]`);
+                        if (input) {
+                            if (input.type === 'checkbox') {
+                                input.checked = !!value;
+                            } else {
+                                input.value = value;
+                            }
+                            console.log('Set prop', key, 'to', value);
+                        } else {
+                            console.log('Could not find input for prop:', key);
+                        }
+                    });
+                } else {
+                    console.log('No props found for example');
+                }
+            }
+            
+            // Update the preview with the new props
+            updatePreview();
+        });
+    }
+    
+    // Theme toggle
+    if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Toggle icons
+            const lightIcon = this.querySelector('.theme-light-icon');
+            const darkIcon = this.querySelector('.theme-dark-icon');
+            
+            if (currentTheme === 'dark') {
+                lightIcon.style.display = 'none';
+                darkIcon.style.display = 'block';
+            } else {
+                lightIcon.style.display = 'block';
+                darkIcon.style.display = 'none';
+            }
+            
+            updatePreview();
+        });
+    }
+    
+    // Resize handle functionality
+    if (resizeHandle) {
+        let dragOverlay;
+        
+        function createDragOverlay() {
+            if (dragOverlay) return dragOverlay;
+            
+            dragOverlay = document.createElement('div');
+            dragOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 9999;
+                cursor: ew-resize;
+                background: transparent;
+                pointer-events: auto;
+                display: none;
+            `;
+            document.body.appendChild(dragOverlay);
+            return dragOverlay;
+        }
+        
+        function startResize(e) {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = previewContainer.offsetWidth;
+            
+            // Prepare UI for dragging
+            previewContainer.style.transition = 'none';
+            resizeHandle.classList.add('dragging');
+            document.body.style.cursor = 'ew-resize';
+            document.body.style.userSelect = 'none';
+            document.body.style.webkitUserSelect = 'none';
+            
+            // Show overlay to capture all mouse events
+            const overlay = createDragOverlay();
+            overlay.style.display = 'block';
+            
+            // Add event listeners to overlay for better event capture
+            overlay.addEventListener('mousemove', handleResize);
+            overlay.addEventListener('mouseup', endResize);
+            
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        function handleResize(e) {
+            if (!isResizing) return;
+            
+            requestAnimationFrame(() => {
+                const diff = e.clientX - startX;
+                const newWidth = startWidth + diff;
+                const parentWidth = previewContainer.parentElement.offsetWidth;
+                
+                // Limit width between 320px and parent width
+                if (newWidth >= 320 && newWidth <= parentWidth) {
+                    previewContainer.style.width = newWidth + 'px';
+                    updateWidth();
+                    
+                    // Update active device button based on width
+                    document.querySelectorAll('.device-btn').forEach(b => b.classList.remove('active'));
+                    if (newWidth <= 400) {
+                        document.querySelector('[data-viewport="mobile"]')?.classList.add('active');
+                    } else if (newWidth <= 800) {
+                        document.querySelector('[data-viewport="tablet"]')?.classList.add('active');
+                    } else {
+                        document.querySelector('[data-viewport="desktop"]')?.classList.add('active');
+                    }
+                }
+            });
+        }
+        
+        function endResize() {
+            if (!isResizing) return;
+            
+            isResizing = false;
+            resizeHandle.classList.remove('dragging');
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
+            document.body.style.webkitUserSelect = '';
+            previewContainer.style.transition = '';
+            
+            // Hide overlay and clean up events
+            if (dragOverlay) {
+                dragOverlay.style.display = 'none';
+                dragOverlay.removeEventListener('mousemove', handleResize);
+                dragOverlay.removeEventListener('mouseup', endResize);
+            }
+        }
+        
+        // Start drag on handle mousedown
+        resizeHandle.addEventListener('mousedown', startResize);
+        
+        // Backup cleanup on document events
+        document.addEventListener('mouseup', endResize);
+        document.addEventListener('mouseleave', endResize);
+    }
+    
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', updatePreview);
+    }
+    
+    // Initialize width display
+    updateWidth();
+    
+    // Check if apply props button exists (from prop editor)
+    const applyPropsBtn = document.getElementById('apply-props');
+    if (applyPropsBtn) {
+        applyPropsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            updatePreview();
+        });
+    }
+    
+    // Auto-update preview when prop values change
+    document.querySelectorAll('.prop-input').forEach(input => {
+        input.addEventListener('change', function() {
+            // Optional: auto-update preview on change
+            // updatePreview();
+        });
+    });
+}
+
+// Initialize when ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeComponentDetail);
+} else {
+    initializeComponentDetail();
+}
+})();
+
+// Syntax highlighting removed for now due to conflicts
+{% endjs %}

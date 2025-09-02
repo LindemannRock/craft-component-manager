@@ -1,0 +1,200 @@
+{# 
+    Twig Component Manager - Usage Examples
+    ========================================
+    
+    This file demonstrates how to use the Twig Component Manager plugin
+    with both function syntax and the various features available.
+#}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twig Component Manager - Usage Examples</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">Twig Component Manager Examples</h1>
+        
+        {# ============================================
+           BUTTON COMPONENT EXAMPLES
+           ============================================ #}
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Button Component</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Different Variants:</h3>
+                    <div class="space-x-2">
+                        {{ component('button', {label: 'Primary', variant: 'primary'}) }}
+                        {{ component('button', {label: 'Secondary', variant: 'secondary'}) }}
+                        {{ component('button', {label: 'Danger', variant: 'danger'}) }}
+                        {{ component('button', {label: 'Ghost', variant: 'ghost'}) }}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Different Sizes:</h3>
+                    <div class="space-x-2">
+                        {{ component('button', {label: 'Small', size: 'sm'}) }}
+                        {{ component('button', {label: 'Medium', size: 'md'}) }}
+                        {{ component('button', {label: 'Large', size: 'lg'}) }}
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Disabled State:</h3>
+                    {{ component('button', {label: 'Disabled Button', disabled: true}) }}
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Button as Link:</h3>
+                    {{ component('button', {label: 'Go to Google', href: 'https://google.com', variant: 'primary'}) }}
+                </div>
+            </div>
+        </section>
+        
+        {# ============================================
+           CARD COMPONENT EXAMPLES
+           ============================================ #}
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Card Component</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Basic Card:</h3>
+                    {{ component('card', {title: 'Simple Card'}) }}
+                </div>
+                
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-2">Card with Custom Shadow:</h3>
+                    {% set cardContent %}
+                        <p>This card has an extra large shadow and large padding.</p>
+                    {% endset %}
+                    {{ component('card', {
+                        title: 'Custom Styled Card',
+                        shadow: 'xl',
+                        padding: 'lg'
+                    }, cardContent) }}
+                </div>
+            </div>
+        </section>
+        
+        {# ============================================
+           ALERT COMPONENT EXAMPLES
+           ============================================ #}
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Alert Component</h2>
+            
+            <div class="space-y-4">
+                {% set infoContent %}
+                    <p>This is an informational message to help users understand something.</p>
+                {% endset %}
+                {{ component('alert', {
+                    type: 'info',
+                    title: 'Information'
+                }, infoContent) }}
+                
+                {% set successContent %}
+                    <p>Your changes have been saved successfully!</p>
+                {% endset %}
+                {{ component('alert', {
+                    type: 'success',
+                    title: 'Success',
+                    dismissible: true
+                }, successContent) }}
+                
+                {% set warningContent %}
+                    <p>Please review your input before continuing.</p>
+                {% endset %}
+                {{ component('alert', {
+                    type: 'warning',
+                    title: 'Warning',
+                    dismissible: true
+                }, warningContent) }}
+                
+                {% set errorContent %}
+                    <p>There was an error processing your request. Please try again.</p>
+                {% endset %}
+                {{ component('alert', {
+                    type: 'error',
+                    title: 'Error',
+                    dismissible: true
+                }, errorContent) }}
+            </div>
+        </section>
+        
+        {# ============================================
+           FORM INPUT COMPONENT EXAMPLES
+           ============================================ #}
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Form Input Component</h2>
+            
+            <div class="space-y-4 max-w-md">
+                {{ component('forms/input', {
+                    name: 'username',
+                    label: 'Username',
+                    placeholder: 'Enter your username',
+                    required: true,
+                    hint: 'Your username must be unique'
+                }) }}
+                
+                {{ component('forms/input', {
+                    name: 'email',
+                    label: 'Email Address',
+                    type: 'email',
+                    placeholder: 'you@example.com',
+                    required: true
+                }) }}
+                
+                {{ component('forms/input', {
+                    name: 'password',
+                    label: 'Password',
+                    type: 'password',
+                    required: true,
+                    error: 'Password must be at least 8 characters'
+                }) }}
+                
+                {{ component('forms/input', {
+                    name: 'disabled_field',
+                    label: 'Disabled Field',
+                    value: 'This field is disabled',
+                    disabled: true
+                }) }}
+            </div>
+        </section>
+        
+        {# ============================================
+           ADVANCED FEATURES
+           ============================================ #}
+        <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">Advanced Features</h2>
+            
+            <div class="prose max-w-none">
+                <h3>Component Discovery</h3>
+                <p>Total components available: <strong>{{ craft.twigComponentManager.all()|length }}</strong></p>
+                
+                <h3>Check if Component Exists</h3>
+                <pre class="bg-gray-100 p-4 rounded">
+{% verbatim %}{% if hasComponent('button') %}
+    Component exists!
+{% endif %}{% endverbatim %}
+                </pre>
+                
+                <h3>Get Component Props</h3>
+                <pre class="bg-gray-100 p-4 rounded">
+{% verbatim %}{% set buttonProps = componentProps('button') %}{% endverbatim %}
+                </pre>
+                
+                <h3>Folder Organization</h3>
+                <p>Components can be organized in folders:</p>
+                <ul>
+                    <li><code>forms/input</code> - Input component in forms folder</li>
+                    <li><code>ui/button</code> - Button in UI folder</li>
+                    <li><code>layout/card</code> - Card in layout folder</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

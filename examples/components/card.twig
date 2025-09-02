@@ -1,0 +1,76 @@
+{#
+    @description Flexible card component with header, body, and footer slots
+    @category Layout
+    @props {
+        "title": {
+            "type": "string",
+            "required": false,
+            "description": "Card title"
+        },
+        "shadow": {
+            "type": "string",
+            "enum": ["none", "sm", "md", "lg", "xl"],
+            "default": "md",
+            "description": "Shadow size"
+        },
+        "padding": {
+            "type": "string",
+            "enum": ["none", "sm", "md", "lg"],
+            "default": "md",
+            "description": "Padding size"
+        },
+        "rounded": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether to round corners"
+        }
+    }
+#}
+
+{# Set defaults #}
+{% set shadow = shadow ?? 'md' %}
+{% set padding = padding ?? 'md' %}
+{% set rounded = rounded ?? true %}
+
+{# Shadow classes #}
+{% set shadowClasses = {
+    'none': '',
+    'sm': 'shadow-sm',
+    'md': 'shadow-md',
+    'lg': 'shadow-lg',
+    'xl': 'shadow-xl'
+} %}
+
+{# Padding classes #}
+{% set paddingClasses = {
+    'none': '',
+    'sm': 'p-4',
+    'md': 'p-6',
+    'lg': 'p-8'
+} %}
+
+<div class="bg-white {{ shadowClasses[shadow] }} {{ paddingClasses[padding] }} {% if rounded %}rounded-lg{% endif %} overflow-hidden">
+    {% if title or (__slots.header is defined and __slots.header) %}
+        <div class="card-header {% if padding != 'none' %}mb-4{% endif %}">
+            {% if __slots.header is defined and __slots.header %}
+                {{ __slots.header|raw }}
+            {% elseif title %}
+                <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+            {% endif %}
+        </div>
+    {% endif %}
+    
+    <div class="card-body">
+        {% if __default_slot %}
+            {{ __default_slot|raw }}
+        {% else %}
+            <p class="text-gray-500">No content provided</p>
+        {% endif %}
+    </div>
+    
+    {% if __slots.footer is defined and __slots.footer %}
+        <div class="card-footer {% if padding != 'none' %}mt-4 pt-4 border-t border-gray-200{% endif %}">
+            {{ __slots.footer|raw }}
+        </div>
+    {% endif %}
+</div>

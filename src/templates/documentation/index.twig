@@ -1,0 +1,602 @@
+{% extends "_layouts/cp" %}
+{% set title = 'Component Library'|t('twig-component-manager') %}
+{% set selectedSubnavItem = 'documentation' %}
+
+{% set crumbs = [
+    {
+        label: pluginName ?? 'Twig Component Manager',
+        url: url('twig-component-manager'),
+    },
+    {
+        label: 'Component Library'|t('twig-component-manager'),
+        url: url('twig-component-manager/documentation'),
+    },
+] %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <button type="button" class="btn" id="view-toggle" data-view="grid">
+            <span class="view-grid">{{ 'Grid View'|t('twig-component-manager') }}</span>
+            <span class="view-list" style="display: none;">{{ 'List View'|t('twig-component-manager') }}</span>
+        </button>
+        <a href="{{ url('twig-component-manager/documentation/export') }}" class="btn">
+            {{ 'Export Docs'|t('twig-component-manager') }}
+        </a>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="component-library">
+        {% if documentation|length == 0 %}
+            <div class="zilch">
+                <h1>{{ 'No Components Found'|t('twig-component-manager') }}</h1>
+                <p>{{ 'No components have been discovered yet. Make sure your component paths are configured correctly in the settings.'|t('twig-component-manager') }}</p>
+                <a href="{{ url('twig-component-manager/settings/paths') }}" class="btn">
+                    {{ 'Configure Paths'|t('twig-component-manager') }}
+                </a>
+            </div>
+        {% else %}
+            {# Group components by category #}
+            {% set grouped = {} %}
+            {% for doc in documentation %}
+                {% set category = doc.category ?? 'Uncategorized' %}
+                {% set grouped = grouped|merge({
+                    (category): (grouped[category] ?? [])|merge([doc])
+                }) %}
+            {% endfor %}
+            
+            {# Quick Navigation #}
+            <div class="library-nav">
+                <h2>{{ 'Quick Navigation'|t('twig-component-manager') }}</h2>
+                <div class="category-pills">
+                    <button class="pill active" data-category="all">
+                        All Components
+                        <span class="count">{{ documentation|length }}</span>
+                    </button>
+                    {% for category, components in grouped %}
+                        <button class="pill" data-category="{{ category|kebab }}">
+                            {{ category }}
+                            <span class="count">{{ components|length }}</span>
+                        </button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {# Component Grid/List #}
+            <div class="library-content" id="library-view">
+                {% for category, components in grouped %}
+                    <div class="category-section" data-category="{{ category|kebab }}">
+                        <h2 class="category-title">{{ category }}</h2>
+                        
+                        <div class="components-grid">
+                            {% for doc in components %}
+                                <div class="component-card" data-component="{{ doc.name|kebab }}">
+                                    <div class="card-header">
+                                        <h3>{{ doc.name }}</h3>
+                                        <button class="btn small secondary copy-btn" data-copy="{% verbatim %}{% x:{% endverbatim %}{{ doc.name }}{% verbatim %} %}{% endx %}{% endverbatim %}">
+                                            {{ 'Copy'|t('twig-component-manager') }}
+                                        </button>
+                                    </div>
+                                    
+                                    {% if doc.description %}
+                                        <p class="card-description">{{ doc.description }}</p>
+                                    {% endif %}
+                                    
+                                    {# Component Preview Area #}
+                                    {% if doc.examples|length > 0 %}
+                                        <div class="preview-area">
+                                            <div class="preview-tabs">
+                                                <button class="tab-btn active" data-tab="preview">{{ 'Preview'|t('twig-component-manager') }}</button>
+                                                <button class="tab-btn" data-tab="code">{{ 'Code'|t('twig-component-manager') }}</button>
+                                                {% if doc.props|length > 0 %}
+                                                    <button class="tab-btn" data-tab="props">{{ 'Props'|t('twig-component-manager') }}</button>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <div class="tab-content preview-tab active">
+                                                <div class="preview-frame">
+                                                    {# This would need to be rendered if possible #}
+                                                    <div class="preview-placeholder">
+                                                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                                                            <path d="M9 9h6v6H9z" />
+                                                        </svg>
+                                                        <p>{{ 'Component Preview'|t('twig-component-manager') }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="tab-content code-tab">
+                                                {% if doc.examples|length > 0 %}
+                                                    {% for example in doc.examples %}
+                                                        <div class="code-example">
+                                                            {% if doc.examples|length > 1 %}
+                                                                <div class="example-title">{{ example.title }}</div>
+                                                            {% endif %}
+                                                            <pre class="code-block"><code>{{ example.code }}</code></pre>
+                                                            <button class="copy-code-btn" data-code="{{ example.code|e('html_attr') }}">
+                                                                {{ 'Copy Code'|t('twig-component-manager') }}
+                                                            </button>
+                                                        </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <div class="basic-usage">
+                                                        <pre class="code-block"><code>{% verbatim %}{% x:{% endverbatim %}{{ doc.name }}{% verbatim %} %}
+    {# Content here #}
+{% endx %}{% endverbatim %}</code></pre>
+                                                        <button class="copy-code-btn" data-code="{% verbatim %}{% x:{% endverbatim %}{{ doc.name }}{% verbatim %} %}{% endx %}{% endverbatim %}">
+                                                            {{ 'Copy Code'|t('twig-component-manager') }}
+                                                        </button>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            {% if doc.props|length > 0 %}
+                                                <div class="tab-content props-tab">
+                                                    <div class="props-list">
+                                                        {% for prop in doc.props %}
+                                                            <div class="prop-item">
+                                                                <div class="prop-header">
+                                                                    <code class="prop-name">{{ prop.name }}</code>
+                                                                    <span class="prop-type">{{ prop.type }}</span>
+                                                                    {% if prop.required %}
+                                                                        <span class="prop-required">required</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                                {% if prop.description %}
+                                                                    <div class="prop-description">{{ prop.description }}</div>
+                                                                {% endif %}
+                                                                {% if prop.default is defined and prop.default is not null %}
+                                                                    <div class="prop-default">
+                                                                        Default: <code>{{ prop.default }}</code>
+                                                                    </div>
+                                                                {% endif %}
+                                                            </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {# Quick Info #}
+                                    <div class="card-footer">
+                                        <div class="quick-info">
+                                            {% if doc.slots|length > 0 %}
+                                                <div class="info-item">
+                                                    <strong>Slots:</strong>
+                                                    <span class="slots-list">
+                                                        {% for slot in doc.slots %}
+                                                            {% if slot is iterable %}
+                                                                {{ slot.name ?? slot[0] ?? 'slot' }}{% if not loop.last %}, {% endif %}
+                                                            {% else %}
+                                                                {{ slot }}{% if not loop.last %}, {% endif %}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </span>
+                                                </div>
+                                            {% endif %}
+                                            <div class="info-item">
+                                                <strong>Path:</strong>
+                                                <code class="small">{{ doc.path }}</code>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% css %}
+.component-library {
+    padding: 20px 0;
+}
+
+/* Navigation Pills */
+.library-nav {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e3e5e8;
+}
+
+.library-nav h2 {
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #7c8b9a;
+    letter-spacing: 0.5px;
+}
+
+.category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pill {
+    padding: 8px 16px;
+    background: #f4f4f6;
+    border: 1px solid #e3e5e8;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.pill:hover {
+    background: #fff;
+    border-color: #0d78f2;
+}
+
+.pill.active {
+    background: #0d78f2;
+    color: white;
+    border-color: #0d78f2;
+}
+
+.pill .count {
+    display: inline-block;
+    margin-left: 5px;
+    padding: 2px 6px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+.pill.active .count {
+    background: rgba(255,255,255,0.3);
+}
+
+/* Category Sections */
+.category-section {
+    margin-bottom: 40px;
+}
+
+.category-title {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e3e5e8;
+}
+
+/* Component Grid */
+.components-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 20px;
+}
+
+/* Component Cards */
+.component-card {
+    background: white;
+    border: 1px solid #e3e5e8;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+}
+
+.component-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #f9fafb;
+    border-bottom: 1px solid #e3e5e8;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.copy-btn {
+    font-size: 12px;
+    padding: 4px 12px;
+}
+
+.card-description {
+    padding: 15px 20px;
+    margin: 0;
+    color: #576575;
+    font-size: 14px;
+}
+
+/* Preview Area */
+.preview-area {
+    border-top: 1px solid #e3e5e8;
+}
+
+.preview-tabs {
+    display: flex;
+    background: #f9fafb;
+    border-bottom: 1px solid #e3e5e8;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #576575;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    background: #fff;
+    color: #0d78f2;
+}
+
+.tab-btn.active {
+    background: #fff;
+    color: #0d78f2;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Preview Frame */
+.preview-frame {
+    background: #f9fafb;
+    border: 1px dashed #d7dade;
+    border-radius: 4px;
+    padding: 30px;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-placeholder {
+    text-align: center;
+    color: #8b95a7;
+}
+
+.preview-placeholder svg {
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+/* Code Examples */
+.code-example {
+    margin-bottom: 15px;
+}
+
+.example-title {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #576575;
+}
+
+.code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.copy-code-btn {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: #f4f4f6;
+    border: 1px solid #e3e5e8;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.copy-code-btn:hover {
+    background: #0d78f2;
+    color: white;
+    border-color: #0d78f2;
+}
+
+/* Props List */
+.props-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.prop-item {
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 4px;
+}
+
+.prop-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.prop-name {
+    font-weight: 600;
+    color: #0d78f2;
+}
+
+.prop-type {
+    font-size: 12px;
+    padding: 2px 6px;
+    background: #e8f5ff;
+    color: #0073e6;
+    border-radius: 3px;
+}
+
+.prop-required {
+    font-size: 11px;
+    padding: 2px 6px;
+    background: #ffebe9;
+    color: #d83c3e;
+    border-radius: 3px;
+}
+
+.prop-description {
+    font-size: 13px;
+    color: #576575;
+    margin-top: 5px;
+}
+
+.prop-default {
+    font-size: 12px;
+    color: #8b95a7;
+    margin-top: 5px;
+}
+
+.prop-default code {
+    background: #fff;
+    padding: 1px 4px;
+    border-radius: 2px;
+}
+
+/* Card Footer */
+.card-footer {
+    padding: 15px 20px;
+    background: #f9fafb;
+    border-top: 1px solid #e3e5e8;
+}
+
+.quick-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-item {
+    font-size: 12px;
+    color: #576575;
+}
+
+.info-item strong {
+    color: #3f4a5c;
+    margin-right: 5px;
+}
+
+.slots-list {
+    font-family: monospace;
+    color: #0d78f2;
+}
+
+code.small {
+    font-size: 11px;
+    background: #fff;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+/* List View */
+.library-content.list-view .components-grid {
+    grid-template-columns: 1fr;
+}
+
+.library-content.list-view .component-card {
+    display: flex;
+    align-items: center;
+}
+
+.library-content.list-view .card-header {
+    flex: 0 0 300px;
+}
+
+.library-content.list-view .preview-area {
+    flex: 1;
+    border-top: none;
+    border-left: 1px solid #e3e5e8;
+}
+{% endcss %}
+
+{% js %}
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.component-card');
+            const targetTab = this.dataset.tab;
+            
+            // Update active tab button
+            card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update active tab content
+            card.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            card.querySelector('.' + targetTab + '-tab').classList.add('active');
+        });
+    });
+    
+    // Category filtering
+    document.querySelectorAll('.pill').forEach(pill => {
+        pill.addEventListener('click', function() {
+            const category = this.dataset.category;
+            
+            // Update active pill
+            document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show/hide category sections
+            if (category === 'all') {
+                document.querySelectorAll('.category-section').forEach(s => s.style.display = 'block');
+            } else {
+                document.querySelectorAll('.category-section').forEach(s => {
+                    s.style.display = s.dataset.category === category ? 'block' : 'none';
+                });
+            }
+        });
+    });
+    
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn, .copy-code-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.dataset.copy || this.dataset.code;
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            });
+        });
+    });
+    
+    // View toggle
+    const viewToggle = document.getElementById('view-toggle');
+    if (viewToggle) {
+        viewToggle.addEventListener('click', function() {
+            const libraryView = document.getElementById('library-view');
+            const currentView = this.dataset.view;
+            
+            if (currentView === 'grid') {
+                libraryView.classList.add('list-view');
+                this.dataset.view = 'list';
+                this.querySelector('.view-grid').style.display = 'none';
+                this.querySelector('.view-list').style.display = 'inline';
+            } else {
+                libraryView.classList.remove('list-view');
+                this.dataset.view = 'grid';
+                this.querySelector('.view-grid').style.display = 'inline';
+                this.querySelector('.view-list').style.display = 'none';
+            }
+        });
+    }
+});
+{% endjs %}

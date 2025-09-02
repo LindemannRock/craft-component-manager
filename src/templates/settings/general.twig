@@ -1,0 +1,54 @@
+{% extends "twig-component-manager/_layouts/settings" %}
+{% set title = "General Settings"|t('twig-component-manager') %}
+{% set fullPageForm = true %}
+{% set selectedSubnavItem = 'general' %}
+
+{% set crumbs = [
+    {
+        label: pluginName ?? 'Twig Component Manager',
+        url: url('twig-component-manager'),
+    },
+    {
+        label: 'Settings'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings'),
+    },
+    {
+        label: 'General'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings/general'),
+    },
+] %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    <h2>{{ 'General Settings'|t('twig-component-manager') }}</h2>
+    
+    <form method="post" accept-charset="UTF-8">
+        {{ csrfInput() }}
+        {{ actionInput('twig-component-manager/settings/save') }}
+        {{ redirectInput('twig-component-manager/settings/general') }}
+        
+        {{ forms.textField({
+            label: 'Plugin name'|t('twig-component-manager'),
+            instructions: 'The public-facing name of the plugin'|t('twig-component-manager'),
+            id: 'pluginName',
+            name: 'pluginName',
+            value: settings.pluginName ?? 'Twig Component Manager',
+            placeholder: 'Twig Component Manager',
+            warning: settings.isOverridden('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('pluginName')
+        }) }}
+        
+        {{ forms.textField({
+            label: 'Default Slot Name'|t('twig-component-manager'),
+            instructions: 'Name of the default slot for component content'|t('twig-component-manager'),
+            id: 'defaultSlotName',
+            name: 'defaultSlotName',
+            value: settings.defaultSlotName,
+            placeholder: 'default',
+            warning: settings.isOverridden('defaultSlotName') ? 'This is being overridden by the `defaultSlotName` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('defaultSlotName'),
+            errors: settings.getErrors('defaultSlotName')
+        }) }}
+    </form>
+{% endblock %}

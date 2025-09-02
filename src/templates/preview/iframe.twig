@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Preview</title>
+    
+    {# Include the compiled CSS directly with hash #}
+    {% if craft.app.config.general.devMode %}
+        <link rel="stylesheet" href="/dist/dev/assets/css/main-BSxoqxLo.css">
+        {# Include Tailwind CDN as a fallback #}
+        <script src="https://cdn.tailwindcss.com"></script>
+    {% else %}
+        <link rel="stylesheet" href="/dist/prod/assets/css/main-BSxoqxLo.css">
+    {% endif %}
+    
+    <style>
+        body {
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f7f7f8;
+        }
+        
+        .preview-container {
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* Preview-specific styles */
+        .preview-dark {
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .preview-mobile {
+            max-width: 375px;
+        }
+        
+        .preview-tablet {
+            max-width: 768px;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-container">
+        {# Debug info - show what data was passed #}
+        <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border: 1px solid #ccc; font-size: 12px; font-family: monospace;">
+            <strong>DEBUG:</strong><br>
+            Content: "{{ content|e }}"<br>
+            Props: {{ props|json_encode }}<br>
+            Slots: {{ slots|json_encode }}<br>
+            Variant: "{{ variant }}"
+        </div>
+        
+        {# Render the pre-processed component HTML #}
+        {{ componentHtml|raw }}
+    </div>
+    
+    {# No need for JS in the preview iframe #}
+</body>
+</html>

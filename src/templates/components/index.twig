@@ -1,0 +1,154 @@
+{#
+ # Twig Component Manager - Components Index
+ #
+ # @link      https://lindemannrock.com
+ # @copyright Copyright (c) 2025 LindemannRock
+ #}
+
+{% extends "_layouts/cp" %}
+
+{% set title = 'Components'|t('twig-component-manager') %}
+{% set selectedSubnavItem = 'components' %}
+
+{% block actionButton %}
+    {% if plugin is defined and plugin.settings is defined and plugin.settings.enableDocumentation %}
+        <a href="{{ url('twig-component-manager/documentation') }}" class="btn">
+            {{ 'View Documentation'|t('twig-component-manager') }}
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ 'Discovered Components'|t('twig-component-manager') }}</h1>
+    
+    {% if components|length %}
+        {# Group components by category #}
+        {% set grouped = {} %}
+        {% for component in components %}
+            {% set category = component.category ?? 'Uncategorized' %}
+            {% set grouped = grouped|merge({
+                (category): (grouped[category] ?? [])|merge([component])
+            }) %}
+        {% endfor %}
+        
+        <div class="data">
+            <table class="data fullwidth collapsible">
+                <thead>
+                    <tr>
+                        <th style="width: 30%">{{ 'Component'|t('twig-component-manager') }}</th>
+                        <th style="width: 35%">{{ 'Path'|t('twig-component-manager') }}</th>
+                        <th style="width: 10%">{{ 'Category'|t('twig-component-manager') }}</th>
+                        <th style="width: 12.5%">{{ 'Props'|t('twig-component-manager') }}</th>
+                        <th style="width: 12.5%">{{ 'Slots'|t('twig-component-manager') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category, categoryComponents in grouped %}
+                        {% for component in categoryComponents %}
+                            <tr>
+                                <td>
+                                    <div class="element small hasstatus">
+                                        <span class="status {{ component.category ? 'enabled' : '' }}"></span>
+                                        <div class="label">
+                                            <span class="title">
+                                                <a href="{{ url('twig-component-manager/component/' ~ component.name) }}">
+                                                    <strong>{{ component.name ?? 'Unknown' }}</strong>
+                                                </a>
+                                            </span>
+                                            {% if component.description or (component.metadata is defined and component.metadata.description is defined) %}
+                                                <div class="light smalltext">
+                                                    {{ component.description ?? (component.metadata.description ?? '') }}
+                                                </div>
+                                            {% endif %}
+                                            {% if component.metadata is defined and (component.metadata.version is defined or component.metadata.author is defined) %}
+                                                <div class="component-meta-inline">
+                                                    {% if component.metadata.version is defined %}
+                                                        <span class="meta-item">v{{ component.metadata.version }}</span>
+                                                    {% endif %}
+                                                    {% if component.metadata.author is defined %}
+                                                        <span class="meta-item">by {{ component.metadata.author }}</span>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <code class="light">{{ component.relativePath ?? component.path }}</code>
+                                </td>
+                                <td>
+                                    {% if component.category %}
+                                        <span class="category-badge">{{ component.category }}</span>
+                                    {% else %}
+                                        <span class="light">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="thin">
+                                    {% if component.props is defined and component.props %}
+                                        {{ component.props|keys|length }}
+                                    {% else %}
+                                        <span class="light">—</span>
+                                    {% endif %}
+                                </td>
+                                <td class="thin">
+                                    {% if component.slots is defined and component.slots and component.slots|length %}
+                                        {{ component.slots|length }}
+                                    {% else %}
+                                        <span class="light">—</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="light">{{ 'No components found. Make sure your component paths are configured correctly in Settings.'|t('twig-component-manager') }}</p>
+        
+        <div class="buttons">
+            <a href="{{ url('twig-component-manager/settings/paths') }}" class="btn">{{ 'Configure Paths'|t('twig-component-manager') }}</a>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% css %}
+.component-library .category-badge,
+#main-content .category-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: #f0f2f5;
+    border-radius: 3px;
+    font-size: 12px;
+    color: #3f4a5c;
+}
+
+#main-content table.data tbody tr td.thin {
+    text-align: center;
+}
+
+#main-content .element.small .label .smalltext {
+    margin-top: 2px;
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.component-meta-inline {
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.component-meta-inline .meta-item {
+    color: #8b95a7;
+    margin-right: 10px;
+}
+
+.element .title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.element .title a:hover {
+    color: #0d78f2;
+}
+{% endcss %}

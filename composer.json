@@ -1,0 +1,73 @@
+{
+    "name": "lindemannrock/twig-component-manager",
+    "description": "Advanced Twig component management for Craft CMS with folder organization, prop validation, and slots",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms", 
+        "craftcms",
+        "craft-plugin",
+        "twig",
+        "components",
+        "component-library",
+        "ui-components",
+        "templates",
+        "design-system"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bilal Hary Lindemann",
+            "email": "bh@lindemannrock.com",
+            "homepage": "https://lindemannrock.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@lindemannrock.com",
+        "issues": "https://github.com/LindemannRock/twig-component-manager/issues",
+        "source": "https://github.com/LindemannRock/twig-component-manager",
+        "docs": "https://github.com/LindemannRock/twig-component-manager/blob/main/README.md",
+        "rss": "https://github.com/LindemannRock/twig-component-manager/commits/main.atom"
+    },
+    "require": {
+        "php": "^8.2",
+        "craftcms/cms": "^5.0.0"
+    },
+    "require-dev": {
+        "craftcms/phpstan": "dev-main",
+        "craftcms/rector": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "lindemannrock\\twigcomponentmanager\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Twig Component Manager",
+        "handle": "twig-component-manager",
+        "developer": "LindemannRock",
+        "developerUrl": "https://lindemannrock.com",
+        "developerEmail": "support@lindemannrock.com",
+        "documentationUrl": "https://github.com/LindemannRock/twig-component-manager/blob/main/README.md",
+        "changelogUrl": "https://github.com/LindemannRock/twig-component-manager/blob/main/CHANGELOG.md",
+        "class": "lindemannrock\\twigcomponentmanager\\TwigComponentManager"
+    },
+    "scripts": {
+        "phpstan": "phpstan --memory-limit=1G",
+        "phpstan-pro": "phpstan --memory-limit=1G --pro",
+        "rector": "rector process src",
+        "rector-dry-run": "rector process src --dry-run"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}

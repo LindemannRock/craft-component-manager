@@ -1,0 +1,121 @@
+{% extends "twig-component-manager/_layouts/settings" %}
+{% set title = "Features"|t('twig-component-manager') %}
+{% set fullPageForm = true %}
+{% set selectedSubnavItem = 'features' %}
+
+{% set crumbs = [
+    {
+        label: pluginName ?? 'Twig Component Manager',
+        url: url('twig-component-manager'),
+    },
+    {
+        label: 'Settings'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings'),
+    },
+    {
+        label: 'Features'|t('twig-component-manager'),
+        url: url('twig-component-manager/settings/features'),
+    },
+] %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+    <h2>{{ 'Features'|t('twig-component-manager') }}</h2>
+    
+    <form method="post" accept-charset="UTF-8">
+        {{ csrfInput() }}
+        {{ actionInput('twig-component-manager/settings/save') }}
+        {{ redirectInput('twig-component-manager/settings/features') }}
+        
+        {{ forms.lightswitchField({
+            label: 'Enable Prop Validation'|t('twig-component-manager'),
+            instructions: 'Validate component props based on their definitions'|t('twig-component-manager'),
+            id: 'enablePropValidation',
+            name: 'enablePropValidation',
+            on: settings.enablePropValidation,
+            warning: settings.isOverridden('enablePropValidation') ? 'This is being overridden by the `enablePropValidation` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enablePropValidation'),
+            errors: settings.getErrors('enablePropValidation')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enable Cache'|t('twig-component-manager'),
+            instructions: 'Cache component discovery for better performance'|t('twig-component-manager'),
+            id: 'enableCache',
+            name: 'enableCache',
+            on: settings.enableCache,
+            warning: settings.isOverridden('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enableCache'),
+            errors: settings.getErrors('enableCache')
+        }) }}
+
+        {{ forms.textField({
+            label: 'Cache Duration'|t('twig-component-manager'),
+            instructions: 'How long to cache component data, in seconds (0 = until manually cleared)'|t('twig-component-manager'),
+            id: 'cacheDuration',
+            name: 'cacheDuration',
+            value: settings.cacheDuration,
+            type: 'number',
+            min: 0,
+            warning: settings.isOverridden('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('cacheDuration'),
+            errors: settings.getErrors('cacheDuration')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enable Debug Mode'|t('twig-component-manager'),
+            instructions: 'Show helpful error messages in dev mode'|t('twig-component-manager'),
+            id: 'enableDebugMode',
+            name: 'enableDebugMode',
+            on: settings.enableDebugMode,
+            warning: settings.isOverridden('enableDebugMode') ? 'This is being overridden by the `enableDebugMode` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enableDebugMode'),
+            errors: settings.getErrors('enableDebugMode')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enable Usage Tracking'|t('twig-component-manager'),
+            instructions: 'Track component usage statistics'|t('twig-component-manager'),
+            id: 'enableUsageTracking',
+            name: 'enableUsageTracking',
+            on: settings.enableUsageTracking,
+            warning: settings.isOverridden('enableUsageTracking') ? 'This is being overridden by the `enableUsageTracking` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enableUsageTracking'),
+            errors: settings.getErrors('enableUsageTracking')
+        }) }}
+        
+        {{ forms.lightswitchField({
+            label: 'Enable Inheritance'|t('twig-component-manager'),
+            instructions: 'Allow components to extend other components'|t('twig-component-manager'),
+            id: 'enableInheritance',
+            name: 'enableInheritance',
+            on: settings.enableInheritance,
+            warning: settings.isOverridden('enableInheritance') ? 'This is being overridden by the `enableInheritance` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enableInheritance'),
+            errors: settings.getErrors('enableInheritance')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Enable Documentation'|t('twig-component-manager'),
+            instructions: 'Enable automatic documentation generation for components'|t('twig-component-manager'),
+            id: 'enableDocumentation',
+            name: 'enableDocumentation',
+            on: settings.enableDocumentation,
+            warning: settings.isOverridden('enableDocumentation') ? 'This is being overridden by the `enableDocumentation` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('enableDocumentation'),
+            errors: settings.getErrors('enableDocumentation')
+        }) }}
+
+        {{ forms.lightswitchField({
+            label: 'Allow Inline Components'|t('twig-component-manager'),
+            instructions: 'Allow components to be defined inline in templates'|t('twig-component-manager'),
+            id: 'allowInlineComponents',
+            name: 'allowInlineComponents',
+            on: settings.allowInlineComponents,
+            warning: settings.isOverridden('allowInlineComponents') ? 'This is being overridden by the `allowInlineComponents` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            disabled: settings.isOverridden('allowInlineComponents'),
+            errors: settings.getErrors('allowInlineComponents')
+        }) }}
+    </form>
+{% endblock %}

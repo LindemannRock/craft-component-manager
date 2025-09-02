@@ -1,0 +1,81 @@
+{#
+    @description A card component with header, body, and footer slots
+    @category Layout
+    @props {
+        "padding": {
+            "type": "string",
+            "default": "md",
+            "enum": ["none", "sm", "md", "lg"],
+            "description": "Card padding size"
+        },
+        "shadow": {
+            "type": "string",
+            "default": "md",
+            "enum": ["none", "sm", "md", "lg", "xl"],
+            "description": "Card shadow size"
+        },
+        "rounded": {
+            "type": "boolean",
+            "default": true,
+            "description": "Whether the card has rounded corners"
+        },
+        "border": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether the card has a border"
+        },
+        "class": {
+            "type": "string",
+            "required": false,
+            "description": "Additional CSS classes"
+        }
+    }
+#}
+
+{% set paddingClasses = {
+    'none': '',
+    'sm': 'p-4',
+    'md': 'p-6',
+    'lg': 'p-8'
+} %}
+
+{% set shadowClasses = {
+    'none': '',
+    'sm': 'shadow-sm',
+    'md': 'shadow-md',
+    'lg': 'shadow-lg',
+    'xl': 'shadow-xl'
+} %}
+
+{% set classes = [
+    'bg-white',
+    paddingClasses[padding] ?? paddingClasses.md,
+    shadowClasses[shadow] ?? shadowClasses.md,
+    rounded ? 'rounded-lg' : '',
+    border ? 'border border-gray-200' : '',
+    class ?? ''
+]|filter(v => v)|join(' ') %}
+
+<div class="{{ classes }}">
+    {% block header %}
+        {% if hasSlot('header') %}
+            <div class="mb-4 pb-4 border-b border-gray-200">
+                {{ slot('header') }}
+            </div>
+        {% endif %}
+    {% endblock %}
+    
+    {% block body %}
+        <div class="card-body">
+            {{ slot('default') }}
+        </div>
+    {% endblock %}
+    
+    {% block footer %}
+        {% if hasSlot('footer') %}
+            <div class="mt-4 pt-4 border-t border-gray-200">
+                {{ slot('footer') }}
+            </div>
+        {% endif %}
+    {% endblock %}
+</div>

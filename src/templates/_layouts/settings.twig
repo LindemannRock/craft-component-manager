@@ -1,0 +1,53 @@
+{% extends "_layouts/cp" %}
+
+{% set title = title ?? 'Settings'|t('twig-component-manager') %}
+{% set selectedSubnavItem = 'settings' %}
+
+{% block sidebar %}
+    <nav id="settings-nav">
+        <ul>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/general') }}" {% if selectedSubnavItem is not defined or selectedSubnavItem == 'general' %}class="sel"{% endif %} data-nav-item="general">
+                    {{ 'General'|t('twig-component-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/paths') }}" {% if selectedSubnavItem == 'paths' %}class="sel"{% endif %} data-nav-item="paths">
+                    {{ 'Paths & Files'|t('twig-component-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/features') }}" {% if selectedSubnavItem == 'features' %}class="sel"{% endif %} data-nav-item="features">
+                    {{ 'Features'|t('twig-component-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/discovery') }}" {% if selectedSubnavItem == 'discovery' %}class="sel"{% endif %} data-nav-item="discovery">
+                    {{ 'Discovery'|t('twig-component-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/library') }}" {% if selectedSubnavItem == 'library' %}class="sel"{% endif %} data-nav-item="library">
+                    {{ 'Component Library'|t('twig-component-manager') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ url('twig-component-manager/settings/maintenance') }}" {% if selectedSubnavItem == 'maintenance' %}class="sel"{% endif %} data-nav-item="maintenance">
+                    {{ 'Maintenance'|t('twig-component-manager') }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endblock %}
+
+{% css %}
+    /* Prevent scroll-based highlighting */
+    #settings-nav a {
+        transition: none;
+    }
+    
+    /* Ensure only the current page link is highlighted */
+    #settings-nav a.sel {
+        cursor: default;
+    }
+{% endcss %}
