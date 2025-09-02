@@ -31,8 +31,7 @@ return [
     'allowNesting' => true,
     'maxNestingDepth' => 3, // 0 = unlimited
     
-    // Component syntax
-    'tagPrefix' => 'x', // {% x:button %}
+    // Component files  
     'componentExtension' => 'twig',
     'defaultSlotName' => 'default',
     
@@ -96,7 +95,6 @@ return [
             '_components',
             'components',
         ],
-        'tagPrefix' => 'x',
         'enablePropValidation' => true,
     ],
     
@@ -138,7 +136,7 @@ All settings support environment variables:
 return [
     'enableCache' => App::env('COMPONENT_CACHE') === 'true',
     'enableDebugMode' => App::env('COMPONENT_DEBUG') === 'true',
-    'tagPrefix' => App::env('COMPONENT_PREFIX') ?: 'x',
+    'enablePropValidation' => App::env('COMPONENT_VALIDATION') === 'true',
     'componentPaths' => explode(',', App::env('COMPONENT_PATHS') ?: '_components,components'),
 ];
 ```
@@ -160,9 +158,8 @@ return [
 - **allowNesting**: Enable organizing components in nested folders
 - **maxNestingDepth**: Maximum folder nesting depth (0 = unlimited)
 
-#### Syntax Settings
+#### Component File Settings
 
-- **tagPrefix**: Prefix for component tags (e.g., 'x' for `{% x:button %}`)
 - **defaultSlotName**: Name for the default/unnamed slot
 
 #### Feature Settings
@@ -242,11 +239,11 @@ For production environments:
 
 ### Advanced Configuration Examples
 
-#### Custom Tag Prefix
+#### Simple Function Usage
 
 ```php
-// Use different prefix to avoid conflicts
-'tagPrefix' => 'comp', // {% comp:button %}
+// Components are used via functions - no tag syntax needed
+// {{ component('button', props) }} and {{ c('button', props) }} work automatically
 ```
 
 #### Selective Feature Enabling

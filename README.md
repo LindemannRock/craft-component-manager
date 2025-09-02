@@ -11,7 +11,7 @@ Advanced Twig component management plugin for Craft CMS 5.x with comprehensive C
 - ✅ **Smart Component Organization** - Category-based filtering and sorting in sidebar
 - ✅ **Database Storage** - Components stored as Craft Elements for efficient querying and management
 - ✅ **Folder Organization** - Organize components in nested folders (e.g., `forms/input.twig`)
-- ✅ **Custom Syntax** - Clean component syntax: `{% x:button with {label: 'Click'} %}{% endx %}`
+- ✅ **Function-Based Syntax** - Clean component functions: `{{ component('button', {label: 'Click'}) }}`
 - ✅ **Prop Validation** - Define and validate component props with types and defaults
 - ✅ **Multiple Slots** - Support for named slots with descriptions
 - ✅ **Console Commands** - Sync and refresh components via CLI
@@ -128,13 +128,14 @@ Create a component at `templates/_components/button.twig`:
 Use it in your templates:
 
 ```twig
-{# Self-closing syntax #}
-{% x:button with {label: 'Click me', variant: 'primary'} %}{% endx %}
+{# Function syntax #}
+{{ component('button', {label: 'Click me', variant: 'primary'}) }}
 
-{# With content #}
-{% x:button with {variant: 'secondary'} %}
-    <span>Custom content</span>
-{% endx %}
+{# Short alias #}
+{{ c('button', {variant: 'secondary'}, '<span>Custom content</span>') }}
+
+{# With content as third parameter #}
+{{ component('button', {variant: 'primary'}, 'Button Text') }}
 ```
 
 ### Nested Components
@@ -158,11 +159,9 @@ templates/_components/
 Use with folder paths:
 
 ```twig
-{% x:forms-input with {name: 'email', type: 'email'} %}{% endx %}
-{% x:cards-product with {product: entry} %}{% endx %}
-{% x:layout-container with {width: 'max-w-6xl'} %}
-    Content here
-{% endx %}
+{{ component('forms/input', {name: 'email', type: 'email'}) }}
+{{ c('cards/product', {product: entry}) }}
+{{ component('layout/container', {width: 'max-w-6xl'}, 'Content here') }}
 ```
 
 ### Component with Rich Documentation
@@ -182,23 +181,17 @@ Create well-documented components that appear beautifully in the CP:
     @slot tooltip - Tooltip content to show on hover
     
     @example "Primary Button"
-    {% x:showcase-button with {
+    {{ component('showcase-button', {
         label: 'Save Changes',
         variant: 'primary'
-    } %}{% endx %}
+    }) }}
     
-    @example "Button with Icon"
-    {% x:showcase-button with {
+    @example "Button with Icon" 
+    {{ component('showcase-button', {
         label: 'Download Report',
         variant: 'secondary',
         size: 'large'
-    } %}
-        {% slot icon %}
-            <svg class="w-5 h-5" fill="none" stroke="currentColor">
-                <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-            </svg>
-        {% endslot %}
-    {% endx %}
+    }, iconSvg) }}
     
     @props {
         "label": {
@@ -222,20 +215,17 @@ Create well-documented components that appear beautifully in the CP:
 </button>
 ```
 
-Use with named slots:
+Use with slots (using functions):
 
 ```twig
-{% x:card %}
-    {% x:card:slot:header %}
-        <h2>Card Title</h2>
-    {% endx %}
-    
-    This is the main content (default slot)
-    
-    {% x:card:slot:footer %}
-        <button>Action</button>
-    {% endx %}
-{% endx %}
+{# For components with slots, content is passed as third parameter #}
+{{ component('card', {title: 'Card Title'}, cardContent) }}
+
+{# Where cardContent variable contains the card body #}
+{% set cardContent %}
+    <p>This is the main content</p>
+    <button>Action</button>
+{% endset %}
 ```
 
 ### Prop Validation
@@ -349,9 +339,7 @@ Define components inline in templates:
 {% endcomponent %}
 
 {# Use the inline component #}
-{% x:alert with {type: 'warning'} %}
-    This is a warning message
-{% endx %}
+{{ component('alert', {type: 'warning'}, 'This is a warning message') }}
 ```
 
 ## Control Panel Features
