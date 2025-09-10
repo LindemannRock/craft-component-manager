@@ -30,8 +30,8 @@ Core component functionality (parsing, rendering, prop validation) is stable and
 
 ## Requirements
 
-- Craft CMS 5.0.0 or later
-- PHP 8.2 or later
+- Craft CMS 5.0 or greater
+- PHP 8.2 or greater
 
 ## Installation
 
