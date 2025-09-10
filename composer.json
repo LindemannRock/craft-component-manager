@@ -2,7 +2,7 @@
     "name": "lindemannrock/twig-component-manager",
     "description": "Advanced Twig component management for Craft CMS with folder organization, prop validation, and slots",
     "type": "craft-plugin",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "craft",
         "cms",
