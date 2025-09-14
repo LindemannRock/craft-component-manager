@@ -1,7 +1,7 @@
 {% extends "twig-component-manager/_layouts/settings" %}
 {% set title = "Paths & Files"|t('twig-component-manager') %}
 {% set fullPageForm = true %}
-{% set selectedSubnavItem = 'paths' %}
+{% set selectedSettingsItem = 'paths' %}
 
 {% set crumbs = [
     {
@@ -67,4 +67,6 @@
             errors: settings.getErrors('componentExtension')
         }) }}
     </form>
+
+    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

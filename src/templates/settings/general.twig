@@ -1,7 +1,7 @@
 {% extends "twig-component-manager/_layouts/settings" %}
 {% set title = "General Settings"|t('twig-component-manager') %}
 {% set fullPageForm = true %}
-{% set selectedSubnavItem = 'general' %}
+{% set selectedSettingsItem = 'general' %}
 
 {% set crumbs = [
     {
@@ -51,4 +51,6 @@
             errors: settings.getErrors('defaultSlotName')
         }) }}
     </form>
+
+    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

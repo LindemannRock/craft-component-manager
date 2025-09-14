@@ -1,7 +1,7 @@
 {% extends "twig-component-manager/_layouts/settings" %}
 {% set title = "Maintenance"|t('twig-component-manager') %}
 {% set fullPageForm = true %}
-{% set selectedSubnavItem = 'maintenance' %}
+{% set selectedSettingsItem = 'maintenance' %}
 
 {% set crumbs = [
     {
@@ -41,16 +41,15 @@
                         {{ 'Clear Component Cache'|t('twig-component-manager') }}
                     </a>
                 </div>
-                
-                <div class="info" style="margin-top: 15px;">
-                    <p class="light">{{ 'Cache Duration:'|t('twig-component-manager') }} 
-                        {% if settings.cacheDuration == 0 %}
-                            {{ 'Until manually cleared'|t('twig-component-manager') }}
-                        {% else %}
-                            {{ settings.cacheDuration }} {{ 'seconds'|t('twig-component-manager') }}
-                        {% endif %}
-                    </p>
-                </div>
+
+                <p class="light" style="margin-top: 15px;">
+                    <strong>{{ 'Cache Duration:'|t('twig-component-manager') }}</strong>
+                    {% if settings.cacheDuration == 0 %}
+                        {{ 'Until manually cleared'|t('twig-component-manager') }}
+                    {% else %}
+                        {{ settings.cacheDuration }} {{ 'seconds'|t('twig-component-manager') }}
+                    {% endif %}
+                </p>
             </div>
         {% else %}
             <div class="input">
@@ -115,10 +114,10 @@
                     {{ 'Re-discover Components'|t('twig-component-manager') }}
                 </a>
             </div>
-            
-            <div class="info" style="margin-top: 15px;">
-                <p class="light">{{ 'Currently searching in:'|t('twig-component-manager') }}</p>
-                <ul class="light">
+
+            <div style="margin-top: 15px;">
+                <p class="light"><strong>{{ 'Currently searching in:'|t('twig-component-manager') }}</strong></p>
+                <ul class="light" style="margin-top: 8px;">
                     {% for path in settings.componentPaths %}
                         <li><code>templates/{{ path }}</code></li>
                     {% endfor %}
@@ -179,4 +178,6 @@
             </table>
         </div>
     </div>
+
+    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

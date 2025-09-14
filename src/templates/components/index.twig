@@ -110,6 +110,8 @@
             <a href="{{ url('twig-component-manager/settings/paths') }}" class="btn">{{ 'Configure Paths'|t('twig-component-manager') }}</a>
         </div>
     {% endif %}
+
+    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
 {% endblock %}
 
 {% css %}
