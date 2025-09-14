@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/LindemannRock/twig-component-manager/compare/v1.0.1...v1.1.0) (2025-09-14)
+
+
+### Features
+
+* add plugin credit component and integrate it into settings and documentation templates ([dee7562](https://github.com/LindemannRock/twig-component-manager/commit/dee7562b7e89510ec0383be27d05a4d872a45bec))
+
 ## [1.0.1](https://github.com/LindemannRock/twig-component-manager/compare/v1.0.0...v1.0.1) (2025-09-10)
 
 
