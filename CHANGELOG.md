@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/LindemannRock/twig-component-manager/compare/v1.1.0...v1.1.1) (2025-09-15)
+
+
+### Bug Fixes
+
+* update copyright notice and format in LICENSE file ([7f68bec](https://github.com/LindemannRock/twig-component-manager/commit/7f68bec40bae681a23ffb9091f86caf8283e012c))
+
 ## [1.1.0](https://github.com/LindemannRock/twig-component-manager/compare/v1.0.1...v1.1.0) (2025-09-14)
 
 
