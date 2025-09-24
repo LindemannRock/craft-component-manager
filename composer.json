@@ -1,5 +1,5 @@
 {
-    "name": "lindemannrock/twig-component-manager",
+    "name": "lindemannrock/craft-component-manager",
     "description": "Advanced Twig component management for Craft CMS with folder organization, prop validation, and slots",
     "type": "craft-plugin",
     "version": "1.1.1",
@@ -26,10 +26,10 @@
     ],
     "support": {
         "email": "support@lindemannrock.com",
-        "issues": "https://github.com/LindemannRock/twig-component-manager/issues",
-        "source": "https://github.com/LindemannRock/twig-component-manager",
-        "docs": "https://github.com/LindemannRock/twig-component-manager/blob/main/README.md",
-        "rss": "https://github.com/LindemannRock/twig-component-manager/commits/main.atom"
+        "issues": "https://github.com/LindemannRock/craft-component-manager/issues",
+        "source": "https://github.com/LindemannRock/craft-component-manager",
+        "docs": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
+        "rss": "https://github.com/LindemannRock/craft-component-manager/commits/main.atom"
     },
     "require": {
         "php": "^8.2",
@@ -50,8 +50,8 @@
         "developer": "LindemannRock",
         "developerUrl": "https://lindemannrock.com",
         "developerEmail": "support@lindemannrock.com",
-        "documentationUrl": "https://github.com/LindemannRock/twig-component-manager/blob/main/README.md",
-        "changelogUrl": "https://github.com/LindemannRock/twig-component-manager/blob/main/CHANGELOG.md",
+        "documentationUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
+        "changelogUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/CHANGELOG.md",
         "class": "lindemannrock\\twigcomponentmanager\\TwigComponentManager"
     },
     "scripts": {

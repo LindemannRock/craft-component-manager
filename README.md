@@ -41,7 +41,7 @@ Until published on Packagist, install directly from the repository:
 
 ```bash
 cd /path/to/project
-composer config repositories.twig-component-manager vcs https://github.com/LindemannRock/twig-component-manager
+composer config repositories.twig-component-manager vcs https://github.com/LindemannRock/craft-component-manager
 composer require lindemannrock/twig-component-manager:dev-main
 ```
 
@@ -446,8 +446,8 @@ This plugin can work alongside the existing performing/twig-components package d
 
 ## Support
 
-- **Documentation**: [https://github.com/LindemannRock/twig-component-manager](https://github.com/LindemannRock/twig-component-manager)
-- **Issues**: [https://github.com/LindemannRock/twig-component-manager/issues](https://github.com/LindemannRock/twig-component-manager/issues)
+- **Documentation**: [https://github.com/LindemannRock/craft-component-manager](https://github.com/LindemannRock/craft-component-manager)
+- **Issues**: [https://github.com/LindemannRock/craft-component-manager/issues](https://github.com/LindemannRock/craft-component-manager/issues)
 - **Email**: [support@lindemannrock.com](mailto:support@lindemannrock.com)
 
 ## License
