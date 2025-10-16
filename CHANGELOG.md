@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.1](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.0...v1.2.1) (2025-10-16)
+
+
+### Bug Fixes
+
+* add table existence checks before loading settings and categories ([c1869e8](https://github.com/LindemannRock/craft-component-manager/commit/c1869e8eb910c13f6e4c8d2477beec449d97884b))
+* update installation instructions for Composer and DDEV ([948d318](https://github.com/LindemannRock/craft-component-manager/commit/948d318de2691c92b73f5928d27f041b968b2895))
+
 ## [1.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.2...v1.2.0) (2025-10-16)
 
 
