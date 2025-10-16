@@ -1,20 +1,20 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
 /**
- * Twig Component Manager config.php
+ * Component Manager config.php
  *
- * This file exists only as a template for the Twig Component Manager settings.
+ * This file exists only as a template for the Component Manager settings.
  * It does nothing on its own.
  *
- * Don't edit this file, instead copy it to 'craft/config' as 'twig-component-manager.php'
+ * Don't edit this file, instead copy it to 'craft/config' as 'component-manager.php'
  * and make your changes there to override default settings.
  *
  * Once copied to 'craft/config', this file will be multi-environment aware as

@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\models;
+namespace lindemannrock\componentmanager\models;
 
 use craft\base\Model;
 
@@ -16,7 +16,7 @@ use craft\base\Model;
  * Component Model
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class ComponentModel extends Model

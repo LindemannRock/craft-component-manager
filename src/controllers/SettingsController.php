@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\controllers;
+namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 
 use Craft;
 use craft\web\Controller;
@@ -24,7 +24,7 @@ class SettingsController extends Controller
      */
     public function actionIndex(): Response
     {
-        return $this->redirect('twig-component-manager/settings/general');
+        return $this->redirect('component-manager/settings/general');
     }
     
     /**
@@ -32,10 +32,10 @@ class SettingsController extends Controller
      */
     public function actionGeneral(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/general', [
+        return $this->renderTemplate('component-manager/settings/general', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -47,10 +47,10 @@ class SettingsController extends Controller
      */
     public function actionPaths(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/paths', [
+        return $this->renderTemplate('component-manager/settings/paths', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -62,10 +62,10 @@ class SettingsController extends Controller
      */
     public function actionFeatures(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/features', [
+        return $this->renderTemplate('component-manager/settings/features', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -77,10 +77,10 @@ class SettingsController extends Controller
      */
     public function actionDiscovery(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/discovery', [
+        return $this->renderTemplate('component-manager/settings/discovery', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -92,10 +92,10 @@ class SettingsController extends Controller
      */
     public function actionLibrary(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/library', [
+        return $this->renderTemplate('component-manager/settings/library', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -107,10 +107,10 @@ class SettingsController extends Controller
      */
     public function actionMaintenance(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
-        return $this->renderTemplate('twig-component-manager/settings/maintenance', [
+        return $this->renderTemplate('component-manager/settings/maintenance', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
@@ -125,7 +125,7 @@ class SettingsController extends Controller
         $this->requirePostRequest();
         
         $request = Craft::$app->getRequest();
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
         // Only update non-overridden settings
@@ -216,7 +216,7 @@ class SettingsController extends Controller
         // Validate
         if (!$settings->validate()) {
             $errors = $settings->getErrors();
-            $errorMessage = Craft::t('twig-component-manager', 'Couldn\'t save plugin settings.');
+            $errorMessage = Craft::t('component-manager', 'Couldn\'t save plugin settings.');
             
             // Add validation errors to the message
             if (!empty($errors)) {
@@ -238,14 +238,14 @@ class SettingsController extends Controller
         
         // Save to database
         if (!$settings->saveToDb()) {
-            Craft::$app->getSession()->setError(Craft::t('twig-component-manager', 'Couldn\'t save plugin settings.'));
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Couldn\'t save plugin settings.'));
             return null;
         }
         
         // Clear component cache when settings change
         $plugin->cache->clearCache();
         
-        Craft::$app->getSession()->setNotice(Craft::t('twig-component-manager', 'Plugin settings saved.'));
+        Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Plugin settings saved.'));
         
         // Redirect to the posted URL (which will be the section they came from)
         return $this->redirectToPostedUrl();

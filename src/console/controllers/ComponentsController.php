@@ -1,16 +1,16 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\console\controllers;
+namespace lindemannrock\componentmanager\console\controllers;
 
 use Craft;
 use craft\console\Controller;
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 
 /**
  * Components controller
@@ -26,7 +26,7 @@ class ComponentsController extends Controller
     {
         $this->stdout("Syncing components from filesystem to database...\n");
         
-        $results = TwigComponentManager::$plugin->discovery->syncToDatabase();
+        $results = ComponentManager::$plugin->discovery->syncToDatabase();
         
         $this->stdout("Created: {$results['created']}\n");
         $this->stdout("Updated: {$results['updated']}\n");
@@ -51,8 +51,8 @@ class ComponentsController extends Controller
     public function actionRefresh(): int
     {
         $this->stdout("Clearing component cache...\n");
-        TwigComponentManager::$plugin->discovery->clearCache();
-        TwigComponentManager::$plugin->cache->clearCache();
+        ComponentManager::$plugin->discovery->clearCache();
+        ComponentManager::$plugin->cache->clearCache();
         
         return $this->actionSync();
     }

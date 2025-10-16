@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\controllers;
+namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 
 use Craft;
 use craft\web\Controller;
@@ -25,17 +25,17 @@ class ComponentsController extends Controller
      */
     public function actionIndex(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         
         // Force discovery of components
         $plugin->discovery->discoverComponents();
         
         // Use Craft's element index
-        return $this->renderTemplate('twig-component-manager/components/_index', [
+        return $this->renderTemplate('component-manager/components/_index', [
             'plugin' => $plugin,
             'title' => 'Components',
             'pluginName' => $plugin->name,
-            'elementType' => \lindemannrock\twigcomponentmanager\elements\Component::class,
+            'elementType' => \lindemannrock\componentmanager\elements\Component::class,
         ]);
     }
     
@@ -44,19 +44,19 @@ class ComponentsController extends Controller
      */
     public function actionDocumentation(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
         // Check if documentation is enabled
         if (!$settings->enableDocumentation) {
-            Craft::$app->getSession()->setError(Craft::t('twig-component-manager', 'Component documentation is disabled. Enable it in the plugin settings.'));
-            return $this->redirect('twig-component-manager');
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Component documentation is disabled. Enable it in the plugin settings.'));
+            return $this->redirect('component-manager');
         }
         
         // Generate documentation
         $documentation = $plugin->documentation->generateAllDocumentation();
         
-        return $this->renderTemplate('twig-component-manager/documentation/index', [
+        return $this->renderTemplate('component-manager/documentation/index', [
             'plugin' => $plugin,
             'documentation' => $documentation,
             'title' => 'Component Documentation',
@@ -69,7 +69,7 @@ class ComponentsController extends Controller
      */
     public function actionDetail(string $componentName): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         
         // Get the component
         $component = $plugin->discovery->getComponent($componentName);
@@ -83,13 +83,13 @@ class ComponentsController extends Controller
         
         // Debug: check what examples were found
         if ($componentName === 'forms/contact-card') {
-            \Craft::info("Contact-card documentation: " . json_encode($documentation), 'twig-component-manager');
+            \Craft::info("Contact-card documentation: " . json_encode($documentation), 'component-manager');
         }
         
         // Read the component source
         $source = file_get_contents($component->path);
         
-        return $this->renderTemplate('twig-component-manager/components/detail', [
+        return $this->renderTemplate('component-manager/components/detail', [
             'plugin' => $plugin,
             'component' => $component,
             'documentation' => $documentation,
@@ -104,13 +104,13 @@ class ComponentsController extends Controller
      */
     public function actionExportDocumentation(): Response
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
         
         // Check if documentation is enabled
         if (!$settings->enableDocumentation) {
-            Craft::$app->getSession()->setError(Craft::t('twig-component-manager', 'Component documentation is disabled. Enable it in the plugin settings.'));
-            return $this->redirect('twig-component-manager');
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Component documentation is disabled. Enable it in the plugin settings.'));
+            return $this->redirect('component-manager');
         }
         
         // Generate markdown documentation

@@ -1,5 +1,5 @@
 {#
- # Twig Component Manager - Components Index
+ # Component Manager - Components Index
  #
  # @link      https://lindemannrock.com
  # @copyright Copyright (c) 2025 LindemannRock
@@ -7,19 +7,19 @@
 
 {% extends "_layouts/cp" %}
 
-{% set title = 'Components'|t('twig-component-manager') %}
+{% set title = 'Components'|t('component-manager') %}
 {% set selectedSubnavItem = 'components' %}
 
 {% block actionButton %}
     {% if plugin is defined and plugin.settings is defined and plugin.settings.enableDocumentation %}
-        <a href="{{ url('twig-component-manager/documentation') }}" class="btn">
-            {{ 'View Documentation'|t('twig-component-manager') }}
+        <a href="{{ url('component-manager/documentation') }}" class="btn">
+            {{ 'View Documentation'|t('component-manager') }}
         </a>
     {% endif %}
 {% endblock %}
 
 {% block content %}
-    <h1>{{ 'Discovered Components'|t('twig-component-manager') }}</h1>
+    <h1>{{ 'Discovered Components'|t('component-manager') }}</h1>
     
     {% if components|length %}
         {# Group components by category #}
@@ -35,11 +35,11 @@
             <table class="data fullwidth collapsible">
                 <thead>
                     <tr>
-                        <th style="width: 30%">{{ 'Component'|t('twig-component-manager') }}</th>
-                        <th style="width: 35%">{{ 'Path'|t('twig-component-manager') }}</th>
-                        <th style="width: 10%">{{ 'Category'|t('twig-component-manager') }}</th>
-                        <th style="width: 12.5%">{{ 'Props'|t('twig-component-manager') }}</th>
-                        <th style="width: 12.5%">{{ 'Slots'|t('twig-component-manager') }}</th>
+                        <th style="width: 30%">{{ 'Component'|t('component-manager') }}</th>
+                        <th style="width: 35%">{{ 'Path'|t('component-manager') }}</th>
+                        <th style="width: 10%">{{ 'Category'|t('component-manager') }}</th>
+                        <th style="width: 12.5%">{{ 'Props'|t('component-manager') }}</th>
+                        <th style="width: 12.5%">{{ 'Slots'|t('component-manager') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,7 +51,7 @@
                                         <span class="status {{ component.category ? 'enabled' : '' }}"></span>
                                         <div class="label">
                                             <span class="title">
-                                                <a href="{{ url('twig-component-manager/component/' ~ component.name) }}">
+                                                <a href="{{ url('component-manager/component/' ~ component.name) }}">
                                                     <strong>{{ component.name ?? 'Unknown' }}</strong>
                                                 </a>
                                             </span>
@@ -104,14 +104,14 @@
             </table>
         </div>
     {% else %}
-        <p class="light">{{ 'No components found. Make sure your component paths are configured correctly in Settings.'|t('twig-component-manager') }}</p>
+        <p class="light">{{ 'No components found. Make sure your component paths are configured correctly in Settings.'|t('component-manager') }}</p>
         
         <div class="buttons">
-            <a href="{{ url('twig-component-manager/settings/paths') }}" class="btn">{{ 'Configure Paths'|t('twig-component-manager') }}</a>
+            <a href="{{ url('component-manager/settings/paths') }}" class="btn">{{ 'Configure Paths'|t('component-manager') }}</a>
         </div>
     {% endif %}
 
-    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
+    {% include 'component-manager/_components/plugin-credit.twig' %}
 {% endblock %}
 
 {% css %}

@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\controllers;
+namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 use Craft;
 use craft\web\Controller;
 use craft\web\View;
@@ -39,7 +39,7 @@ class PreviewController extends Controller
             throw new \Exception('Component name is required');
         }
         
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $component = $plugin->discovery->getComponent($componentName);
         
         if (!$component) {
@@ -61,7 +61,7 @@ class PreviewController extends Controller
         }
         
         // Render the preview template
-        return $this->renderTemplate('twig-component-manager/preview/component', [
+        return $this->renderTemplate('component-manager/preview/component', [
             'component' => $component,
             'props' => $props,
             'content' => $content,
@@ -105,11 +105,11 @@ class PreviewController extends Controller
         }
         
         // Debug logging
-        \Craft::info("Iframe request - Component: {$componentName}, Variant: {$variant}, Props JSON: {$propsJson}", 'twig-component-manager');
-        \Craft::info("Parsed props: " . json_encode($props), 'twig-component-manager');
+        \Craft::info("Iframe request - Component: {$componentName}, Variant: {$variant}, Props JSON: {$propsJson}", 'component-manager');
+        \Craft::info("Parsed props: " . json_encode($props), 'component-manager');
         
         // Get the plugin instance
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         
         // Force discovery of components first
         $components = $plugin->discovery->discoverComponents();
@@ -126,7 +126,7 @@ class PreviewController extends Controller
         // Always try to load example data (including for default)
         $documentation = $plugin->documentation->generateComponentDocumentation($component);
         
-        \Craft::info("Looking for variant '{$variant}' in examples", 'twig-component-manager');
+        \Craft::info("Looking for variant '{$variant}' in examples", 'component-manager');
         
         if (isset($documentation['examples'])) {
             // For "default" variant, use the first example
@@ -135,24 +135,24 @@ class PreviewController extends Controller
                 $props = $example['props'] ?? [];
                 $defaultContent = $example['content'] ?? '';
                 $slots = $example['slots'] ?? [];
-                \Craft::info("Using first example for default: Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'twig-component-manager');
+                \Craft::info("Using first example for default: Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'component-manager');
             } else {
                 // Find the matching example by ID
                 foreach ($documentation['examples'] as $index => $example) {
                     $exampleId = $example['id'] ?? ('example-' . ($index + 1));
-                    \Craft::info("Checking example ID: {$exampleId}", 'twig-component-manager');
+                    \Craft::info("Checking example ID: {$exampleId}", 'component-manager');
                     if ($exampleId === $variant) {
                         $props = $example['props'] ?? [];
                         $defaultContent = $example['content'] ?? '';
                         $slots = $example['slots'] ?? [];
-                        \Craft::info("Found variant '{$variant}'! Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'twig-component-manager');
+                        \Craft::info("Found variant '{$variant}'! Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'component-manager');
                         break;
                     }
                 }
             }
         }
         
-        \Craft::info("Final props being used: " . json_encode($props), 'twig-component-manager');
+        \Craft::info("Final props being used: " . json_encode($props), 'component-manager');
         
         // Determine default content for the component
         $defaultContent = $content ?: '';
@@ -223,7 +223,7 @@ class PreviewController extends Controller
         
         try {
             // Render minimal template with just the component
-            $html = $this->renderTemplate('twig-component-manager/preview/iframe', [
+            $html = $this->renderTemplate('component-manager/preview/iframe', [
                 'componentHtml' => $componentHtml,
                 'content' => $defaultContent,
                 'props' => $props,
@@ -232,7 +232,7 @@ class PreviewController extends Controller
             ]);
         } catch (\Exception $e) {
             // If template not found, try with absolute path
-            $pluginPath = Craft::getAlias('@plugins/twig-component-manager/src/templates');
+            $pluginPath = Craft::getAlias('@plugins/component-manager/src/templates');
             Craft::$app->view->setTemplatesPath($pluginPath);
             
             $html = $this->renderTemplate('preview/iframe', [

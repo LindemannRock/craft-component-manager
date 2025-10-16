@@ -1,12 +1,12 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\records;
+namespace lindemannrock\componentmanager\records;
 
 use craft\db\ActiveRecord;
 
@@ -30,6 +30,6 @@ class ComponentRecord extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%twigcomponentmanager_components}}';
+        return '{{%componentmanager_components}}';
     }
 }

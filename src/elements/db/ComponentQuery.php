@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\elements\db;
+namespace lindemannrock\componentmanager\elements\db;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 
@@ -63,19 +63,19 @@ class ComponentQuery extends ElementQuery
     protected function beforePrepare(): bool
     {
         // Join with the components table
-        $this->joinElementTable('twigcomponentmanager_components');
+        $this->joinElementTable('componentmanager_components');
 
         // Apply component-specific filters
         if ($this->componentName !== null) {
-            $this->subQuery->andWhere(Db::parseParam('twigcomponentmanager_components.componentName', $this->componentName));
+            $this->subQuery->andWhere(Db::parseParam('componentmanager_components.componentName', $this->componentName));
         }
 
         if ($this->category !== null) {
-            $this->subQuery->andWhere(Db::parseParam('twigcomponentmanager_components.category', $this->category));
+            $this->subQuery->andWhere(Db::parseParam('componentmanager_components.category', $this->category));
         }
 
         if ($this->path !== null) {
-            $this->subQuery->andWhere(Db::parseParam('twigcomponentmanager_components.path', $this->path));
+            $this->subQuery->andWhere(Db::parseParam('componentmanager_components.path', $this->path));
         }
 
         return parent::beforePrepare();

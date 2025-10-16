@@ -1,16 +1,16 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\elements;
+namespace lindemannrock\componentmanager\elements;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
-use lindemannrock\twigcomponentmanager\elements\db\ComponentQuery;
-use lindemannrock\twigcomponentmanager\records\ComponentRecord;
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\elements\db\ComponentQuery;
+use lindemannrock\componentmanager\records\ComponentRecord;
 
 use Craft;
 use craft\base\Element;
@@ -43,7 +43,7 @@ class Component extends Element
      */
     public static function displayName(): string
     {
-        return Craft::t('twig-component-manager', 'Component');
+        return Craft::t('component-manager', 'Component');
     }
 
     /**
@@ -51,7 +51,7 @@ class Component extends Element
      */
     public static function pluralDisplayName(): string
     {
-        return Craft::t('twig-component-manager', 'Components');
+        return Craft::t('component-manager', 'Components');
     }
 
     /**
@@ -67,7 +67,7 @@ class Component extends Element
      */
     public static function tableName(): string
     {
-        return '{{%twigcomponentmanager_components}}';
+        return '{{%componentmanager_components}}';
     }
 
     /**
@@ -126,7 +126,7 @@ class Component extends Element
         $sources = [
             [
                 'key' => '*',
-                'label' => Craft::t('twig-component-manager', 'All Components'),
+                'label' => Craft::t('component-manager', 'All Components'),
                 'defaultSort' => ['title', 'asc'],
             ],
         ];
@@ -167,11 +167,11 @@ class Component extends Element
     protected static function defineSortOptions(): array
     {
         return [
-            'title' => Craft::t('twig-component-manager', 'Component'),
-            'componentName' => Craft::t('twig-component-manager', 'Handle'),
-            'category' => Craft::t('twig-component-manager', 'Category'),
-            'description' => Craft::t('twig-component-manager', 'Description'),
-            'path' => Craft::t('twig-component-manager', 'Path'),
+            'title' => Craft::t('component-manager', 'Component'),
+            'componentName' => Craft::t('component-manager', 'Handle'),
+            'category' => Craft::t('component-manager', 'Category'),
+            'description' => Craft::t('component-manager', 'Description'),
+            'path' => Craft::t('component-manager', 'Path'),
         ];
     }
 
@@ -181,12 +181,12 @@ class Component extends Element
     protected static function defineTableAttributes(): array
     {
         return [
-            'componentName' => ['label' => Craft::t('twig-component-manager', 'Handle')],
-            'description' => ['label' => Craft::t('twig-component-manager', 'Description')],
-            'category' => ['label' => Craft::t('twig-component-manager', 'Category')],
-            'props' => ['label' => Craft::t('twig-component-manager', 'Props')],
-            'slots' => ['label' => Craft::t('twig-component-manager', 'Slots')],
-            'path' => ['label' => Craft::t('twig-component-manager', 'Path')],
+            'componentName' => ['label' => Craft::t('component-manager', 'Handle')],
+            'description' => ['label' => Craft::t('component-manager', 'Description')],
+            'category' => ['label' => Craft::t('component-manager', 'Category')],
+            'props' => ['label' => Craft::t('component-manager', 'Props')],
+            'slots' => ['label' => Craft::t('component-manager', 'Slots')],
+            'path' => ['label' => Craft::t('component-manager', 'Path')],
         ];
     }
 
@@ -281,7 +281,7 @@ class Component extends Element
      */
     public function getCpEditUrl(): ?string
     {
-        return UrlHelper::cpUrl('twig-component-manager/component/' . $this->componentName);
+        return UrlHelper::cpUrl('component-manager/component/' . $this->componentName);
     }
 
     /**

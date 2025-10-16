@@ -1,19 +1,19 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\services;
+namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
-use lindemannrock\twigcomponentmanager\models\ComponentModel;
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\models\ComponentModel;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -21,7 +21,7 @@ use RecursiveIteratorIterator;
  * Discovery Service
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class DiscoveryService extends Component
@@ -49,7 +49,7 @@ class DiscoveryService extends Component
         }
 
         $this->_components = [];
-        $plugin = TwigComponentManager::$plugin;
+        $plugin = ComponentManager::$plugin;
         $settings = $plugin->getSettings();
         $paths = $plugin->getComponentPaths();
 
@@ -78,7 +78,7 @@ class DiscoveryService extends Component
             return;
         }
 
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         $extension = $settings->componentExtension;
 
         if ($settings->allowNesting) {
@@ -110,7 +110,7 @@ class DiscoveryService extends Component
      */
     private function processComponentFile(\SplFileInfo $file, string $basePath): void
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         $filename = $file->getFilename();
         
         // Check ignore patterns
@@ -144,7 +144,7 @@ class DiscoveryService extends Component
      */
     private function createComponentModel(\SplFileInfo $file, string $basePath): ?ComponentModel
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         // Calculate component name
         $relativePath = str_replace($basePath . DIRECTORY_SEPARATOR, '', $file->getPathname());
@@ -358,7 +358,7 @@ class DiscoveryService extends Component
         $filesystemComponentNames = array_keys($components);
         
         // Get all existing component elements from database
-        $existingElements = \lindemannrock\twigcomponentmanager\elements\Component::find()->all();
+        $existingElements = \lindemannrock\componentmanager\elements\Component::find()->all();
         
         // Track which components we've processed
         $processedNames = [];
@@ -367,12 +367,12 @@ class DiscoveryService extends Component
         foreach ($components as $component) {
             try {
                 // Create or update component element
-                $element = \lindemannrock\twigcomponentmanager\elements\Component::find()
+                $element = \lindemannrock\componentmanager\elements\Component::find()
                     ->componentName($component->name)
                     ->one();
                 
                 if (!$element) {
-                    $element = new \lindemannrock\twigcomponentmanager\elements\Component();
+                    $element = new \lindemannrock\componentmanager\elements\Component();
                     $isNew = true;
                 } else {
                     $isNew = false;
@@ -424,7 +424,7 @@ class DiscoveryService extends Component
         // Clear all caches after sync to ensure CP reflects changes
         if ($results['deleted'] > 0 || $results['created'] > 0 || $results['updated'] > 0) {
             Craft::$app->getElements()->invalidateAllCaches();
-            TwigComponentManager::$plugin->cache->clearCache();
+            ComponentManager::$plugin->cache->clearCache();
             $this->clearCache();
         }
         

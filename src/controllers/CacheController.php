@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\controllers;
+namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 
 use Craft;
 use craft\web\Controller;
@@ -26,7 +26,7 @@ class CacheController extends Controller
     {
         $this->requirePostRequest();
         
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         
         // Clear the component cache
         $plugin->cache->clearCache();
@@ -34,7 +34,7 @@ class CacheController extends Controller
         // Clear discovery cache
         $plugin->discovery->clearCache();
         
-        Craft::$app->getSession()->setNotice(Craft::t('twig-component-manager', 'Component cache cleared successfully.'));
+        Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Component cache cleared successfully.'));
         
         return $this->redirectToPostedUrl();
     }

@@ -1,6 +1,6 @@
-# Twig Component Manager for Craft CMS
+# Component Manager for Craft CMS
 
-Advanced Twig component management plugin for Craft CMS 5.x with comprehensive Control Panel interface, automatic component discovery, rich documentation parsing, and professional preview system.
+Advanced component management plugin for Craft CMS 5.x with comprehensive Control Panel interface, automatic component discovery, rich documentation parsing, and professional preview system.
 
 ## Features
 
@@ -41,13 +41,13 @@ Until published on Packagist, install directly from the repository:
 
 ```bash
 cd /path/to/project
-composer config repositories.twig-component-manager vcs https://github.com/LindemannRock/craft-component-manager
-composer require lindemannrock/twig-component-manager:dev-main
+composer config repositories.component-manager vcs https://github.com/LindemannRock/craft-component-manager
+composer require lindemannrock/component-manager:dev-main
 ```
 
 Then install the plugin:
 ```bash
-./craft plugin/install twig-component-manager
+./craft plugin/install component-manager
 ```
 
 ### Via Composer (Production - Coming Soon)
@@ -56,19 +56,19 @@ Once published on Packagist:
 
 ```bash
 cd /path/to/project
-composer require lindemannrock/twig-component-manager
-./craft plugin/install twig-component-manager
+composer require lindemannrock/component-manager
+./craft plugin/install component-manager
 ```
 
 ### Via Control Panel
 
-In the Control Panel, go to Settings → Plugins and click "Install" for Twig Component Manager.
+In the Control Panel, go to Settings → Plugins and click "Install" for Component Manager.
 
 ## Configuration
 
 ### Config File
 
-Create a `config/twig-component-manager.php` file to override default settings:
+Create a `config/component-manager.php` file to override default settings:
 
 ```php
 <?php
@@ -79,13 +79,13 @@ return [
         'components',
         'src/components',
     ],
-    
+
     // Basic settings
     'defaultPath' => '_components',
     'tagPrefix' => 'x',
     'enablePropValidation' => true,
     'enableCache' => true,
-    
+
     // Production optimizations
     'production' => [
         'enableDebugMode' => false,
@@ -175,33 +175,33 @@ Create well-documented components that appear beautifully in the CP:
     @version 2.0.0
     @author LindemannRock
     @tags button, interactive, ui, showcase, accessibility
-    
+
     @slot icon - Optional icon to display before the button text
     @slot endIcon - Optional icon to display after the button text
     @slot tooltip - Tooltip content to show on hover
-    
+
     @example "Primary Button"
     {{ component('showcase-button', {
         label: 'Save Changes',
         variant: 'primary'
     }) }}
-    
-    @example "Button with Icon" 
+
+    @example "Button with Icon"
     {{ component('showcase-button', {
         label: 'Download Report',
         variant: 'secondary',
         size: 'large'
     }, iconSvg) }}
-    
+
     @props {
         "label": {
-            "type": "string", 
+            "type": "string",
             "required": true,
             "description": "Button text to display"
         },
         "variant": {
             "type": "string",
-            "default": "primary", 
+            "default": "primary",
             "enum": ["primary", "secondary", "danger"],
             "description": "Visual style variant"
         }
@@ -288,19 +288,19 @@ Access component information:
 
 ```twig
 {# Get all components #}
-{% set components = craft.twigComponentManager.all() %}
+{% set components = craft.componentManager.all() %}
 
 {# Get component by name #}
-{% set button = craft.twigComponentManager.get('button') %}
+{% set button = craft.componentManager.get('button') %}
 
 {# Get components by category #}
-{% set formComponents = craft.twigComponentManager.byCategory('Forms') %}
+{% set formComponents = craft.componentManager.byCategory('Forms') %}
 
 {# Get usage statistics #}
-{% set usage = craft.twigComponentManager.usage() %}
+{% set usage = craft.componentManager.usage() %}
 
 {# Validate a component #}
-{% set validation = craft.twigComponentManager.validate('button') %}
+{% set validation = craft.componentManager.validate('button') %}
 ```
 
 ## Advanced Features
@@ -372,10 +372,10 @@ Manage components via CLI:
 
 ```bash
 # Sync filesystem components to database
-php craft twig-component-manager/components/sync
+php craft component-manager/components/sync
 
 # Clear cache and re-sync all components
-php craft twig-component-manager/components/refresh
+php craft component-manager/components/refresh
 ```
 
 ### Settings
@@ -397,13 +397,13 @@ The plugin includes intelligent caching:
 
 ```twig
 {# Clear cache programmatically #}
-{{ craft.twigComponentManager.clearCache() }}
+{{ craft.componentManager.clearCache() }}
 
 {# Warm cache #}
-{{ craft.twigComponentManager.warmCache() }}
+{{ craft.componentManager.warmCache() }}
 
 {# Get cache stats #}
-{% set stats = craft.twigComponentManager.cacheStats() %}
+{% set stats = craft.componentManager.cacheStats() %}
 ```
 
 ### Best Practices
@@ -419,7 +419,7 @@ The plugin includes intelligent caching:
 
 This plugin can work alongside the existing performing/twig-components package during migration:
 
-1. Install Twig Component Manager
+1. Install Component Manager
 2. Configure different tag prefix (e.g., `y` instead of `x`)
 3. Gradually migrate components
 4. Remove performing/twig-components when complete

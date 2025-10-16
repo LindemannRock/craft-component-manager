@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager;
+namespace lindemannrock\componentmanager;
 
 use Craft;
 use craft\base\Model;
@@ -20,21 +20,21 @@ use craft\events\TemplateEvent;
 use craft\web\UrlManager;
 use craft\web\View;
 use craft\web\twig\variables\CraftVariable;
-use lindemannrock\twigcomponentmanager\models\Settings;
-use lindemannrock\twigcomponentmanager\services\ComponentService;
-use lindemannrock\twigcomponentmanager\services\DiscoveryService;
-use lindemannrock\twigcomponentmanager\services\CacheService;
-use lindemannrock\twigcomponentmanager\services\DocumentationService;
-use lindemannrock\twigcomponentmanager\twig\ComponentExtension;
-use lindemannrock\twigcomponentmanager\twig\ComponentLexer;
-use lindemannrock\twigcomponentmanager\variables\ComponentVariable;
+use lindemannrock\componentmanager\models\Settings;
+use lindemannrock\componentmanager\services\ComponentService;
+use lindemannrock\componentmanager\services\DiscoveryService;
+use lindemannrock\componentmanager\services\CacheService;
+use lindemannrock\componentmanager\services\DocumentationService;
+use lindemannrock\componentmanager\twig\ComponentExtension;
+use lindemannrock\componentmanager\twig\ComponentLexer;
+use lindemannrock\componentmanager\variables\ComponentVariable;
 use yii\base\Event;
 
 /**
- * Twig Component Manager Plugin
+ * Component Manager Plugin
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  *
  * @property  ComponentService $components
@@ -44,12 +44,12 @@ use yii\base\Event;
  * @property  Settings $settings
  * @method    Settings getSettings()
  */
-class TwigComponentManager extends Plugin
+class ComponentManager extends Plugin
 {
     /**
-     * @var TwigComponentManager|null
+     * @var ComponentManager|null
      */
-    public static ?TwigComponentManager $plugin = null;
+    public static ?ComponentManager $plugin = null;
 
     /**
      * @var string
@@ -72,7 +72,7 @@ class TwigComponentManager extends Plugin
     public function getControllerMap(): array
     {
         return [
-            'components' => 'lindemannrock\twigcomponentmanager\console\controllers\ComponentsController',
+            'components' => 'lindemannrock\componentmanager\console\controllers\ComponentsController',
         ];
     }
 
@@ -85,7 +85,7 @@ class TwigComponentManager extends Plugin
         self::$plugin = $this;
         
         // Override plugin name from config if available
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('twig-component-manager');
+        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
         if (isset($configFileSettings['pluginName'])) {
             $this->name = $configFileSettings['pluginName'];
         } else {
@@ -128,7 +128,7 @@ class TwigComponentManager extends Plugin
             function (Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
-                $variable->set('twigComponentManager', ComponentVariable::class);
+                $variable->set('componentManager', ComponentVariable::class);
             }
         );
 
@@ -137,7 +137,7 @@ class TwigComponentManager extends Plugin
             View::class,
             View::EVENT_REGISTER_CP_TEMPLATE_ROOTS,
             function(RegisterTemplateRootsEvent $event) {
-                $event->roots['twig-component-manager'] = __DIR__ . '/templates';
+                $event->roots['component-manager'] = __DIR__ . '/templates';
             }
         );
 
@@ -147,21 +147,21 @@ class TwigComponentManager extends Plugin
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function(RegisterUrlRulesEvent $event) {
                 $event->rules = array_merge($event->rules, [
-                    'twig-component-manager' => 'twig-component-manager/components/index',
-                    'twig-component-manager/components' => 'twig-component-manager/components/index',
-                    'twig-component-manager/component/<componentName:.*>' => 'twig-component-manager/components/detail',
-                    'twig-component-manager/documentation' => 'twig-component-manager/components/documentation',
-                    'twig-component-manager/documentation/export' => 'twig-component-manager/components/export-documentation',
-                    'twig-component-manager/preview/render' => 'twig-component-manager/preview/render',
-                    'twig-component-manager/preview/iframe' => 'twig-component-manager/preview/iframe',
-                    'twig-component-manager/settings' => 'twig-component-manager/settings/index',
-                    'twig-component-manager/settings/general' => 'twig-component-manager/settings/general',
-                    'twig-component-manager/settings/paths' => 'twig-component-manager/settings/paths',
-                    'twig-component-manager/settings/features' => 'twig-component-manager/settings/features',
-                    'twig-component-manager/settings/discovery' => 'twig-component-manager/settings/discovery',
-                    'twig-component-manager/settings/library' => 'twig-component-manager/settings/library',
-                    'twig-component-manager/settings/maintenance' => 'twig-component-manager/settings/maintenance',
-                    'twig-component-manager/settings/save' => 'twig-component-manager/settings/save',
+                    'component-manager' => 'component-manager/components/index',
+                    'component-manager/components' => 'component-manager/components/index',
+                    'component-manager/component/<componentName:.*>' => 'component-manager/components/detail',
+                    'component-manager/documentation' => 'component-manager/components/documentation',
+                    'component-manager/documentation/export' => 'component-manager/components/export-documentation',
+                    'component-manager/preview/render' => 'component-manager/preview/render',
+                    'component-manager/preview/iframe' => 'component-manager/preview/iframe',
+                    'component-manager/settings' => 'component-manager/settings/index',
+                    'component-manager/settings/general' => 'component-manager/settings/general',
+                    'component-manager/settings/paths' => 'component-manager/settings/paths',
+                    'component-manager/settings/features' => 'component-manager/settings/features',
+                    'component-manager/settings/discovery' => 'component-manager/settings/discovery',
+                    'component-manager/settings/library' => 'component-manager/settings/library',
+                    'component-manager/settings/maintenance' => 'component-manager/settings/maintenance',
+                    'component-manager/settings/save' => 'component-manager/settings/save',
                 ]);
             }
         );
@@ -181,7 +181,7 @@ class TwigComponentManager extends Plugin
 
         Craft::info(
             Craft::t(
-                'twig-component-manager',
+                'component-manager',
                 '{name} plugin loaded',
                 ['name' => $this->name]
             ),
@@ -202,24 +202,24 @@ class TwigComponentManager extends Plugin
 
             $item['subnav'] = [
                 'components' => [
-                    'label' => Craft::t('twig-component-manager', 'Components'),
-                    'url' => 'twig-component-manager',
+                    'label' => Craft::t('component-manager', 'Components'),
+                    'url' => 'component-manager',
                 ],
             ];
-            
+
             // Add documentation link if enabled
             $settings = $this->getSettings();
             if ($settings && $settings->enableDocumentation) {
                 $item['subnav']['documentation'] = [
-                    'label' => Craft::t('twig-component-manager', 'Documentation'),
-                    'url' => 'twig-component-manager/documentation',
+                    'label' => Craft::t('component-manager', 'Documentation'),
+                    'url' => 'component-manager/documentation',
                 ];
             }
 
-            if (Craft::$app->getUser()->checkPermission('accessPlugin-twig-component-manager')) {
+            if (Craft::$app->getUser()->checkPermission('accessPlugin-component-manager')) {
                 $item['subnav']['settings'] = [
-                    'label' => Craft::t('twig-component-manager', 'Settings'),
-                    'url' => 'twig-component-manager/settings',
+                    'label' => Craft::t('component-manager', 'Settings'),
+                    'url' => 'component-manager/settings',
                 ];
             }
         }
@@ -232,7 +232,7 @@ class TwigComponentManager extends Plugin
      */
     public function getSettingsResponse(): mixed
     {
-        return Craft::$app->controller->redirect('twig-component-manager/settings');
+        return Craft::$app->controller->redirect('component-manager/settings');
     }
 
     /**
@@ -244,9 +244,9 @@ class TwigComponentManager extends Plugin
         
         // Try to load settings from database first
         $settings->loadFromDb();
-        
+
         // Then apply config file overrides
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('twig-component-manager');
+        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
         if ($configFileSettings) {
             // Apply all config file settings
             foreach ($configFileSettings as $key => $value) {
@@ -272,7 +272,7 @@ class TwigComponentManager extends Plugin
         }
         
         return Craft::$app->view->renderTemplate(
-            'twig-component-manager/settings',
+            'component-manager/settings',
             [
                 'settings' => $settings,
                 'plugin' => $this,

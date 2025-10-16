@@ -1,79 +1,79 @@
-{% extends "twig-component-manager/_layouts/settings" %}
-{% set title = "Component Library"|t('twig-component-manager') %}
+{% extends "component-manager/_layouts/settings" %}
+{% set title = "Component Library"|t('component-manager') %}
 {% set fullPageForm = true %}
 {% set selectedSettingsItem = 'library' %}
 
 {% set crumbs = [
     {
-        label: pluginName ?? 'Twig Component Manager',
-        url: url('twig-component-manager'),
+        label: pluginName ?? 'Component Manager',
+        url: url('component-manager'),
     },
     {
-        label: 'Settings'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings'),
+        label: 'Settings'|t('component-manager'),
+        url: url('component-manager/settings'),
     },
     {
-        label: 'Component Library'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings/library'),
+        label: 'Component Library'|t('component-manager'),
+        url: url('component-manager/settings/library'),
     },
 ] %}
 
 {% import "_includes/forms" as forms %}
 
 {% block content %}
-    <h2>{{ 'Component Library'|t('twig-component-manager') }}</h2>
+    <h2>{{ 'Component Library'|t('component-manager') }}</h2>
     
     <form method="post" accept-charset="UTF-8">
         {{ csrfInput() }}
-        {{ actionInput('twig-component-manager/settings/save') }}
-        {{ redirectInput('twig-component-manager/settings/library') }}
+        {{ actionInput('component-manager/settings/save') }}
+        {{ redirectInput('component-manager/settings/library') }}
 
         {{ forms.lightswitchField({
-            label: 'Enable Component Library'|t('twig-component-manager'),
-            instructions: 'Enable the component library UI in the Control Panel'|t('twig-component-manager'),
+            label: 'Enable Component Library'|t('component-manager'),
+            instructions: 'Enable the component library UI in the Control Panel'|t('component-manager'),
             id: 'enableComponentLibrary',
             name: 'enableComponentLibrary',
             on: settings.enableComponentLibrary,
-            warning: settings.isOverridden('enableComponentLibrary') ? 'This is being overridden by the `enableComponentLibrary` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('enableComponentLibrary') ? 'This is being overridden by the `enableComponentLibrary` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('enableComponentLibrary'),
             errors: settings.getErrors('enableComponentLibrary')
         }) }}
 
         {{ forms.lightswitchField({
-            label: 'Show Component Source'|t('twig-component-manager'),
-            instructions: 'Show component source code in the library'|t('twig-component-manager'),
+            label: 'Show Component Source'|t('component-manager'),
+            instructions: 'Show component source code in the library'|t('component-manager'),
             id: 'showComponentSource',
             name: 'showComponentSource',
             on: settings.showComponentSource,
-            warning: settings.isOverridden('showComponentSource') ? 'This is being overridden by the `showComponentSource` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('showComponentSource') ? 'This is being overridden by the `showComponentSource` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('showComponentSource'),
             errors: settings.getErrors('showComponentSource')
         }) }}
 
         {{ forms.lightswitchField({
-            label: 'Enable Live Preview'|t('twig-component-manager'),
-            instructions: 'Enable live component preview in the library'|t('twig-component-manager'),
+            label: 'Enable Live Preview'|t('component-manager'),
+            instructions: 'Enable live component preview in the library'|t('component-manager'),
             id: 'enableLivePreview',
             name: 'enableLivePreview',
             on: settings.enableLivePreview,
-            warning: settings.isOverridden('enableLivePreview') ? 'This is being overridden by the `enableLivePreview` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('enableLivePreview') ? 'This is being overridden by the `enableLivePreview` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('enableLivePreview'),
             errors: settings.getErrors('enableLivePreview')
         }) }}
 
         {{ forms.textareaField({
-            label: 'Metadata Fields'|t('twig-component-manager'),
-            instructions: 'Custom metadata fields for components (one per line)'|t('twig-component-manager'),
+            label: 'Metadata Fields'|t('component-manager'),
+            instructions: 'Custom metadata fields for components (one per line)'|t('component-manager'),
             id: 'metadataFields',
             name: 'metadataFields',
             value: settings.metadataFields|join("\n"),
             rows: 5,
             placeholder: "description\ncategory\nversion\nauthor\ntags",
-            warning: settings.isOverridden('metadataFields') ? 'This is being overridden by the `metadataFields` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('metadataFields') ? 'This is being overridden by the `metadataFields` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('metadataFields'),
             errors: settings.getErrors('metadataFields')
         }) }}
     </form>
 
-    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
+    {% include 'component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

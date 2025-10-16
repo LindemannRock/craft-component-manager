@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\models;
+namespace lindemannrock\componentmanager\models;
 
 use Craft;
 use craft\base\Model;
@@ -21,7 +21,7 @@ use craft\helpers\Json;
  * Settings Model
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class Settings extends Model
@@ -29,7 +29,7 @@ class Settings extends Model
     /**
      * @var string The public-facing name of the plugin
      */
-    public string $pluginName = 'Twig Component Manager';
+    public string $pluginName = 'Component Manager';
     
     /**
      * @var array Component paths relative to templates folder
@@ -253,7 +253,7 @@ class Settings extends Model
     {
         $settings = (new Query())
             ->select('*')
-            ->from('{{%twigcomponentmanager_settings}}')
+            ->from('{{%componentmanager_settings}}')
             ->where(['id' => 1])
             ->one();
             
@@ -333,7 +333,7 @@ class Settings extends Model
         ];
         
         $result = Craft::$app->getDb()->createCommand()
-            ->update('{{%twigcomponentmanager_settings}}', $data, ['id' => 1])
+            ->update('{{%componentmanager_settings}}', $data, ['id' => 1])
             ->execute();
             
         return $result > 0;
@@ -347,7 +347,7 @@ class Settings extends Model
      */
     public function isOverridden(string $setting): bool
     {
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('twig-component-manager');
+        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
         return isset($configFileSettings[$setting]);
     }
 }

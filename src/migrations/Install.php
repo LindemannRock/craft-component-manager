@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\migrations;
+namespace lindemannrock\componentmanager\migrations;
 
 use craft\db\Migration;
 use craft\helpers\Db;
@@ -48,10 +48,10 @@ class Install extends Migration
     protected function createTables(): void
     {
         // Settings table (single row)
-        $this->createTable('{{%twigcomponentmanager_settings}}', [
+        $this->createTable('{{%componentmanager_settings}}', [
             'id' => $this->primaryKey(),
             // Plugin settings
-            'pluginName' => $this->string()->notNull()->defaultValue('Twig Component Manager'),
+            'pluginName' => $this->string()->notNull()->defaultValue('Component Manager'),
             // Component paths (stored as JSON array)
             'componentPaths' => $this->text(),
             // General settings
@@ -85,7 +85,7 @@ class Install extends Migration
         ]);
 
         // Component cache table
-        $this->createTable('{{%twigcomponentmanager_cache}}', [
+        $this->createTable('{{%componentmanager_cache}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'path' => $this->string()->notNull(),
@@ -101,7 +101,7 @@ class Install extends Migration
         ]);
 
         // Component usage tracking table
-        $this->createTable('{{%twigcomponentmanager_usage}}', [
+        $this->createTable('{{%componentmanager_usage}}', [
             'id' => $this->primaryKey(),
             'componentName' => $this->string()->notNull(),
             'template' => $this->string()->null(),
@@ -114,7 +114,7 @@ class Install extends Migration
         ]);
 
         // Main components table (for Element storage)
-        $this->createTable('{{%twigcomponentmanager_components}}', [
+        $this->createTable('{{%componentmanager_components}}', [
             'id' => $this->primaryKey(),
             'componentName' => $this->string()->notNull(),
             'path' => $this->text(),
@@ -136,16 +136,16 @@ class Install extends Migration
     protected function createIndexes(): void
     {
         // Cache indexes
-        $this->createIndex(null, '{{%twigcomponentmanager_cache}}', 'name', false);
-        $this->createIndex(null, '{{%twigcomponentmanager_cache}}', 'hash', true);
+        $this->createIndex(null, '{{%componentmanager_cache}}', 'name', false);
+        $this->createIndex(null, '{{%componentmanager_cache}}', 'hash', true);
         
         // Usage indexes
-        $this->createIndex(null, '{{%twigcomponentmanager_usage}}', 'componentName', false);
-        $this->createIndex(null, '{{%twigcomponentmanager_usage}}', ['componentName', 'template', 'siteId'], true);
+        $this->createIndex(null, '{{%componentmanager_usage}}', 'componentName', false);
+        $this->createIndex(null, '{{%componentmanager_usage}}', ['componentName', 'template', 'siteId'], true);
         
         // Components indexes
-        $this->createIndex(null, '{{%twigcomponentmanager_components}}', 'componentName', true);
-        $this->createIndex(null, '{{%twigcomponentmanager_components}}', 'category');
+        $this->createIndex(null, '{{%componentmanager_components}}', 'componentName', true);
+        $this->createIndex(null, '{{%componentmanager_components}}', 'category');
     }
 
     /**
@@ -154,9 +154,9 @@ class Install extends Migration
     protected function insertDefaultData(): void
     {
         // Insert default settings row
-        $this->insert('{{%twigcomponentmanager_settings}}', [
+        $this->insert('{{%componentmanager_settings}}', [
             'id' => 1,
-            'pluginName' => 'Twig Component Manager',
+            'pluginName' => 'Component Manager',
             'componentPaths' => Json::encode([
                 '_components',
                 'components',
@@ -208,9 +208,9 @@ class Install extends Migration
      */
     protected function dropTables(): void
     {
-        $this->dropTableIfExists('{{%twigcomponentmanager_usage}}');
-        $this->dropTableIfExists('{{%twigcomponentmanager_cache}}');
-        $this->dropTableIfExists('{{%twigcomponentmanager_components}}');
-        $this->dropTableIfExists('{{%twigcomponentmanager_settings}}');
+        $this->dropTableIfExists('{{%componentmanager_usage}}');
+        $this->dropTableIfExists('{{%componentmanager_cache}}');
+        $this->dropTableIfExists('{{%componentmanager_components}}');
+        $this->dropTableIfExists('{{%componentmanager_settings}}');
     }
 }

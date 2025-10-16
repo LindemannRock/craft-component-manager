@@ -1,15 +1,15 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\services;
+namespace lindemannrock\componentmanager\services;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
-use lindemannrock\twigcomponentmanager\models\ComponentModel;
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\models\ComponentModel;
 
 use Craft;
 use craft\base\Component;
@@ -31,7 +31,7 @@ class DocumentationService extends Component
      */
     public function generateAllDocumentation(): array
     {
-        $plugin = TwigComponentManager::getInstance();
+        $plugin = ComponentManager::getInstance();
         $components = $plugin->discovery->discoverComponents();
         $documentation = [];
         
@@ -187,13 +187,13 @@ class DocumentationService extends Component
         // Look for @examples followed by JSON array, more flexible ending
         if (preg_match('/@examples\s*(\[[\s\S]*?\])/m', $content, $jsonMatch)) {
             $jsonStr = trim($jsonMatch[1]);
-            \Craft::info("Found JSON examples: " . $jsonStr, 'twig-component-manager');
+            \Craft::info("Found JSON examples: " . $jsonStr, 'component-manager');
             // Try to parse as JSON
             $decoded = json_decode($jsonStr, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                \Craft::info("JSON parsed successfully: " . json_encode($decoded), 'twig-component-manager');
+                \Craft::info("JSON parsed successfully: " . json_encode($decoded), 'component-manager');
                 foreach ($decoded as $index => $example) {
-                    \Craft::info("Processing JSON example {$index}: " . json_encode($example), 'twig-component-manager');
+                    \Craft::info("Processing JSON example {$index}: " . json_encode($example), 'component-manager');
                     $examples[] = [
                         'id' => $example['id'] ?? 'example-' . ($index + 1),
                         'title' => $example['title'] ?? 'Example ' . ($index + 1),
@@ -202,7 +202,7 @@ class DocumentationService extends Component
                         'content' => $example['content'] ?? '',
                         'code' => $this->generateExampleCode($example, $componentName),
                     ];
-                    \Craft::info("Created example with content: '{$examples[count($examples)-1]['content']}' and slots: " . json_encode($examples[count($examples)-1]['slots']), 'twig-component-manager');
+                    \Craft::info("Created example with content: '{$examples[count($examples)-1]['content']}' and slots: " . json_encode($examples[count($examples)-1]['slots']), 'component-manager');
                 }
                 // If we found structured examples, return them
                 if (!empty($examples)) {
@@ -277,7 +277,7 @@ class DocumentationService extends Component
                 $content = trim(preg_replace('/\s+/', ' ', $fullContent));
                 
                 // Debug logging
-                \Craft::info("Extracted content: '{$content}', slots: " . json_encode($slots), 'twig-component-manager');
+                \Craft::info("Extracted content: '{$content}', slots: " . json_encode($slots), 'component-manager');
             }
             
             $examples[] = [
@@ -326,8 +326,10 @@ class DocumentationService extends Component
                     $propLines[] = $key . ': ' . $value;
                 } elseif (is_null($value)) {
                     $propLines[] = $key . ': null';
+                } elseif (is_array($value)) {
+                    $propLines[] = $key . ': ' . json_encode($value);
                 } else {
-                    $propLines[] = $key . ': \'' . addslashes($value) . '\'';
+                    $propLines[] = $key . ': \'' . addslashes((string)$value) . '\'';
                 }
             }
             $code .= "\n    " . implode(",\n    ", $propLines) . "\n} ";

@@ -1,20 +1,20 @@
 {# 
-    Twig Component Manager - Usage Examples
+    Component Manager - Usage Examples
     ========================================
     
-    This file demonstrates how to use the Twig Component Manager plugin
+    This file demonstrates how to use the Component Manager plugin
     with both function syntax and the various features available.
 #}
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Twig Component Manager - Usage Examples</title>
+    <title>Component Manager - Usage Examples</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-8">
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold mb-8">Twig Component Manager Examples</h1>
+        <h1 class="text-3xl font-bold mb-8">Component Manager Examples</h1>
         
         {# ============================================
            BUTTON COMPONENT EXAMPLES
@@ -172,7 +172,7 @@
             
             <div class="prose max-w-none">
                 <h3>Component Discovery</h3>
-                <p>Total components available: <strong>{{ craft.twigComponentManager.all()|length }}</strong></p>
+                <p>Total components available: <strong>{{ craft.componentManager.all()|length }}</strong></p>
                 
                 <h3>Check if Component Exists</h3>
                 <pre class="bg-gray-100 p-4 rounded">

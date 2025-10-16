@@ -1,14 +1,14 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\twig;
+namespace lindemannrock\componentmanager\twig;
 
 use Twig\Error\SyntaxError;
 use Twig\Node\Node;
@@ -22,7 +22,7 @@ use Twig\TokenParser\AbstractTokenParser;
  * Parses slot tags: {% slot:name %}content{% endslot %}
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class SlotTokenParser extends AbstractTokenParser

@@ -1,6 +1,6 @@
 {
     "name": "lindemannrock/craft-component-manager",
-    "description": "Advanced Twig component management for Craft CMS with folder organization, prop validation, and slots",
+    "description": "Advanced component management for Craft CMS with folder organization, prop validation, and slots",
     "type": "craft-plugin",
     "version": "1.1.2",
     "keywords": [
@@ -41,18 +41,18 @@
     },
     "autoload": {
         "psr-4": {
-            "lindemannrock\\twigcomponentmanager\\": "src/"
+            "lindemannrock\\componentmanager\\": "src/"
         }
     },
     "extra": {
-        "name": "Twig Component Manager",
-        "handle": "twig-component-manager",
+        "name": "Component Manager",
+        "handle": "component-manager",
         "developer": "LindemannRock",
         "developerUrl": "https://lindemannrock.com",
         "developerEmail": "support@lindemannrock.com",
         "documentationUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
         "changelogUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/CHANGELOG.md",
-        "class": "lindemannrock\\twigcomponentmanager\\TwigComponentManager"
+        "class": "lindemannrock\\componentmanager\\ComponentManager"
     },
     "scripts": {
         "phpstan": "phpstan --memory-limit=1G",

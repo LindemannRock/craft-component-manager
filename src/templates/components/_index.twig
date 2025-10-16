@@ -1,5 +1,5 @@
 {#
- # Twig Component Manager - Components Element Index
+ # Component Manager - Components Element Index
  #
  # @link      https://lindemannrock.com
  # @copyright Copyright (c) 2025 LindemannRock
@@ -7,9 +7,9 @@
 
 {% extends "_layouts/elementindex" %}
 
-{% set title = 'Components'|t('twig-component-manager') %}
+{% set title = 'Components'|t('component-manager') %}
 {% set selectedSubnavItem = 'components' %}
-{% set elementType = elementType ?? 'lindemannrock\\twigcomponentmanager\\elements\\Component' %}
+{% set elementType = elementType ?? 'lindemannrock\\componentmanager\\elements\\Component' %}
 
 {% block actionButton %}
     {# No action buttons needed #}

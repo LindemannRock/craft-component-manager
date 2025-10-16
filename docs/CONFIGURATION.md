@@ -1,12 +1,12 @@
-# Twig Component Manager Configuration
+# Component Manager Configuration
 
 ## Configuration File
 
-You can override plugin settings by creating a `twig-component-manager.php` file in your `config/` directory.
+You can override plugin settings by creating a `component-manager.php` file in your `config/` directory.
 
 ### Basic Setup
 
-1. Copy `vendor/lindemannrock/twig-component-manager/src/config.php` to `config/twig-component-manager.php`
+1. Copy `vendor/lindemannrock/component-manager/src/config.php` to `config/component-manager.php`
 2. Modify the settings as needed
 
 ### Available Settings
@@ -15,7 +15,7 @@ You can override plugin settings by creating a `twig-component-manager.php` file
 <?php
 return [
     // Plugin settings
-    'pluginName' => 'Twig Component Manager',
+    'pluginName' => 'Component Manager',
     
     // Component discovery paths
     'componentPaths' => [
@@ -90,7 +90,7 @@ use craft\helpers\App;
 return [
     // Global settings
     '*' => [
-        'pluginName' => 'Twig Component Manager',
+        'pluginName' => 'Component Manager',
         'componentPaths' => [
             '_components',
             'components',

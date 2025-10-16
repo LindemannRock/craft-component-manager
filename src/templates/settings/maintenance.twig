@@ -1,62 +1,62 @@
-{% extends "twig-component-manager/_layouts/settings" %}
-{% set title = "Maintenance"|t('twig-component-manager') %}
+{% extends "component-manager/_layouts/settings" %}
+{% set title = "Maintenance"|t('component-manager') %}
 {% set fullPageForm = true %}
 {% set selectedSettingsItem = 'maintenance' %}
 
 {% set crumbs = [
     {
-        label: pluginName ?? 'Twig Component Manager',
-        url: url('twig-component-manager'),
+        label: pluginName ?? 'Component Manager',
+        url: url('component-manager'),
     },
     {
-        label: 'Settings'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings'),
+        label: 'Settings'|t('component-manager'),
+        url: url('component-manager/settings'),
     },
     {
-        label: 'Maintenance'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings/maintenance'),
+        label: 'Maintenance'|t('component-manager'),
+        url: url('component-manager/settings/maintenance'),
     },
 ] %}
 
 {% import "_includes/forms" as forms %}
 
 {% block content %}
-    <h2>{{ 'Maintenance'|t('twig-component-manager') }}</h2>
+    <h2>{{ 'Maintenance'|t('component-manager') }}</h2>
     
     <div class="field">
         <div class="heading">
-            <h3>{{ 'Component Cache'|t('twig-component-manager') }}</h3>
+            <h3>{{ 'Component Cache'|t('component-manager') }}</h3>
             <div class="instructions">
-                <p>{{ 'Clear the component discovery cache to force re-discovery of all components.'|t('twig-component-manager') }}</p>
+                <p>{{ 'Clear the component discovery cache to force re-discovery of all components.'|t('component-manager') }}</p>
             </div>
         </div>
         
         {% if settings.enableCache %}
             <div class="input">
                 <div class="buttons">
-                    <a href="{{ actionUrl('twig-component-manager/cache/clear') }}" 
+                    <a href="{{ actionUrl('component-manager/cache/clear') }}" 
                        class="btn formsubmit"
-                       data-confirm="{{ 'Are you sure you want to clear the component cache?'|t('twig-component-manager') }}"
-                       data-redirect="{{ 'twig-component-manager/settings/maintenance'|hash }}">
-                        {{ 'Clear Component Cache'|t('twig-component-manager') }}
+                       data-confirm="{{ 'Are you sure you want to clear the component cache?'|t('component-manager') }}"
+                       data-redirect="{{ 'component-manager/settings/maintenance'|hash }}">
+                        {{ 'Clear Component Cache'|t('component-manager') }}
                     </a>
                 </div>
 
                 <p class="light" style="margin-top: 15px;">
-                    <strong>{{ 'Cache Duration:'|t('twig-component-manager') }}</strong>
+                    <strong>{{ 'Cache Duration:'|t('component-manager') }}</strong>
                     {% if settings.cacheDuration == 0 %}
-                        {{ 'Until manually cleared'|t('twig-component-manager') }}
+                        {{ 'Until manually cleared'|t('component-manager') }}
                     {% else %}
-                        {{ settings.cacheDuration }} {{ 'seconds'|t('twig-component-manager') }}
+                        {{ settings.cacheDuration }} {{ 'seconds'|t('component-manager') }}
                     {% endif %}
                 </p>
             </div>
         {% else %}
             <div class="input">
-                <p class="warning">{{ 'Component caching is currently disabled. Enable it in the Features settings.'|t('twig-component-manager') }}</p>
+                <p class="warning">{{ 'Component caching is currently disabled. Enable it in the Features settings.'|t('component-manager') }}</p>
                 <div class="buttons">
-                    <a href="{{ url('twig-component-manager/settings/features') }}" class="btn">
-                        {{ 'Go to Features Settings'|t('twig-component-manager') }}
+                    <a href="{{ url('component-manager/settings/features') }}" class="btn">
+                        {{ 'Go to Features Settings'|t('component-manager') }}
                     </a>
                 </div>
             </div>
@@ -67,29 +67,29 @@
     
     <div class="field">
         <div class="heading">
-            <h3>{{ 'Usage Statistics'|t('twig-component-manager') }}</h3>
+            <h3>{{ 'Usage Statistics'|t('component-manager') }}</h3>
             <div class="instructions">
-                <p>{{ 'Clear component usage statistics and tracking data.'|t('twig-component-manager') }}</p>
+                <p>{{ 'Clear component usage statistics and tracking data.'|t('component-manager') }}</p>
             </div>
         </div>
         
         {% if settings.enableUsageTracking %}
             <div class="input">
                 <div class="buttons">
-                    <a href="{{ actionUrl('twig-component-manager/usage/clear') }}" 
+                    <a href="{{ actionUrl('component-manager/usage/clear') }}" 
                        class="btn formsubmit"
-                       data-confirm="{{ 'Are you sure you want to clear all usage statistics?'|t('twig-component-manager') }}"
-                       data-redirect="{{ 'twig-component-manager/settings/maintenance'|hash }}">
-                        {{ 'Clear Usage Statistics'|t('twig-component-manager') }}
+                       data-confirm="{{ 'Are you sure you want to clear all usage statistics?'|t('component-manager') }}"
+                       data-redirect="{{ 'component-manager/settings/maintenance'|hash }}">
+                        {{ 'Clear Usage Statistics'|t('component-manager') }}
                     </a>
                 </div>
             </div>
         {% else %}
             <div class="input">
-                <p class="warning">{{ 'Usage tracking is currently disabled. Enable it in the Features settings.'|t('twig-component-manager') }}</p>
+                <p class="warning">{{ 'Usage tracking is currently disabled. Enable it in the Features settings.'|t('component-manager') }}</p>
                 <div class="buttons">
-                    <a href="{{ url('twig-component-manager/settings/features') }}" class="btn">
-                        {{ 'Go to Features Settings'|t('twig-component-manager') }}
+                    <a href="{{ url('component-manager/settings/features') }}" class="btn">
+                        {{ 'Go to Features Settings'|t('component-manager') }}
                     </a>
                 </div>
             </div>
@@ -100,23 +100,23 @@
     
     <div class="field">
         <div class="heading">
-            <h3>{{ 'Component Discovery'|t('twig-component-manager') }}</h3>
+            <h3>{{ 'Component Discovery'|t('component-manager') }}</h3>
             <div class="instructions">
-                <p>{{ 'Force re-discovery of all components from configured paths.'|t('twig-component-manager') }}</p>
+                <p>{{ 'Force re-discovery of all components from configured paths.'|t('component-manager') }}</p>
             </div>
         </div>
         
         <div class="input">
             <div class="buttons">
-                <a href="{{ actionUrl('twig-component-manager/discovery/refresh') }}" 
+                <a href="{{ actionUrl('component-manager/discovery/refresh') }}" 
                    class="btn formsubmit"
-                   data-redirect="{{ 'twig-component-manager/settings/maintenance'|hash }}">
-                    {{ 'Re-discover Components'|t('twig-component-manager') }}
+                   data-redirect="{{ 'component-manager/settings/maintenance'|hash }}">
+                    {{ 'Re-discover Components'|t('component-manager') }}
                 </a>
             </div>
 
             <div style="margin-top: 15px;">
-                <p class="light"><strong>{{ 'Currently searching in:'|t('twig-component-manager') }}</strong></p>
+                <p class="light"><strong>{{ 'Currently searching in:'|t('component-manager') }}</strong></p>
                 <ul class="light" style="margin-top: 8px;">
                     {% for path in settings.componentPaths %}
                         <li><code>templates/{{ path }}</code></li>
@@ -130,9 +130,9 @@
     
     <div class="field">
         <div class="heading">
-            <h3>{{ 'System Information'|t('twig-component-manager') }}</h3>
+            <h3>{{ 'System Information'|t('component-manager') }}</h3>
             <div class="instructions">
-                <p>{{ 'Information about the Twig Component Manager system.'|t('twig-component-manager') }}</p>
+                <p>{{ 'Information about the Component Manager system.'|t('component-manager') }}</p>
             </div>
         </div>
         
@@ -140,37 +140,37 @@
             <table class="data fullwidth">
                 <tbody>
                     <tr>
-                        <th>{{ 'Plugin Version'|t('twig-component-manager') }}</th>
+                        <th>{{ 'Plugin Version'|t('component-manager') }}</th>
                         <td>{{ plugin.version }}</td>
                     </tr>
                     <tr>
-                        <th>{{ 'Schema Version'|t('twig-component-manager') }}</th>
+                        <th>{{ 'Schema Version'|t('component-manager') }}</th>
                         <td>{{ plugin.schemaVersion }}</td>
                     </tr>
                     <tr>
-                        <th>{{ 'Components Discovered'|t('twig-component-manager') }}</th>
+                        <th>{{ 'Components Discovered'|t('component-manager') }}</th>
                         <td>
                             {% set components = plugin.discovery.discoverComponents() %}
-                            {{ components|length }} {{ 'components'|t('twig-component-manager') }}
+                            {{ components|length }} {{ 'components'|t('component-manager') }}
                         </td>
                     </tr>
                     <tr>
-                        <th>{{ 'Cache Status'|t('twig-component-manager') }}</th>
+                        <th>{{ 'Cache Status'|t('component-manager') }}</th>
                         <td>
                             {% if settings.enableCache %}
-                                <span class="status green"></span> {{ 'Enabled'|t('twig-component-manager') }}
+                                <span class="status green"></span> {{ 'Enabled'|t('component-manager') }}
                             {% else %}
-                                <span class="status light"></span> {{ 'Disabled'|t('twig-component-manager') }}
+                                <span class="status light"></span> {{ 'Disabled'|t('component-manager') }}
                             {% endif %}
                         </td>
                     </tr>
                     <tr>
-                        <th>{{ 'Usage Tracking'|t('twig-component-manager') }}</th>
+                        <th>{{ 'Usage Tracking'|t('component-manager') }}</th>
                         <td>
                             {% if settings.enableUsageTracking %}
-                                <span class="status green"></span> {{ 'Enabled'|t('twig-component-manager') }}
+                                <span class="status green"></span> {{ 'Enabled'|t('component-manager') }}
                             {% else %}
-                                <span class="status light"></span> {{ 'Disabled'|t('twig-component-manager') }}
+                                <span class="status light"></span> {{ 'Disabled'|t('component-manager') }}
                             {% endif %}
                         </td>
                     </tr>
@@ -179,5 +179,5 @@
         </div>
     </div>
 
-    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
+    {% include 'component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

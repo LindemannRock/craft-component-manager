@@ -8,23 +8,23 @@
 
 {% set crumbs = [
     {
-        label: pluginName ?? 'Twig Component Manager',
-        url: url('twig-component-manager'),
+        label: pluginName ?? 'Component Manager',
+        url: url('component-manager'),
     },
     {
-        label: 'Components'|t('twig-component-manager'),
-        url: url('twig-component-manager/components'),
+        label: 'Components'|t('component-manager'),
+        url: url('component-manager/components'),
     },
     {
         label: displayName,
-        url: url('twig-component-manager/component/' ~ component.name),
+        url: url('component-manager/component/' ~ component.name),
     },
 ] %}
 
 {% block actionButton %}
     <div class="btngroup">
         <button class="btn" onclick="navigator.clipboard.writeText('{% verbatim %}{% x:{% endverbatim %}{{ component.name }}{% verbatim %} %}{% endx %}{% endverbatim %}')">
-            {{ 'Copy Usage'|t('twig-component-manager') }}
+            {{ 'Copy Usage'|t('component-manager') }}
         </button>
     </div>
 {% endblock %}
@@ -35,7 +35,7 @@
 {# Always show preview first #}
 {% set tabs = tabs|merge({
     preview: {
-        label: 'Live Preview'|t('twig-component-manager'),
+        label: 'Live Preview'|t('component-manager'),
         url: '#preview'
     }
 }) %}
@@ -43,7 +43,7 @@
 {% if documentation.examples|length > 0 %}
     {% set tabs = tabs|merge({
         examples: {
-            label: 'Examples'|t('twig-component-manager'),
+            label: 'Examples'|t('component-manager'),
             url: '#examples'
         }
     }) %}
@@ -52,7 +52,7 @@
 {% if documentation.props|length > 0 %}
     {% set tabs = tabs|merge({
         props: {
-            label: 'Props'|t('twig-component-manager'),
+            label: 'Props'|t('component-manager'),
             url: '#props'
         }
     }) %}
@@ -61,7 +61,7 @@
 {% if documentation.slots|length > 0 %}
     {% set tabs = tabs|merge({
         slots: {
-            label: 'Slots'|t('twig-component-manager'),
+            label: 'Slots'|t('component-manager'),
             url: '#slots'
         }
     }) %}
@@ -69,7 +69,7 @@
 
 {% set tabs = tabs|merge({
     source: {
-        label: 'Source Code'|t('twig-component-manager'),
+        label: 'Source Code'|t('component-manager'),
         url: '#source'
     }
 }) %}
@@ -77,7 +77,7 @@
 {% if documentation.usage|length > 0 %}
     {% set tabs = tabs|merge({
         usage: {
-            label: 'Usage Notes'|t('twig-component-manager'),
+            label: 'Usage Notes'|t('component-manager'),
             url: '#usage'
         }
     }) %}
@@ -134,9 +134,9 @@
                         {# Variant selector #}
                         {% if documentation.examples|length > 0 %}
                             <div class="preview-variant-select">
-                                <label for="variant-select">{{ 'Example'|t('twig-component-manager') }}:</label>
+                                <label for="variant-select">{{ 'Example'|t('component-manager') }}:</label>
                                 <select id="variant-select" class="select">
-                                    <option value="default">{{ 'Default'|t('twig-component-manager') }}</option>
+                                    <option value="default">{{ 'Default'|t('component-manager') }}</option>
                                     {% for example in documentation.examples %}
                                         <option value="{{ example.id ?? ('example-' ~ loop.index) }}">{{ example.title }}</option>
                                     {% endfor %}
@@ -215,7 +215,7 @@
                         {% set defaultProps = documentation.examples[0].props ?? {} %}
                         {% set defaultPropsJson = defaultProps|json_encode %}
                         {# Use actionUrl properly with parameters #}
-                        {% set iframeUrl = actionUrl('twig-component-manager/preview/iframe', {
+                        {% set iframeUrl = actionUrl('component-manager/preview/iframe', {
                             component: component.name,
                             props: defaultPropsJson,
                             content: ''
@@ -231,7 +231,7 @@
                 {# Interactive prop editor #}
                 {% if documentation.props|length > 0 %}
                     <div class="prop-editor" style="margin-top: 20px;">
-                        <h3>{{ 'Edit Props'|t('twig-component-manager') }}</h3>
+                        <h3>{{ 'Edit Props'|t('component-manager') }}</h3>
                         <div class="prop-fields">
                             {% for prop in documentation.props %}
                                 <div class="field" style="margin-bottom: 12px;">
@@ -266,7 +266,7 @@
                             {% endfor %}
                         </div>
                         <div style="margin-top: 12px;">
-                            <button id="apply-props" class="btn submit">{{ 'Apply Changes'|t('twig-component-manager') }}</button>
+                            <button id="apply-props" class="btn submit">{{ 'Apply Changes'|t('component-manager') }}</button>
                         </div>
                     </div>
                 {% endif %}
@@ -275,14 +275,14 @@
             {# Examples Tab #}
             {% if documentation.examples|length > 0 %}
                 <div id="examples" {% if firstTab != 'examples' %}class="hidden"{% endif %}>
-                    <h2>{{ 'Examples'|t('twig-component-manager') }}</h2>
+                    <h2>{{ 'Examples'|t('component-manager') }}</h2>
                     {% for example in documentation.examples %}
                         <div class="example-block">
                             <h3>{{ example.title }}</h3>
                             <div class="code-example">
                                 <pre><code class="twig-code">{{ example.code|e }}</code></pre>
                                 <button class="btn small secondary copy-code" data-code="{{ example.code|e('html_attr') }}">
-                                    {{ 'Copy'|t('twig-component-manager') }}
+                                    {{ 'Copy'|t('component-manager') }}
                                 </button>
                             </div>
                         </div>
@@ -293,15 +293,15 @@
             {# Props Tab #}
             {% if documentation.props|length > 0 %}
                 <div id="props" {% if firstTab != 'props' %}class="hidden"{% endif %}>
-                    <h2>{{ 'Props'|t('twig-component-manager') }}</h2>
+                    <h2>{{ 'Props'|t('component-manager') }}</h2>
                     <table class="data fullwidth">
                         <thead>
                             <tr>
-                                <th>{{ 'Name'|t('twig-component-manager') }}</th>
-                                <th>{{ 'Type'|t('twig-component-manager') }}</th>
-                                <th>{{ 'Required'|t('twig-component-manager') }}</th>
-                                <th>{{ 'Default'|t('twig-component-manager') }}</th>
-                                <th>{{ 'Description'|t('twig-component-manager') }}</th>
+                                <th>{{ 'Name'|t('component-manager') }}</th>
+                                <th>{{ 'Type'|t('component-manager') }}</th>
+                                <th>{{ 'Required'|t('component-manager') }}</th>
+                                <th>{{ 'Default'|t('component-manager') }}</th>
+                                <th>{{ 'Description'|t('component-manager') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -322,9 +322,9 @@
                                     </td>
                                     <td>
                                         {% if prop.required %}
-                                            <span class="status orange"></span> {{ 'Yes'|t('twig-component-manager') }}
+                                            <span class="status orange"></span> {{ 'Yes'|t('component-manager') }}
                                         {% else %}
-                                            <span class="status light"></span> {{ 'No'|t('twig-component-manager') }}
+                                            <span class="status light"></span> {{ 'No'|t('component-manager') }}
                                         {% endif %}
                                     </td>
                                     <td>
@@ -351,14 +351,14 @@
             {# Slots Tab #}
             {% if documentation.slots|length > 0 %}
                 <div id="slots" {% if firstTab != 'slots' %}class="hidden"{% endif %}>
-                    <h2>{{ 'Slots'|t('twig-component-manager') }}</h2>
+                    <h2>{{ 'Slots'|t('component-manager') }}</h2>
                     <div class="slots-list">
                         {% for slot in documentation.slots %}
                             <div class="slot-item">
                                 <h3>
                                     <code>{{ slot.name }}</code>
                                     {% if slot.required %}
-                                        <span class="status orange small">{{ 'Required'|t('twig-component-manager') }}</span>
+                                        <span class="status orange small">{{ 'Required'|t('component-manager') }}</span>
                                     {% endif %}
                                 </h3>
                                 {% if slot.description %}
@@ -377,7 +377,7 @@
             
             {# Source Code Tab #}
             <div id="source" {% if firstTab != 'source' %}class="hidden"{% endif %}>
-                <h2>{{ 'Source Code'|t('twig-component-manager') }}</h2>
+                <h2>{{ 'Source Code'|t('component-manager') }}</h2>
                 <div class="source-code">
                     <pre><code class="twig-code">{{ source|e }}</code></pre>
                 </div>
@@ -386,7 +386,7 @@
             {# Usage Notes Tab #}
             {% if documentation.usage|length > 0 %}
                 <div id="usage" {% if firstTab != 'usage' %}class="hidden"{% endif %}>
-                    <h2>{{ 'Usage Notes'|t('twig-component-manager') }}</h2>
+                    <h2>{{ 'Usage Notes'|t('component-manager') }}</h2>
                     <ul class="usage-notes">
                         {% for note in documentation.usage %}
                             <li>{{ note }}</li>
@@ -943,12 +943,12 @@
         console.log('Sending params to iframe:', params);
         
         // Build the URL using Craft's format
-        const baseUrl = '{{ cpUrl('twig-component-manager/preview/iframe')|raw }}';
+        const baseUrl = '{{ cpUrl('component-manager/preview/iframe')|raw }}';
         const queryString = new URLSearchParams(params).toString();
         
         // The baseUrl from cpUrl already includes the proper base path
         // We need to use the action format
-        const actionPath = '{{ actionUrl('twig-component-manager/preview/iframe')|raw }}';
+        const actionPath = '{{ actionUrl('component-manager/preview/iframe')|raw }}';
         
         // Parse the existing URL to get base components
         const url = new URL(actionPath, window.location.origin);

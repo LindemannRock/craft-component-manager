@@ -1,6 +1,6 @@
 {% extends "_layouts/cp" %}
 
-{% set title = title ?? 'Settings'|t('twig-component-manager') %}
+{% set title = title ?? 'Settings'|t('component-manager') %}
 {% set selectedSettingsItem = selectedSettingsItem ?? 'general' %}
 {% set selectedSubnavItem = 'settings' %}
 
@@ -8,33 +8,33 @@
     <nav id="settings-nav">
         <ul>
             <li>
-                <a href="{{ url('twig-component-manager/settings/general') }}" {% if selectedSettingsItem == 'general' %}class="sel"{% endif %} data-nav-item="general">
-                    {{ 'General'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/general') }}" {% if selectedSettingsItem == 'general' %}class="sel"{% endif %} data-nav-item="general">
+                    {{ 'General'|t('component-manager') }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('twig-component-manager/settings/paths') }}" {% if selectedSettingsItem == 'paths' %}class="sel"{% endif %} data-nav-item="paths">
-                    {{ 'Paths & Files'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/paths') }}" {% if selectedSettingsItem == 'paths' %}class="sel"{% endif %} data-nav-item="paths">
+                    {{ 'Paths & Files'|t('component-manager') }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('twig-component-manager/settings/features') }}" {% if selectedSettingsItem == 'features' %}class="sel"{% endif %} data-nav-item="features">
-                    {{ 'Features'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/features') }}" {% if selectedSettingsItem == 'features' %}class="sel"{% endif %} data-nav-item="features">
+                    {{ 'Features'|t('component-manager') }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('twig-component-manager/settings/discovery') }}" {% if selectedSettingsItem == 'discovery' %}class="sel"{% endif %} data-nav-item="discovery">
-                    {{ 'Discovery'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/discovery') }}" {% if selectedSettingsItem == 'discovery' %}class="sel"{% endif %} data-nav-item="discovery">
+                    {{ 'Discovery'|t('component-manager') }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('twig-component-manager/settings/library') }}" {% if selectedSettingsItem == 'library' %}class="sel"{% endif %} data-nav-item="library">
-                    {{ 'Component Library'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/library') }}" {% if selectedSettingsItem == 'library' %}class="sel"{% endif %} data-nav-item="library">
+                    {{ 'Component Library'|t('component-manager') }}
                 </a>
             </li>
             <li>
-                <a href="{{ url('twig-component-manager/settings/maintenance') }}" {% if selectedSettingsItem == 'maintenance' %}class="sel"{% endif %} data-nav-item="maintenance">
-                    {{ 'Maintenance'|t('twig-component-manager') }}
+                <a href="{{ url('component-manager/settings/maintenance') }}" {% if selectedSettingsItem == 'maintenance' %}class="sel"{% endif %} data-nav-item="maintenance">
+                    {{ 'Maintenance'|t('component-manager') }}
                 </a>
             </li>
         </ul>

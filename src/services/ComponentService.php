@@ -1,20 +1,20 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\services;
+namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
 use craft\web\View;
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
-use lindemannrock\twigcomponentmanager\models\ComponentModel;
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\models\ComponentModel;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -23,7 +23,7 @@ use Twig\Error\SyntaxError;
  * Component Service
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class ComponentService extends Component
@@ -45,7 +45,7 @@ class ComponentService extends Component
      */
     public function render(string $name, array $props = [], ?string $content = null, array $slots = []): string
     {
-        $plugin = TwigComponentManager::$plugin;
+        $plugin = ComponentManager::$plugin;
         $settings = $plugin->getSettings();
         
         // Component name already contains slashes for folder paths (e.g., "forms/contact-card")
@@ -131,7 +131,7 @@ class ComponentService extends Component
      */
     private function getTemplatePath(ComponentModel $component): string
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         // Try each configured path
         foreach ($settings->componentPaths as $basePath) {
@@ -172,7 +172,7 @@ class ComponentService extends Component
     public function getUsageStats(): array
     {
         $stats = [];
-        $components = TwigComponentManager::$plugin->discovery->discoverComponents();
+        $components = ComponentManager::$plugin->discovery->discoverComponents();
         
         foreach ($components as $component) {
             $cacheKey = 'component-usage-' . md5($component->name);
@@ -208,7 +208,7 @@ class ComponentService extends Component
             'warnings' => [],
         ];
         
-        $component = TwigComponentManager::$plugin->discovery->getComponent($name);
+        $component = ComponentManager::$plugin->discovery->getComponent($name);
         
         if (!$component) {
             $results['valid'] = false;

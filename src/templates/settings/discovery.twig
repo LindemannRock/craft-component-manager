@@ -1,83 +1,83 @@
-{% extends "twig-component-manager/_layouts/settings" %}
-{% set title = "Discovery Settings"|t('twig-component-manager') %}
+{% extends "component-manager/_layouts/settings" %}
+{% set title = "Discovery Settings"|t('component-manager') %}
 {% set fullPageForm = true %}
 {% set selectedSettingsItem = 'discovery' %}
 
 {% set crumbs = [
     {
-        label: pluginName ?? 'Twig Component Manager',
-        url: url('twig-component-manager'),
+        label: pluginName ?? 'Component Manager',
+        url: url('component-manager'),
     },
     {
-        label: 'Settings'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings'),
+        label: 'Settings'|t('component-manager'),
+        url: url('component-manager/settings'),
     },
     {
-        label: 'Discovery'|t('twig-component-manager'),
-        url: url('twig-component-manager/settings/discovery'),
+        label: 'Discovery'|t('component-manager'),
+        url: url('component-manager/settings/discovery'),
     },
 ] %}
 
 {% import "_includes/forms" as forms %}
 
 {% block content %}
-    <h2>{{ 'Discovery Settings'|t('twig-component-manager') }}</h2>
+    <h2>{{ 'Discovery Settings'|t('component-manager') }}</h2>
     
     <form method="post" accept-charset="UTF-8">
         {{ csrfInput() }}
-        {{ actionInput('twig-component-manager/settings/save') }}
-        {{ redirectInput('twig-component-manager/settings/discovery') }}
+        {{ actionInput('component-manager/settings/save') }}
+        {{ redirectInput('component-manager/settings/discovery') }}
         
         {{ forms.lightswitchField({
-            label: 'Allow Nesting'|t('twig-component-manager'),
-            instructions: 'Allow nested folder organization for components'|t('twig-component-manager'),
+            label: 'Allow Nesting'|t('component-manager'),
+            instructions: 'Allow nested folder organization for components'|t('component-manager'),
             id: 'allowNesting',
             name: 'allowNesting',
             on: settings.allowNesting,
-            warning: settings.isOverridden('allowNesting') ? 'This is being overridden by the `allowNesting` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('allowNesting') ? 'This is being overridden by the `allowNesting` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('allowNesting'),
             errors: settings.getErrors('allowNesting')
         }) }}
 
         {{ forms.textField({
-            label: 'Max Nesting Depth'|t('twig-component-manager'),
-            instructions: 'Maximum folder nesting depth (0 = unlimited)'|t('twig-component-manager'),
+            label: 'Max Nesting Depth'|t('component-manager'),
+            instructions: 'Maximum folder nesting depth (0 = unlimited)'|t('component-manager'),
             id: 'maxNestingDepth',
             name: 'maxNestingDepth',
             value: settings.maxNestingDepth,
             type: 'number',
             min: 0,
-            warning: settings.isOverridden('maxNestingDepth') ? 'This is being overridden by the `maxNestingDepth` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('maxNestingDepth') ? 'This is being overridden by the `maxNestingDepth` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('maxNestingDepth'),
             errors: settings.getErrors('maxNestingDepth')
         }) }}
         
         {{ forms.textareaField({
-            label: 'Ignore Folders'|t('twig-component-manager'),
-            instructions: 'Folders to ignore when discovering components (one per line)'|t('twig-component-manager'),
+            label: 'Ignore Folders'|t('component-manager'),
+            instructions: 'Folders to ignore when discovering components (one per line)'|t('component-manager'),
             id: 'ignoreFolders',
             name: 'ignoreFolders',
             value: settings.ignoreFolders|join("\n"),
             rows: 5,
             placeholder: "node_modules\n.git\nvendor\ndist\nbuild",
-            warning: settings.isOverridden('ignoreFolders') ? 'This is being overridden by the `ignoreFolders` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('ignoreFolders') ? 'This is being overridden by the `ignoreFolders` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('ignoreFolders'),
             errors: settings.getErrors('ignoreFolders')
         }) }}
 
         {{ forms.textareaField({
-            label: 'Ignore Patterns'|t('twig-component-manager'),
-            instructions: 'File patterns to ignore when discovering components (one per line)'|t('twig-component-manager'),
+            label: 'Ignore Patterns'|t('component-manager'),
+            instructions: 'File patterns to ignore when discovering components (one per line)'|t('component-manager'),
             id: 'ignorePatterns',
             name: 'ignorePatterns',
             value: settings.ignorePatterns|join("\n"),
             rows: 3,
             placeholder: "*.test.twig\n*.spec.twig\n_*",
-            warning: settings.isOverridden('ignorePatterns') ? 'This is being overridden by the `ignorePatterns` setting in the `config/twig-component-manager.php` file.'|t('twig-component-manager'),
+            warning: settings.isOverridden('ignorePatterns') ? 'This is being overridden by the `ignorePatterns` setting in the `config/component-manager.php` file.'|t('component-manager'),
             disabled: settings.isOverridden('ignorePatterns'),
             errors: settings.getErrors('ignorePatterns')
         }) }}
     </form>
 
-    {% include 'twig-component-manager/_components/plugin-credit.twig' %}
+    {% include 'component-manager/_components/plugin-credit.twig' %}
 {% endblock %}

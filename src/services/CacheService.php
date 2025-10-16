@@ -1,24 +1,24 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\services;
+namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
+use lindemannrock\componentmanager\ComponentManager;
 
 /**
  * Cache Service
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class CacheService extends Component
@@ -34,7 +34,7 @@ class CacheService extends Component
      */
     public function getComponents(): ?array
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         if (!$settings->enableCache) {
             return null;
@@ -52,7 +52,7 @@ class CacheService extends Component
      */
     public function setComponents(array $components): bool
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         if (!$settings->enableCache) {
             return false;
@@ -72,7 +72,7 @@ class CacheService extends Component
      */
     public function getCompiled(string $name): ?string
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         if (!$settings->enableCache) {
             return null;
@@ -91,7 +91,7 @@ class CacheService extends Component
      */
     public function setCompiled(string $name, string $compiled): bool
     {
-        $settings = TwigComponentManager::$plugin->getSettings();
+        $settings = ComponentManager::$plugin->getSettings();
         
         if (!$settings->enableCache) {
             return false;
@@ -117,7 +117,7 @@ class CacheService extends Component
         $this->clearCompiled();
         
         // Clear discovery service cache
-        TwigComponentManager::$plugin->discovery->clearCache();
+        ComponentManager::$plugin->discovery->clearCache();
         
         Craft::info('Component cache cleared', __METHOD__);
         
@@ -144,7 +144,7 @@ class CacheService extends Component
     {
         // Since we can't easily delete all keys with a prefix,
         // we'll need to track compiled components
-        $components = TwigComponentManager::$plugin->discovery->discoverComponents();
+        $components = ComponentManager::$plugin->discovery->discoverComponents();
         
         foreach ($components as $component) {
             $cacheKey = self::CACHE_KEY_PREFIX . self::COMPILED_CACHE_KEY . md5($component->name);
@@ -162,7 +162,7 @@ class CacheService extends Component
     public function getStats(): array
     {
         $stats = [
-            'enabled' => TwigComponentManager::$plugin->getSettings()->enableCache,
+            'enabled' => ComponentManager::$plugin->getSettings()->enableCache,
             'components' => 0,
             'compiled' => 0,
             'size' => 0,
@@ -174,7 +174,7 @@ class CacheService extends Component
         }
         
         // Count compiled components
-        $components = TwigComponentManager::$plugin->discovery->discoverComponents();
+        $components = ComponentManager::$plugin->discovery->discoverComponents();
         foreach ($components as $component) {
             if ($this->getCompiled($component->name) !== null) {
                 $stats['compiled']++;
@@ -192,7 +192,7 @@ class CacheService extends Component
     public function warmCache(): int
     {
         $count = 0;
-        $components = TwigComponentManager::$plugin->discovery->discoverComponents(true);
+        $components = ComponentManager::$plugin->discovery->discoverComponents(true);
         
         foreach ($components as $component) {
             // Pre-compile each component

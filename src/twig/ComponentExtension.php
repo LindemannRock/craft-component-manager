@@ -1,18 +1,18 @@
 <?php
 /**
- * Twig Component Manager plugin for Craft CMS 5.x
+ * Component Manager plugin for Craft CMS 5.x
  *
- * Advanced Twig component management with folder organization, prop validation, and slots
+ * Advanced component management with folder organization, prop validation, and slots
  *
  * @link      https://lindemannrock.com
  * @copyright Copyright (c) 2025 LindemannRock
  */
 
-namespace lindemannrock\twigcomponentmanager\twig;
+namespace lindemannrock\componentmanager\twig;
 
-use lindemannrock\twigcomponentmanager\TwigComponentManager;
-use lindemannrock\twigcomponentmanager\twig\ComponentTokenParser;
-use lindemannrock\twigcomponentmanager\twig\SlotTokenParser;
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\twig\ComponentTokenParser;
+use lindemannrock\componentmanager\twig\SlotTokenParser;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -20,22 +20,22 @@ use Twig\TwigFunction;
  * Component Twig Extension
  *
  * @author    LindemannRock
- * @package   TwigComponentManager
+ * @package   ComponentManager
  * @since     1.0.0
  */
 class ComponentExtension extends AbstractExtension
 {
     /**
-     * @var TwigComponentManager
+     * @var ComponentManager
      */
-    private TwigComponentManager $plugin;
+    private ComponentManager $plugin;
 
     /**
      * Constructor
      *
-     * @param TwigComponentManager $plugin
+     * @param ComponentManager $plugin
      */
-    public function __construct(TwigComponentManager $plugin)
+    public function __construct(ComponentManager $plugin)
     {
         $this->plugin = $plugin;
     }
@@ -45,7 +45,7 @@ class ComponentExtension extends AbstractExtension
      */
     public function getName(): string
     {
-        return 'TwigComponentManager';
+        return 'ComponentManager';
     }
 
     /**
