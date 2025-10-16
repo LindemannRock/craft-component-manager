@@ -131,6 +131,12 @@ class Component extends Element
             ],
         ];
 
+        // Check if table exists first (it won't during initial installation)
+        $tableSchema = Craft::$app->getDb()->getTableSchema('{{%componentmanager_components}}');
+        if (!$tableSchema) {
+            return $sources;
+        }
+
         // Add category sources from database
         $categories = ComponentRecord::find()
             ->select(['category'])
@@ -138,9 +144,9 @@ class Component extends Element
             ->where(['not', ['category' => null]])
             ->andWhere(['!=', 'category', ''])
             ->column();
-        
+
         sort($categories);
-        
+
         foreach ($categories as $category) {
             $sources[] = [
                 'key' => 'category:' . $category,

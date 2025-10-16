@@ -251,12 +251,18 @@ class Settings extends Model
      */
     public function loadFromDb(): bool
     {
+        // Check if table exists first (it won't during initial installation)
+        $tableSchema = Craft::$app->getDb()->getTableSchema('{{%componentmanager_settings}}');
+        if (!$tableSchema) {
+            return false;
+        }
+
         $settings = (new Query())
             ->select('*')
             ->from('{{%componentmanager_settings}}')
             ->where(['id' => 1])
             ->one();
-            
+
         if (!$settings) {
             return false;
         }
