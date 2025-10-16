@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.2...v1.2.0) (2025-10-16)
+
+
+### Features
+
+* rename plugin from Twig Component Manager to Component Manager ([5186b96](https://github.com/LindemannRock/craft-component-manager/commit/5186b960b65119c75d08965c2f4d7f97165c2c1a))
+
 ## [1.1.2](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.1...v1.1.2) (2025-09-24)
 
 
