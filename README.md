@@ -35,29 +35,20 @@ Core component functionality (parsing, rendering, prop validation) is stable and
 
 ## Installation
 
-### Via Composer (Development)
-
-Until published on Packagist, install directly from the repository:
+### Via Composer
 
 ```bash
 cd /path/to/project
-composer config repositories.component-manager vcs https://github.com/LindemannRock/craft-component-manager
-composer require lindemannrock/component-manager:dev-main
-```
-
-Then install the plugin:
-```bash
+composer require lindemannrock/craft-component-manager
 ./craft plugin/install component-manager
 ```
 
-### Via Composer (Production - Coming Soon)
-
-Once published on Packagist:
+### Using DDEV
 
 ```bash
 cd /path/to/project
-composer require lindemannrock/component-manager
-./craft plugin/install component-manager
+ddev composer require lindemannrock/craft-component-manager
+ddev craft plugin/install component-manager
 ```
 
 ### Via Control Panel
