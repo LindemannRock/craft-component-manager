@@ -2,7 +2,7 @@
     "name": "lindemannrock/craft-component-manager",
     "description": "Advanced component management for Craft CMS with folder organization, prop validation, and slots",
     "type": "craft-plugin",
-    "version": "1.2.1",
+    "version": "5.0.0",
     "keywords": [
         "craft",
         "cms",

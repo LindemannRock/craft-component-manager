@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.0.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.1...v5.0.0) (2025-10-20)
+
+
+### Miscellaneous Chores
+
+* bump version scheme to match Craft 5 ([c42a566](https://github.com/LindemannRock/craft-component-manager/commit/c42a566c6ce88cae9b2ce5278b4411fee6b870c8))
+
 ## [1.2.1](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.0...v1.2.1) (2025-10-16)
 
 
