@@ -1,5 +1,10 @@
 # Component Manager for Craft CMS
 
+[![Latest Version](https://img.shields.io/packagist/v/lindemannrock/craft-component-manager.svg)](https://packagist.org/packages/lindemannrock/craft-component-manager)
+[![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.0+-orange.svg)](https://craftcms.com/)
+[![PHP](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net/)
+[![License](https://img.shields.io/packagist/l/lindemannrock/craft-component-manager.svg)](LICENSE)
+
 Advanced component management plugin for Craft CMS 5.x with comprehensive Control Panel interface, automatic component discovery, rich documentation parsing, and professional preview system.
 
 ## Features
