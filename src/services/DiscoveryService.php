@@ -12,6 +12,7 @@ namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\ComponentModel;
 use RecursiveDirectoryIterator;
@@ -26,15 +27,26 @@ use RecursiveIteratorIterator;
  */
 class DiscoveryService extends Component
 {
+    use LoggingTrait;
+
     /**
      * @var array Discovered components cache
      */
     private array $_components = [];
-    
+
     /**
      * @var bool Whether components have been discovered
      */
     private bool $_discovered = false;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
 
     /**
      * Discover all components in configured paths

@@ -16,7 +16,9 @@ use craft\base\Plugin;
 use craft\events\CreateTwigEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterUserPermissionsEvent;
 use craft\events\TemplateEvent;
+use craft\services\UserPermissions;
 use craft\web\UrlManager;
 use craft\web\View;
 use craft\web\twig\variables\CraftVariable;
@@ -28,6 +30,8 @@ use lindemannrock\componentmanager\services\DocumentationService;
 use lindemannrock\componentmanager\twig\ComponentExtension;
 use lindemannrock\componentmanager\twig\ComponentLexer;
 use lindemannrock\componentmanager\variables\ComponentVariable;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
+use lindemannrock\logginglibrary\LoggingLibrary;
 use yii\base\Event;
 
 /**
@@ -46,6 +50,8 @@ use yii\base\Event;
  */
 class ComponentManager extends Plugin
 {
+    use LoggingTrait;
+
     /**
      * @var ComponentManager|null
      */
@@ -83,7 +89,17 @@ class ComponentManager extends Plugin
     {
         parent::init();
         self::$plugin = $this;
-        
+
+        // Configure logging
+        $settings = $this->getSettings();
+        LoggingLibrary::configure([
+            'pluginHandle' => $this->handle,
+            'pluginName' => $settings->pluginName ?? $this->name,
+            'logLevel' => $settings->logLevel ?? 'error',
+            'itemsPerPage' => $settings->itemsPerPage ?? 100,
+            'permissions' => ['componentManager:viewLogs'],
+        ]);
+
         // Override plugin name from config if available
         $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
         if (isset($configFileSettings['pluginName'])) {
@@ -141,30 +157,26 @@ class ComponentManager extends Plugin
             }
         );
 
+        // Register permissions
+        Event::on(
+            UserPermissions::class,
+            UserPermissions::EVENT_REGISTER_PERMISSIONS,
+            function(RegisterUserPermissionsEvent $event) {
+                $event->permissions[] = [
+                    'heading' => Craft::t('component-manager', 'Component Manager'),
+                    'permissions' => [
+                        'componentManager:viewLogs' => [
+                            'label' => Craft::t('component-manager', 'View logs'),
+                        ],
+                    ],
+                ];
+            }
+        );
+
         // Register CP routes
         $this->_registerCpRoutes();
 
-        // Clear cache on template changes in dev mode
-        if (Craft::$app->getConfig()->getGeneral()->devMode) {
-            Event::on(
-                View::class,
-                View::EVENT_AFTER_RENDER_TEMPLATE,
-                function (TemplateEvent $event) {
-                    if (str_contains($event->template, $this->getSettings()->defaultPath)) {
-                        $this->cache->clearCache();
-                    }
-                }
-            );
-        }
-
-        Craft::info(
-            Craft::t(
-                'component-manager',
-                '{name} plugin loaded',
-                ['name' => $this->name]
-            ),
-            __METHOD__
-        );
+        // DO NOT log in init() - it's called on every request
     }
 
     /**
@@ -192,6 +204,14 @@ class ComponentManager extends Plugin
                     'label' => Craft::t('component-manager', 'Documentation'),
                     'url' => 'component-manager/documentation',
                 ];
+            }
+
+            // Add logs section using logging library (only if installed and enabled)
+            if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
+                Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
+                $item = LoggingLibrary::addLogsNav($item, $this->handle, [
+                    'componentManager:viewLogs'
+                ]);
             }
 
             if (Craft::$app->getUser()->checkPermission('accessPlugin-component-manager')) {
@@ -323,6 +343,10 @@ class ComponentManager extends Plugin
                     'component-manager/settings/interface' => 'component-manager/settings/interface',
                     'component-manager/settings/maintenance' => 'component-manager/settings/maintenance',
                     'component-manager/settings/save' => 'component-manager/settings/save',
+
+                    // Logging routes
+                    'component-manager/logs' => 'logging-library/logs/index',
+                    'component-manager/logs/download' => 'logging-library/logs/download',
                 ]);
             }
         );

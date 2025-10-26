@@ -12,6 +12,7 @@ use lindemannrock\componentmanager\ComponentManager;
 use Craft;
 use craft\web\Controller;
 use craft\web\View;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 
 /**
@@ -19,10 +20,21 @@ use yii\web\Response;
  */
 class PreviewController extends Controller
 {
+    use LoggingTrait;
+
     /**
      * @inheritdoc
      */
     protected array|int|bool $allowAnonymous = ['render', 'iframe'];
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
     
     /**
      * Render a component with given props
@@ -105,8 +117,12 @@ class PreviewController extends Controller
         }
         
         // Debug logging
-        \Craft::info("Iframe request - Component: {$componentName}, Variant: {$variant}, Props JSON: {$propsJson}", 'component-manager');
-        \Craft::info("Parsed props: " . json_encode($props), 'component-manager');
+        $this->logDebug('Iframe request', [
+            'component' => $componentName,
+            'variant' => $variant,
+            'propsJson' => $propsJson
+        ]);
+        $this->logDebug('Parsed props', ['props' => $props]);
         
         // Get the plugin instance
         $plugin = ComponentManager::getInstance();
@@ -125,9 +141,9 @@ class PreviewController extends Controller
         
         // Always try to load example data (including for default)
         $documentation = $plugin->documentation->generateComponentDocumentation($component);
-        
-        \Craft::info("Looking for variant '{$variant}' in examples", 'component-manager');
-        
+
+        $this->logDebug('Looking for variant in examples', ['variant' => $variant]);
+
         if (isset($documentation['examples'])) {
             // For "default" variant, use the first example
             if ($variant === 'default' && !empty($documentation['examples'])) {
@@ -135,25 +151,34 @@ class PreviewController extends Controller
                 $props = $example['props'] ?? [];
                 $defaultContent = $example['content'] ?? '';
                 $slots = $example['slots'] ?? [];
-                \Craft::info("Using first example for default: Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'component-manager');
+                $this->logDebug('Using first example for default', [
+                    'props' => $props,
+                    'content' => $defaultContent,
+                    'slots' => $slots
+                ]);
             } else {
                 // Find the matching example by ID
                 foreach ($documentation['examples'] as $index => $example) {
                     $exampleId = $example['id'] ?? ('example-' . ($index + 1));
-                    \Craft::info("Checking example ID: {$exampleId}", 'component-manager');
+                    $this->logDebug('Checking example ID', ['exampleId' => $exampleId]);
                     if ($exampleId === $variant) {
                         $props = $example['props'] ?? [];
                         $defaultContent = $example['content'] ?? '';
                         $slots = $example['slots'] ?? [];
-                        \Craft::info("Found variant '{$variant}'! Props: " . json_encode($props) . ", Content: '{$defaultContent}', Slots: " . json_encode($slots), 'component-manager');
+                        $this->logDebug('Found variant', [
+                            'variant' => $variant,
+                            'props' => $props,
+                            'content' => $defaultContent,
+                            'slots' => $slots
+                        ]);
                         break;
                     }
                 }
             }
         }
-        
-        \Craft::info("Final props being used: " . json_encode($props), 'component-manager');
-        
+
+        $this->logDebug('Final props being used', ['props' => $props]);
+
         // Determine default content for the component
         $defaultContent = $content ?: '';
         $slots = [];

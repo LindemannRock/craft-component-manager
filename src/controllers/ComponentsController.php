@@ -12,6 +12,7 @@ use lindemannrock\componentmanager\ComponentManager;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 use craft\helpers\FileHelper;
 
@@ -20,6 +21,17 @@ use craft\helpers\FileHelper;
  */
 class ComponentsController extends Controller
 {
+    use LoggingTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
+
     /**
      * Components index - list all discovered components using element index
      */
@@ -83,7 +95,7 @@ class ComponentsController extends Controller
         
         // Debug: check what examples were found
         if ($componentName === 'forms/contact-card') {
-            \Craft::info("Contact-card documentation: " . json_encode($documentation), 'component-manager');
+            $this->logDebug('Contact-card documentation', ['documentation' => $documentation]);
         }
         
         // Read the component source

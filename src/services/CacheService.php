@@ -12,6 +12,7 @@ namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
 
 /**
@@ -23,9 +24,20 @@ use lindemannrock\componentmanager\ComponentManager;
  */
 class CacheService extends Component
 {
+    use LoggingTrait;
+
     const CACHE_KEY_PREFIX = 'twig-component-manager-';
     const COMPONENTS_CACHE_KEY = 'discovered-components';
     const COMPILED_CACHE_KEY = 'compiled-';
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
 
     /**
      * Get cached components
@@ -118,9 +130,9 @@ class CacheService extends Component
         
         // Clear discovery service cache
         ComponentManager::$plugin->discovery->clearCache();
-        
-        Craft::info('Component cache cleared', __METHOD__);
-        
+
+        $this->logInfo('Component cache cleared');
+
         return true;
     }
 
@@ -201,12 +213,15 @@ class CacheService extends Component
                 $this->setCompiled($component->name, $content);
                 $count++;
             } catch (\Exception $e) {
-                Craft::warning("Failed to warm cache for component '{$component->name}': " . $e->getMessage(), __METHOD__);
+                $this->logWarning('Failed to warm cache for component', [
+                    'component' => $component->name,
+                    'error' => $e->getMessage()
+                ]);
             }
         }
-        
-        Craft::info("Warmed cache for {$count} components", __METHOD__);
-        
+
+        $this->logInfo('Warmed cache for components', ['count' => $count]);
+
         return $count;
     }
 }

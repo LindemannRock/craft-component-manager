@@ -13,6 +13,7 @@ namespace lindemannrock\componentmanager\services;
 use Craft;
 use craft\base\Component;
 use craft\web\View;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\ComponentModel;
 use Twig\Error\LoaderError;
@@ -28,10 +29,21 @@ use Twig\Error\SyntaxError;
  */
 class ComponentService extends Component
 {
+    use LoggingTrait;
+
     /**
      * @var array Active component stack for debugging
      */
     private array $_componentStack = [];
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
 
     /**
      * Render a component
@@ -69,7 +81,10 @@ class ComponentService extends Component
                 if ($settings->enableDebugMode && Craft::$app->getConfig()->getGeneral()->devMode) {
                     throw new \Exception("Component '{$name}' prop validation failed:\n" . implode("\n", $errors));
                 }
-                Craft::warning("Component '{$name}' prop validation failed: " . implode(', ', $errors), __METHOD__);
+                $this->logWarning('Component prop validation failed', [
+                    'component' => $name,
+                    'errors' => $errors
+                ]);
             }
         }
         
@@ -107,12 +122,15 @@ class ComponentService extends Component
         } catch (\Exception $e) {
             // Remove from stack
             array_pop($this->_componentStack);
-            
+
             if ($settings->enableDebugMode && Craft::$app->getConfig()->getGeneral()->devMode) {
                 throw new \Exception("Error rendering component '{$name}': " . $e->getMessage(), 0, $e);
             }
-            
-            Craft::error("Error rendering component '{$name}': " . $e->getMessage(), __METHOD__);
+
+            $this->logError('Error rendering component', [
+                'component' => $name,
+                'error' => $e->getMessage()
+            ]);
             return '';
             
         } finally {

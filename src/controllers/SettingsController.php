@@ -13,6 +13,7 @@ use lindemannrock\componentmanager\models\Settings;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 
 /**
@@ -20,6 +21,17 @@ use yii\web\Response;
  */
 class SettingsController extends Controller
 {
+    use LoggingTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
+
     /**
      * Settings index - redirect to general
      */
@@ -166,6 +178,7 @@ class SettingsController extends Controller
 
         // Validate
         if (!$settings->validate()) {
+            $this->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
             Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings.'));
 
             // Get the section to re-render the correct template with errors
@@ -179,6 +192,8 @@ class SettingsController extends Controller
 
         // Save settings to database
         if ($settings->saveToDatabase()) {
+            $this->logInfo('Settings saved successfully');
+
             // Update the plugin's cached settings (CRITICAL - forces Craft to refresh)
             $plugin->setSettings($settings->getAttributes());
 
@@ -187,6 +202,7 @@ class SettingsController extends Controller
 
             Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Settings saved successfully'));
         } else {
+            $this->logError('Failed to save settings to database');
             Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings'));
             return null;
         }

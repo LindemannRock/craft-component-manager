@@ -5,14 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Component Preview</title>
     
-    {# Include the compiled CSS directly with hash #}
-    {% if craft.app.config.general.devMode %}
-        <link rel="stylesheet" href="/dist/dev/assets/css/main-BSxoqxLo.css">
-        {# Include Tailwind CDN as a fallback #}
-        <script src="https://cdn.tailwindcss.com"></script>
-    {% else %}
-        <link rel="stylesheet" href="/dist/prod/assets/css/main-BSxoqxLo.css">
-    {% endif %}
+    {# TODO: Add proper CSS loading mechanism
+       - Cannot use hardcoded paths (hashes change on each build)
+       - Cannot use Tailwind Manager yet (not ready)
+       - Cannot use CDN (bad practice)
+       - Need to implement: Vite manifest reader or similar dynamic asset loading
+    #}
     
     <style>
         body {

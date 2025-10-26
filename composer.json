@@ -33,7 +33,8 @@
     },
     "require": {
         "php": "^8.2",
-        "craftcms/cms": "^5.0.0"
+        "craftcms/cms": "^5.0.0",
+        "lindemannrock/craft-logging-library": "^5.0"
     },
     "require-dev": {
         "craftcms/phpstan": "dev-main",

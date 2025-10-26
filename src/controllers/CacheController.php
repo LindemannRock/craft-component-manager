@@ -12,6 +12,7 @@ use lindemannrock\componentmanager\ComponentManager;
 
 use Craft;
 use craft\web\Controller;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 
 /**
@@ -19,6 +20,17 @@ use yii\web\Response;
  */
 class CacheController extends Controller
 {
+    use LoggingTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
+
     /**
      * Clear component cache
      */

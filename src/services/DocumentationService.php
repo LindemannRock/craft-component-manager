@@ -16,14 +16,26 @@ use craft\base\Component;
 use craft\helpers\FileHelper;
 use craft\helpers\Json;
 use craft\helpers\StringHelper;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
  * Documentation Service
- * 
+ *
  * Generates automatic documentation for Twig components
  */
 class DocumentationService extends Component
 {
+    use LoggingTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
+
     /**
      * Generate documentation for all components
      *
@@ -187,13 +199,13 @@ class DocumentationService extends Component
         // Look for @examples followed by JSON array, more flexible ending
         if (preg_match('/@examples\s*(\[[\s\S]*?\])/m', $content, $jsonMatch)) {
             $jsonStr = trim($jsonMatch[1]);
-            \Craft::info("Found JSON examples: " . $jsonStr, 'component-manager');
+            $this->logDebug('Found JSON examples', ['json' => $jsonStr]);
             // Try to parse as JSON
             $decoded = json_decode($jsonStr, true);
             if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                \Craft::info("JSON parsed successfully: " . json_encode($decoded), 'component-manager');
+                $this->logDebug('JSON parsed successfully', ['decoded' => $decoded]);
                 foreach ($decoded as $index => $example) {
-                    \Craft::info("Processing JSON example {$index}: " . json_encode($example), 'component-manager');
+                    $this->logDebug('Processing JSON example', ['index' => $index, 'example' => $example]);
                     $examples[] = [
                         'id' => $example['id'] ?? 'example-' . ($index + 1),
                         'title' => $example['title'] ?? 'Example ' . ($index + 1),
@@ -202,7 +214,11 @@ class DocumentationService extends Component
                         'content' => $example['content'] ?? '',
                         'code' => $this->generateExampleCode($example, $componentName),
                     ];
-                    \Craft::info("Created example with content: '{$examples[count($examples)-1]['content']}' and slots: " . json_encode($examples[count($examples)-1]['slots']), 'component-manager');
+                    $lastExample = $examples[count($examples)-1];
+                    $this->logDebug('Created example', [
+                        'content' => $lastExample['content'],
+                        'slots' => $lastExample['slots']
+                    ]);
                 }
                 // If we found structured examples, return them
                 if (!empty($examples)) {
@@ -275,9 +291,9 @@ class DocumentationService extends Component
                 
                 // What's left is the default content (clean up whitespace)
                 $content = trim(preg_replace('/\s+/', ' ', $fullContent));
-                
+
                 // Debug logging
-                \Craft::info("Extracted content: '{$content}', slots: " . json_encode($slots), 'component-manager');
+                $this->logDebug('Extracted content', ['content' => $content, 'slots' => $slots]);
             }
             
             $examples[] = [
