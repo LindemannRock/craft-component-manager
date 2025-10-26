@@ -27,15 +27,16 @@
         {{ csrfInput() }}
         {{ actionInput('component-manager/settings/save') }}
         {{ redirectInput('component-manager/settings/features') }}
-        
+        {{ hiddenInput('section', 'features') }}
+
         {{ forms.lightswitchField({
             label: 'Enable Prop Validation'|t('component-manager'),
             instructions: 'Validate component props based on their definitions'|t('component-manager'),
             id: 'enablePropValidation',
-            name: 'enablePropValidation',
+            name: 'settings[enablePropValidation]',
             on: settings.enablePropValidation,
-            warning: settings.isOverridden('enablePropValidation') ? 'This is being overridden by the `enablePropValidation` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enablePropValidation'),
+            warning: settings.isOverriddenByConfig('enablePropValidation') ? 'This is being overridden by the `enablePropValidation` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enablePropValidation'),
             errors: settings.getErrors('enablePropValidation')
         }) }}
 
@@ -43,10 +44,10 @@
             label: 'Enable Cache'|t('component-manager'),
             instructions: 'Cache component discovery for better performance'|t('component-manager'),
             id: 'enableCache',
-            name: 'enableCache',
+            name: 'settings[enableCache]',
             on: settings.enableCache,
-            warning: settings.isOverridden('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enableCache'),
+            warning: settings.isOverriddenByConfig('enableCache') ? 'This is being overridden by the `enableCache` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enableCache'),
             errors: settings.getErrors('enableCache')
         }) }}
 
@@ -54,12 +55,12 @@
             label: 'Cache Duration'|t('component-manager'),
             instructions: 'How long to cache component data, in seconds (0 = until manually cleared)'|t('component-manager'),
             id: 'cacheDuration',
-            name: 'cacheDuration',
+            name: 'settings[cacheDuration]',
             value: settings.cacheDuration,
             type: 'number',
             min: 0,
-            warning: settings.isOverridden('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('cacheDuration'),
+            warning: settings.isOverriddenByConfig('cacheDuration') ? 'This is being overridden by the `cacheDuration` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('cacheDuration'),
             errors: settings.getErrors('cacheDuration')
         }) }}
 
@@ -67,10 +68,10 @@
             label: 'Enable Debug Mode'|t('component-manager'),
             instructions: 'Show helpful error messages in dev mode'|t('component-manager'),
             id: 'enableDebugMode',
-            name: 'enableDebugMode',
+            name: 'settings[enableDebugMode]',
             on: settings.enableDebugMode,
-            warning: settings.isOverridden('enableDebugMode') ? 'This is being overridden by the `enableDebugMode` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enableDebugMode'),
+            warning: settings.isOverriddenByConfig('enableDebugMode') ? 'This is being overridden by the `enableDebugMode` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enableDebugMode'),
             errors: settings.getErrors('enableDebugMode')
         }) }}
 
@@ -78,10 +79,10 @@
             label: 'Enable Usage Tracking'|t('component-manager'),
             instructions: 'Track component usage statistics'|t('component-manager'),
             id: 'enableUsageTracking',
-            name: 'enableUsageTracking',
+            name: 'settings[enableUsageTracking]',
             on: settings.enableUsageTracking,
-            warning: settings.isOverridden('enableUsageTracking') ? 'This is being overridden by the `enableUsageTracking` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enableUsageTracking'),
+            warning: settings.isOverriddenByConfig('enableUsageTracking') ? 'This is being overridden by the `enableUsageTracking` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enableUsageTracking'),
             errors: settings.getErrors('enableUsageTracking')
         }) }}
         
@@ -89,10 +90,10 @@
             label: 'Enable Inheritance'|t('component-manager'),
             instructions: 'Allow components to extend other components'|t('component-manager'),
             id: 'enableInheritance',
-            name: 'enableInheritance',
+            name: 'settings[enableInheritance]',
             on: settings.enableInheritance,
-            warning: settings.isOverridden('enableInheritance') ? 'This is being overridden by the `enableInheritance` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enableInheritance'),
+            warning: settings.isOverriddenByConfig('enableInheritance') ? 'This is being overridden by the `enableInheritance` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enableInheritance'),
             errors: settings.getErrors('enableInheritance')
         }) }}
 
@@ -100,10 +101,10 @@
             label: 'Enable Documentation'|t('component-manager'),
             instructions: 'Enable automatic documentation generation for components'|t('component-manager'),
             id: 'enableDocumentation',
-            name: 'enableDocumentation',
+            name: 'settings[enableDocumentation]',
             on: settings.enableDocumentation,
-            warning: settings.isOverridden('enableDocumentation') ? 'This is being overridden by the `enableDocumentation` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('enableDocumentation'),
+            warning: settings.isOverriddenByConfig('enableDocumentation') ? 'This is being overridden by the `enableDocumentation` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('enableDocumentation'),
             errors: settings.getErrors('enableDocumentation')
         }) }}
 
@@ -111,10 +112,10 @@
             label: 'Allow Inline Components'|t('component-manager'),
             instructions: 'Allow components to be defined inline in templates'|t('component-manager'),
             id: 'allowInlineComponents',
-            name: 'allowInlineComponents',
+            name: 'settings[allowInlineComponents]',
             on: settings.allowInlineComponents,
-            warning: settings.isOverridden('allowInlineComponents') ? 'This is being overridden by the `allowInlineComponents` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('allowInlineComponents'),
+            warning: settings.isOverriddenByConfig('allowInlineComponents') ? 'This is being overridden by the `allowInlineComponents` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('allowInlineComponents'),
             errors: settings.getErrors('allowInlineComponents')
         }) }}
     </form>

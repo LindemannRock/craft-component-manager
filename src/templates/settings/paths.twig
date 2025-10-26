@@ -27,17 +27,18 @@
         {{ csrfInput() }}
         {{ actionInput('component-manager/settings/save') }}
         {{ redirectInput('component-manager/settings/paths') }}
-        
+        {{ hiddenInput('section', 'paths') }}
+
         {{ forms.textareaField({
             label: 'Component Paths'|t('component-manager'),
             instructions: 'Paths to search for components (one per line, relative to templates folder)'|t('component-manager'),
             id: 'componentPaths',
-            name: 'componentPaths',
+            name: 'settings[componentPaths]',
             value: settings.componentPaths|join("\n"),
             rows: 4,
             placeholder: "_components\ncomponents\nsrc/components",
-            warning: settings.isOverridden('componentPaths') ? 'This is being overridden by the `componentPaths` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('componentPaths'),
+            warning: settings.isOverriddenByConfig('componentPaths') ? 'This is being overridden by the `componentPaths` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('componentPaths'),
             errors: settings.getErrors('componentPaths')
         }) }}
 
@@ -45,13 +46,13 @@
             label: 'Default Path'|t('component-manager'),
             instructions: 'Default path for components (relative to templates folder)'|t('component-manager'),
             id: 'defaultPath',
-            name: 'defaultPath',
+            name: 'settings[defaultPath]',
             value: settings.defaultPath,
             placeholder: '_components',
             suggestEnvVars: true,
             suggestAliases: true,
-            warning: settings.isOverridden('defaultPath') ? 'This is being overridden by the `defaultPath` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('defaultPath'),
+            warning: settings.isOverriddenByConfig('defaultPath') ? 'This is being overridden by the `defaultPath` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('defaultPath'),
             errors: settings.getErrors('defaultPath')
         }) }}
 
@@ -59,11 +60,11 @@
             label: 'Component Extension'|t('component-manager'),
             instructions: 'File extension for component files'|t('component-manager'),
             id: 'componentExtension',
-            name: 'componentExtension',
+            name: 'settings[componentExtension]',
             value: settings.componentExtension,
             placeholder: 'twig',
-            warning: settings.isOverridden('componentExtension') ? 'This is being overridden by the `componentExtension` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('componentExtension'),
+            warning: settings.isOverriddenByConfig('componentExtension') ? 'This is being overridden by the `componentExtension` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('componentExtension'),
             errors: settings.getErrors('componentExtension')
         }) }}
     </form>

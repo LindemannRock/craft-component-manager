@@ -27,28 +27,56 @@
         {{ csrfInput() }}
         {{ actionInput('component-manager/settings/save') }}
         {{ redirectInput('component-manager/settings/general') }}
-        
+        {{ hiddenInput('section', 'general') }}
+
         {{ forms.textField({
             label: 'Plugin name'|t('component-manager'),
             instructions: 'The public-facing name of the plugin'|t('component-manager'),
             id: 'pluginName',
-            name: 'pluginName',
+            name: 'settings[pluginName]',
             value: settings.pluginName ?? 'Component Manager',
             placeholder: 'Component Manager',
-            warning: settings.isOverridden('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('pluginName')
+            warning: settings.isOverriddenByConfig('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('pluginName')
         }) }}
-        
+
         {{ forms.textField({
             label: 'Default Slot Name'|t('component-manager'),
             instructions: 'Name of the default slot for component content'|t('component-manager'),
             id: 'defaultSlotName',
-            name: 'defaultSlotName',
+            name: 'settings[defaultSlotName]',
             value: settings.defaultSlotName,
             placeholder: 'default',
-            warning: settings.isOverridden('defaultSlotName') ? 'This is being overridden by the `defaultSlotName` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('defaultSlotName'),
+            warning: settings.isOverriddenByConfig('defaultSlotName') ? 'This is being overridden by the `defaultSlotName` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('defaultSlotName'),
             errors: settings.getErrors('defaultSlotName')
+        }) }}
+
+        <hr>
+
+        <h2>{{ 'Logging Settings'|t('component-manager') }}</h2>
+
+        {% set logOptions = [
+            {value: 'error', label: 'Error (Critical errors only)'|t('component-manager')},
+            {value: 'warning', label: 'Warning (Errors and warnings)'|t('component-manager')},
+            {value: 'info', label: 'Info (General information)'|t('component-manager')},
+        ] %}
+
+        {% if craft.app.config.general.devMode %}
+            {% set logOptions = logOptions|merge([
+                {value: 'debug', label: 'Debug (Detailed debugging)'|t('component-manager')}
+            ]) %}
+        {% endif %}
+
+        {{ forms.selectField({
+            label: 'Log Level'|t('component-manager'),
+            instructions: 'Choose what types of messages to log. Debug level requires devMode to be enabled.'|t('component-manager'),
+            id: 'logLevel',
+            name: 'settings[logLevel]',
+            value: settings.logLevel,
+            options: logOptions,
+            warning: settings.isOverriddenByConfig('logLevel') ? 'This is being overridden by the <code>logLevel</code> setting in the <code>config/component-manager.php</code> file.'|t('component-manager')|raw : null,
+            disabled: settings.isOverriddenByConfig('logLevel')
         }) }}
     </form>
 

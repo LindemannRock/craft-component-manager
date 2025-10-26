@@ -142,29 +142,7 @@ class ComponentManager extends Plugin
         );
 
         // Register CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function(RegisterUrlRulesEvent $event) {
-                $event->rules = array_merge($event->rules, [
-                    'component-manager' => 'component-manager/components/index',
-                    'component-manager/components' => 'component-manager/components/index',
-                    'component-manager/component/<componentName:.*>' => 'component-manager/components/detail',
-                    'component-manager/documentation' => 'component-manager/components/documentation',
-                    'component-manager/documentation/export' => 'component-manager/components/export-documentation',
-                    'component-manager/preview/render' => 'component-manager/preview/render',
-                    'component-manager/preview/iframe' => 'component-manager/preview/iframe',
-                    'component-manager/settings' => 'component-manager/settings/index',
-                    'component-manager/settings/general' => 'component-manager/settings/general',
-                    'component-manager/settings/paths' => 'component-manager/settings/paths',
-                    'component-manager/settings/features' => 'component-manager/settings/features',
-                    'component-manager/settings/discovery' => 'component-manager/settings/discovery',
-                    'component-manager/settings/library' => 'component-manager/settings/library',
-                    'component-manager/settings/maintenance' => 'component-manager/settings/maintenance',
-                    'component-manager/settings/save' => 'component-manager/settings/save',
-                ]);
-            }
-        );
+        $this->_registerCpRoutes();
 
         // Clear cache on template changes in dev mode
         if (Craft::$app->getConfig()->getGeneral()->devMode) {
@@ -240,10 +218,8 @@ class ComponentManager extends Plugin
      */
     protected function createSettingsModel(): ?Model
     {
-        $settings = new Settings();
-        
-        // Try to load settings from database first
-        $settings->loadFromDb();
+        // Load settings from database
+        $settings = Settings::loadFromDatabase();
 
         // Then apply config file overrides
         $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
@@ -255,7 +231,7 @@ class ComponentManager extends Plugin
                 }
             }
         }
-        
+
         return $settings;
     }
 
@@ -286,11 +262,11 @@ class ComponentManager extends Plugin
     public function afterSaveSettings(): void
     {
         parent::afterSaveSettings();
-        
+
         // Save settings to database
         $settings = $this->getSettings();
-        $settings->saveToDb();
-        
+        $settings->saveToDatabase();
+
         // Clear component cache when settings change
         $this->cache->clearCache();
     }
@@ -305,14 +281,50 @@ class ComponentManager extends Plugin
     {
         $settings = $this->getSettings();
         $paths = [];
-        
+
         foreach ($settings->componentPaths as $path) {
             $fullPath = Craft::$app->getPath()->getSiteTemplatesPath() . DIRECTORY_SEPARATOR . $path;
             if (is_dir($fullPath)) {
                 $paths[] = $fullPath;
             }
         }
-        
+
         return $paths;
+    }
+
+    /**
+     * Register CP routes
+     */
+    private function _registerCpRoutes(): void
+    {
+        Event::on(
+            UrlManager::class,
+            UrlManager::EVENT_REGISTER_CP_URL_RULES,
+            function(RegisterUrlRulesEvent $event) {
+                $event->rules = array_merge($event->rules, [
+                    // Component routes
+                    'component-manager' => 'component-manager/components/index',
+                    'component-manager/components' => 'component-manager/components/index',
+                    'component-manager/component/<componentName:.*>' => 'component-manager/components/detail',
+                    'component-manager/documentation' => 'component-manager/components/documentation',
+                    'component-manager/documentation/export' => 'component-manager/components/export-documentation',
+
+                    // Preview routes
+                    'component-manager/preview/render' => 'component-manager/preview/render',
+                    'component-manager/preview/iframe' => 'component-manager/preview/iframe',
+
+                    // Settings routes
+                    'component-manager/settings' => 'component-manager/settings/index',
+                    'component-manager/settings/general' => 'component-manager/settings/general',
+                    'component-manager/settings/paths' => 'component-manager/settings/paths',
+                    'component-manager/settings/features' => 'component-manager/settings/features',
+                    'component-manager/settings/discovery' => 'component-manager/settings/discovery',
+                    'component-manager/settings/library' => 'component-manager/settings/library',
+                    'component-manager/settings/interface' => 'component-manager/settings/interface',
+                    'component-manager/settings/maintenance' => 'component-manager/settings/maintenance',
+                    'component-manager/settings/save' => 'component-manager/settings/save',
+                ]);
+            }
+        );
     }
 }

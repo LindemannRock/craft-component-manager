@@ -78,6 +78,10 @@ class Install extends Migration
             'metadataFields' => $this->text(), // JSON array
             // Advanced settings
             'defaultSlotName' => $this->string()->notNull()->defaultValue('default'),
+            // Logging
+            'logLevel' => $this->string()->notNull()->defaultValue('error'),
+            // UI settings
+            'itemsPerPage' => $this->integer()->notNull()->defaultValue(100),
             // System fields
             'dateCreated' => $this->dateTime()->notNull(),
             'dateUpdated' => $this->dateTime()->notNull(),
@@ -197,6 +201,8 @@ class Install extends Migration
                 'tags',
             ]),
             'defaultSlotName' => 'default',
+            'logLevel' => 'error',
+            'itemsPerPage' => 100,
             'dateCreated' => Db::prepareDateForDb(new \DateTime()),
             'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
             'uid' => StringHelper::UUID(),

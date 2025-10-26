@@ -9,6 +9,7 @@
 namespace lindemannrock\componentmanager\controllers;
 
 use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\models\Settings;
 
 use Craft;
 use craft\web\Controller;
@@ -103,151 +104,93 @@ class SettingsController extends Controller
     }
     
     /**
+     * Interface settings
+     */
+    public function actionInterface(): Response
+    {
+        $plugin = ComponentManager::getInstance();
+        $settings = $plugin->getSettings();
+
+        return $this->renderTemplate('component-manager/settings/interface', [
+            'plugin' => $plugin,
+            'settings' => $settings,
+            'pluginName' => $plugin->name,
+        ]);
+    }
+
+    /**
      * Maintenance settings
      */
     public function actionMaintenance(): Response
     {
         $plugin = ComponentManager::getInstance();
         $settings = $plugin->getSettings();
-        
+
         return $this->renderTemplate('component-manager/settings/maintenance', [
             'plugin' => $plugin,
             'settings' => $settings,
             'pluginName' => $plugin->name,
         ]);
     }
-    
+
     /**
      * Save settings
      */
     public function actionSave(): ?Response
     {
         $this->requirePostRequest();
-        
-        $request = Craft::$app->getRequest();
+
         $plugin = ComponentManager::getInstance();
-        $settings = $plugin->getSettings();
-        
-        // Only update non-overridden settings
-        if (!$settings->isOverridden('pluginName')) {
-            $settings->pluginName = $request->getBodyParam('pluginName', $settings->pluginName);
+
+        // Load current settings from database
+        $settings = Settings::loadFromDatabase();
+        if (!$settings) {
+            $settings = new Settings();
         }
-        
-        if (!$settings->isOverridden('componentPaths')) {
-            $settings->componentPaths = $request->getBodyParam('componentPaths', $settings->componentPaths);
+
+        // Get only the posted settings (fields from the current page)
+        $settingsData = Craft::$app->getRequest()->getBodyParam('settings', []);
+
+        // Only update fields that were posted and are not overridden by config
+        foreach ($settingsData as $key => $value) {
+            if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
+                // Check for setter method first (handles array conversions, etc.)
+                $setterMethod = 'set' . ucfirst($key);
+                if (method_exists($settings, $setterMethod)) {
+                    $settings->$setterMethod($value);
+                } else {
+                    $settings->$key = $value;
+                }
+            }
         }
-        
-        if (!$settings->isOverridden('defaultPath')) {
-            $settings->defaultPath = $request->getBodyParam('defaultPath', $settings->defaultPath);
-        }
-        
-        if (!$settings->isOverridden('componentExtension')) {
-            $settings->componentExtension = $request->getBodyParam('componentExtension', $settings->componentExtension);
-        }
-        
-        if (!$settings->isOverridden('enablePropValidation')) {
-            $settings->enablePropValidation = (bool)$request->getBodyParam('enablePropValidation', $settings->enablePropValidation);
-        }
-        
-        if (!$settings->isOverridden('enableCache')) {
-            $settings->enableCache = (bool)$request->getBodyParam('enableCache', $settings->enableCache);
-        }
-        
-        if (!$settings->isOverridden('cacheDuration')) {
-            $settings->cacheDuration = (int)$request->getBodyParam('cacheDuration', $settings->cacheDuration);
-        }
-        
-        if (!$settings->isOverridden('enableDebugMode')) {
-            $settings->enableDebugMode = (bool)$request->getBodyParam('enableDebugMode', $settings->enableDebugMode);
-        }
-        
-        if (!$settings->isOverridden('enableUsageTracking')) {
-            $settings->enableUsageTracking = (bool)$request->getBodyParam('enableUsageTracking', $settings->enableUsageTracking);
-        }
-        
-        if (!$settings->isOverridden('defaultSlotName')) {
-            $settings->defaultSlotName = $request->getBodyParam('defaultSlotName', $settings->defaultSlotName);
-        }
-        
-        if (!$settings->isOverridden('ignorePatterns')) {
-            $settings->ignorePatterns = $request->getBodyParam('ignorePatterns', $settings->ignorePatterns);
-        }
-        
-        if (!$settings->isOverridden('ignoreFolders')) {
-            $settings->ignoreFolders = $request->getBodyParam('ignoreFolders', $settings->ignoreFolders);
-        }
-        
-        if (!$settings->isOverridden('metadataFields')) {
-            $settings->metadataFields = $request->getBodyParam('metadataFields', $settings->metadataFields);
-        }
-        
-        if (!$settings->isOverridden('allowNesting')) {
-            $settings->allowNesting = (bool)$request->getBodyParam('allowNesting', $settings->allowNesting);
-        }
-        
-        if (!$settings->isOverridden('maxNestingDepth')) {
-            $settings->maxNestingDepth = (int)$request->getBodyParam('maxNestingDepth', $settings->maxNestingDepth);
-        }
-        
-        if (!$settings->isOverridden('enableInheritance')) {
-            $settings->enableInheritance = (bool)$request->getBodyParam('enableInheritance', $settings->enableInheritance);
-        }
-        
-        if (!$settings->isOverridden('enableDocumentation')) {
-            $settings->enableDocumentation = (bool)$request->getBodyParam('enableDocumentation', $settings->enableDocumentation);
-        }
-        
-        if (!$settings->isOverridden('allowInlineComponents')) {
-            $settings->allowInlineComponents = (bool)$request->getBodyParam('allowInlineComponents', $settings->allowInlineComponents);
-        }
-        
-        if (!$settings->isOverridden('enableComponentLibrary')) {
-            $settings->enableComponentLibrary = (bool)$request->getBodyParam('enableComponentLibrary', $settings->enableComponentLibrary);
-        }
-        
-        if (!$settings->isOverridden('showComponentSource')) {
-            $settings->showComponentSource = (bool)$request->getBodyParam('showComponentSource', $settings->showComponentSource);
-        }
-        
-        if (!$settings->isOverridden('enableLivePreview')) {
-            $settings->enableLivePreview = (bool)$request->getBodyParam('enableLivePreview', $settings->enableLivePreview);
-        }
-        
+
         // Validate
         if (!$settings->validate()) {
-            $errors = $settings->getErrors();
-            $errorMessage = Craft::t('component-manager', 'Couldn\'t save plugin settings.');
-            
-            // Add validation errors to the message
-            if (!empty($errors)) {
-                $errorDetails = [];
-                foreach ($errors as $attribute => $attributeErrors) {
-                    $errorDetails[] = $attribute . ': ' . implode(', ', $attributeErrors);
-                }
-                $errorMessage .= ' ' . implode(' ', $errorDetails);
-            }
-            
-            Craft::$app->getSession()->setError($errorMessage);
-            
-            Craft::$app->getUrlManager()->setRouteParams([
-                'settings' => $settings
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings.'));
+
+            // Get the section to re-render the correct template with errors
+            $section = $this->request->getBodyParam('section', 'general');
+            $template = "component-manager/settings/{$section}";
+
+            return $this->renderTemplate($template, [
+                'settings' => $settings,
             ]);
-            
+        }
+
+        // Save settings to database
+        if ($settings->saveToDatabase()) {
+            // Update the plugin's cached settings (CRITICAL - forces Craft to refresh)
+            $plugin->setSettings($settings->getAttributes());
+
+            // Clear component cache when settings change
+            $plugin->cache->clearCache();
+
+            Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Settings saved successfully'));
+        } else {
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings'));
             return null;
         }
-        
-        // Save to database
-        if (!$settings->saveToDb()) {
-            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Couldn\'t save plugin settings.'));
-            return null;
-        }
-        
-        // Clear component cache when settings change
-        $plugin->cache->clearCache();
-        
-        Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Plugin settings saved.'));
-        
-        // Redirect to the posted URL (which will be the section they came from)
+
         return $this->redirectToPostedUrl();
     }
 }

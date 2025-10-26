@@ -16,6 +16,7 @@ use craft\behaviors\EnvAttributeParserBehavior;
 use craft\db\Query;
 use craft\helpers\Db;
 use craft\helpers\Json;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
  * Settings Model
@@ -26,6 +27,17 @@ use craft\helpers\Json;
  */
 class Settings extends Model
 {
+    use LoggingTrait;
+
+    /**
+     * @inheritdoc
+     */
+    public function init(): void
+    {
+        parent::init();
+        $this->setLoggingHandle('component-manager');
+    }
+
     /**
      * @var string The public-facing name of the plugin
      */
@@ -157,6 +169,16 @@ class Settings extends Model
     ];
 
     /**
+     * @var string Log level (error, warning, info, debug)
+     */
+    public string $logLevel = 'error';
+
+    /**
+     * @var int Items per page in CP element index
+     */
+    public int $itemsPerPage = 100;
+
+    /**
      * @inheritdoc
      */
     public function behaviors(): array
@@ -179,13 +201,52 @@ class Settings extends Model
             [['componentPaths', 'ignoreFolders', 'ignorePatterns', 'metadataFields'], 'each', 'rule' => ['string']],
             [['defaultPath', 'tagPrefix', 'componentExtension', 'defaultSlotName'], 'string'],
             [['maxNestingDepth', 'cacheDuration'], 'integer', 'min' => 0],
-            [['allowNesting', 'enableCache', 'enablePropValidation', 'enableDebugMode', 
+            [['itemsPerPage'], 'integer', 'min' => 10, 'max' => 500],
+            [['allowNesting', 'enableCache', 'enablePropValidation', 'enableDebugMode',
               'enableInheritance', 'enableDocumentation', 'enableUsageTracking',
               'allowInlineComponents', 'enableComponentLibrary', 'showComponentSource',
               'enableLivePreview'], 'boolean'],
-            [['tagPrefix'], 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/', 
+            [['tagPrefix'], 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/',
              'message' => 'Tag prefix must start with a letter and contain only letters and numbers.'],
+            [['logLevel'], 'in', 'range' => ['debug', 'info', 'warning', 'error']],
+            [['logLevel'], 'validateLogLevel'],
         ];
+    }
+
+    /**
+     * Validate log level - debug requires devMode
+     */
+    public function validateLogLevel($attribute, $params, $validator)
+    {
+        $logLevel = $this->$attribute;
+
+        // Reset session warning when devMode is true - allows warning to show again if devMode changes
+        if (Craft::$app->getConfig()->getGeneral()->devMode && !Craft::$app->getRequest()->getIsConsoleRequest()) {
+            Craft::$app->getSession()->remove('cm_debug_config_warning');
+        }
+
+        // Debug level is only allowed when devMode is enabled
+        if ($logLevel === 'debug' && !Craft::$app->getConfig()->getGeneral()->devMode) {
+            $this->$attribute = 'info';
+
+            if ($this->isOverriddenByConfig('logLevel')) {
+                if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
+                    if (Craft::$app->getSession()->get('cm_debug_config_warning') === null) {
+                        $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
+                            'configFile' => 'config/component-manager.php'
+                        ]);
+                        Craft::$app->getSession()->set('cm_debug_config_warning', true);
+                    }
+                } else {
+                    $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
+                        'configFile' => 'config/component-manager.php'
+                    ]);
+                }
+            } else {
+                $this->logWarning('Log level automatically changed from "debug" to "info" because devMode is disabled');
+                $this->saveToDatabase();
+            }
+        }
     }
     
     /**
@@ -247,63 +308,75 @@ class Settings extends Model
     /**
      * Load settings from database
      *
-     * @return bool
+     * @param Settings|null $settings Optional existing settings instance
+     * @return self
      */
-    public function loadFromDb(): bool
+    public static function loadFromDatabase(?Settings $settings = null): self
     {
+        if ($settings === null) {
+            $settings = new self();
+        }
+
         // Check if table exists first (it won't during initial installation)
         $tableSchema = Craft::$app->getDb()->getTableSchema('{{%componentmanager_settings}}');
         if (!$tableSchema) {
-            return false;
+            return $settings;
         }
 
-        $settings = (new Query())
+        $row = (new Query())
             ->select('*')
             ->from('{{%componentmanager_settings}}')
             ->where(['id' => 1])
             ->one();
 
-        if (!$settings) {
-            return false;
+        if (!$row) {
+            return $settings;
         }
-        
+
+        // Remove system fields
+        unset($row['id'], $row['dateCreated'], $row['dateUpdated'], $row['uid']);
+
         // Parse JSON fields
-        if (!empty($settings['componentPaths'])) {
-            $this->componentPaths = Json::decodeIfJson($settings['componentPaths']);
+        if (!empty($row['componentPaths'])) {
+            $row['componentPaths'] = Json::decodeIfJson($row['componentPaths']);
         }
-        
-        if (!empty($settings['ignorePatterns'])) {
-            $this->ignorePatterns = Json::decodeIfJson($settings['ignorePatterns']);
+
+        if (!empty($row['ignorePatterns'])) {
+            $row['ignorePatterns'] = Json::decodeIfJson($row['ignorePatterns']);
         }
-        
-        if (!empty($settings['ignoreFolders'])) {
-            $this->ignoreFolders = Json::decodeIfJson($settings['ignoreFolders']);
+
+        if (!empty($row['ignoreFolders'])) {
+            $row['ignoreFolders'] = Json::decodeIfJson($row['ignoreFolders']);
         }
-        
-        if (!empty($settings['metadataFields'])) {
-            $this->metadataFields = Json::decodeIfJson($settings['metadataFields']);
+
+        if (!empty($row['metadataFields'])) {
+            $row['metadataFields'] = Json::decodeIfJson($row['metadataFields']);
         }
-        
-        // Set other fields
-        $this->pluginName = $settings['pluginName'] ?? $this->pluginName;
-        $this->defaultPath = $settings['defaultPath'] ?? $this->defaultPath;
-        $this->componentExtension = $settings['componentExtension'] ?? $this->componentExtension;
-        $this->enablePropValidation = (bool)($settings['enablePropValidation'] ?? $this->enablePropValidation);
-        $this->enableCache = (bool)($settings['enableCache'] ?? $this->enableCache);
-        $this->cacheDuration = (int)($settings['cacheDuration'] ?? $this->cacheDuration);
-        $this->enableDebugMode = (bool)($settings['enableDebugMode'] ?? $this->enableDebugMode);
-        $this->enableUsageTracking = (bool)($settings['enableUsageTracking'] ?? $this->enableUsageTracking);
-        $this->defaultSlotName = $settings['defaultSlotName'] ?? $this->defaultSlotName;
-        $this->allowNesting = (bool)($settings['allowNesting'] ?? $this->allowNesting);
-        $this->maxNestingDepth = (int)($settings['maxNestingDepth'] ?? $this->maxNestingDepth);
-        $this->enableInheritance = (bool)($settings['enableInheritance'] ?? $this->enableInheritance);
-        $this->enableDocumentation = (bool)($settings['enableDocumentation'] ?? $this->enableDocumentation);
-        $this->allowInlineComponents = (bool)($settings['allowInlineComponents'] ?? $this->allowInlineComponents);
-        $this->enableComponentLibrary = (bool)($settings['enableComponentLibrary'] ?? $this->enableComponentLibrary);
-        $this->showComponentSource = (bool)($settings['showComponentSource'] ?? $this->showComponentSource);
-        $this->enableLivePreview = (bool)($settings['enableLivePreview'] ?? $this->enableLivePreview);
-        
-        return true;
+
+        // Convert boolean fields
+        $booleanFields = ['enablePropValidation', 'enableCache', 'enableDebugMode', 'enableUsageTracking',
+                          'allowNesting', 'enableInheritance', 'enableDocumentation', 'allowInlineComponents',
+                          'enableComponentLibrary', 'showComponentSource', 'enableLivePreview'];
+
+        foreach ($booleanFields as $field) {
+            if (isset($row[$field])) {
+                $row[$field] = (bool) $row[$field];
+            }
+        }
+
+        // Convert integer fields
+        $integerFields = ['cacheDuration', 'maxNestingDepth', 'itemsPerPage'];
+
+        foreach ($integerFields as $field) {
+            if (isset($row[$field])) {
+                $row[$field] = (int) $row[$field];
+            }
+        }
+
+        // Set attributes from database
+        $settings->setAttributes($row, false);
+
+        return $settings;
     }
     
     /**
@@ -311,7 +384,7 @@ class Settings extends Model
      *
      * @return bool
      */
-    public function saveToDb(): bool
+    public function saveToDatabase(): bool
     {
         $data = [
             'pluginName' => $this->pluginName,
@@ -335,6 +408,8 @@ class Settings extends Model
             'enableComponentLibrary' => $this->enableComponentLibrary,
             'showComponentSource' => $this->showComponentSource,
             'enableLivePreview' => $this->enableLivePreview,
+            'logLevel' => $this->logLevel,
+            'itemsPerPage' => $this->itemsPerPage,
             'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
         ];
         
@@ -346,14 +421,55 @@ class Settings extends Model
     }
     
     /**
-     * Check if a setting is overridden by config file
+     * Check if a setting is being overridden by config file
+     * Supports dot notation for nested settings like: componentPaths.0
      *
-     * @param string $setting
+     * @param string $attribute The setting attribute name or dot-notation path
      * @return bool
      */
-    public function isOverridden(string $setting): bool
+    public function isOverriddenByConfig(string $attribute): bool
     {
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
-        return isset($configFileSettings[$setting]);
+        $configPath = \Craft::$app->getPath()->getConfigPath() . '/component-manager.php';
+
+        if (!file_exists($configPath)) {
+            return false;
+        }
+
+        // Load the raw config file instead of using Craft's config which merges with database
+        $rawConfig = require $configPath;
+
+        // Handle dot notation for nested config
+        if (str_contains($attribute, '.')) {
+            $parts = explode('.', $attribute);
+            $current = $rawConfig;
+
+            foreach ($parts as $part) {
+                if (!is_array($current) || !array_key_exists($part, $current)) {
+                    return false;
+                }
+                $current = $current[$part];
+            }
+
+            return true;
+        }
+
+        // Check for the attribute in the config
+        // Use array_key_exists instead of isset to detect null values
+        if (array_key_exists($attribute, $rawConfig)) {
+            return true;
+        }
+
+        // Check environment-specific configs
+        $env = \Craft::$app->getConfig()->env;
+        if ($env && is_array($rawConfig[$env] ?? null) && array_key_exists($attribute, $rawConfig[$env])) {
+            return true;
+        }
+
+        // Check wildcard config
+        if (is_array($rawConfig['*'] ?? null) && array_key_exists($attribute, $rawConfig['*'])) {
+            return true;
+        }
+
+        return false;
     }
 }

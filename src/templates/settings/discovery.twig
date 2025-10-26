@@ -27,15 +27,16 @@
         {{ csrfInput() }}
         {{ actionInput('component-manager/settings/save') }}
         {{ redirectInput('component-manager/settings/discovery') }}
-        
+        {{ hiddenInput('section', 'discovery') }}
+
         {{ forms.lightswitchField({
             label: 'Allow Nesting'|t('component-manager'),
             instructions: 'Allow nested folder organization for components'|t('component-manager'),
             id: 'allowNesting',
-            name: 'allowNesting',
+            name: 'settings[allowNesting]',
             on: settings.allowNesting,
-            warning: settings.isOverridden('allowNesting') ? 'This is being overridden by the `allowNesting` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('allowNesting'),
+            warning: settings.isOverriddenByConfig('allowNesting') ? 'This is being overridden by the `allowNesting` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('allowNesting'),
             errors: settings.getErrors('allowNesting')
         }) }}
 
@@ -43,12 +44,12 @@
             label: 'Max Nesting Depth'|t('component-manager'),
             instructions: 'Maximum folder nesting depth (0 = unlimited)'|t('component-manager'),
             id: 'maxNestingDepth',
-            name: 'maxNestingDepth',
+            name: 'settings[maxNestingDepth]',
             value: settings.maxNestingDepth,
             type: 'number',
             min: 0,
-            warning: settings.isOverridden('maxNestingDepth') ? 'This is being overridden by the `maxNestingDepth` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('maxNestingDepth'),
+            warning: settings.isOverriddenByConfig('maxNestingDepth') ? 'This is being overridden by the `maxNestingDepth` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('maxNestingDepth'),
             errors: settings.getErrors('maxNestingDepth')
         }) }}
         
@@ -56,12 +57,12 @@
             label: 'Ignore Folders'|t('component-manager'),
             instructions: 'Folders to ignore when discovering components (one per line)'|t('component-manager'),
             id: 'ignoreFolders',
-            name: 'ignoreFolders',
+            name: 'settings[ignoreFolders]',
             value: settings.ignoreFolders|join("\n"),
             rows: 5,
             placeholder: "node_modules\n.git\nvendor\ndist\nbuild",
-            warning: settings.isOverridden('ignoreFolders') ? 'This is being overridden by the `ignoreFolders` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('ignoreFolders'),
+            warning: settings.isOverriddenByConfig('ignoreFolders') ? 'This is being overridden by the `ignoreFolders` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('ignoreFolders'),
             errors: settings.getErrors('ignoreFolders')
         }) }}
 
@@ -69,12 +70,12 @@
             label: 'Ignore Patterns'|t('component-manager'),
             instructions: 'File patterns to ignore when discovering components (one per line)'|t('component-manager'),
             id: 'ignorePatterns',
-            name: 'ignorePatterns',
+            name: 'settings[ignorePatterns]',
             value: settings.ignorePatterns|join("\n"),
             rows: 3,
             placeholder: "*.test.twig\n*.spec.twig\n_*",
-            warning: settings.isOverridden('ignorePatterns') ? 'This is being overridden by the `ignorePatterns` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverridden('ignorePatterns'),
+            warning: settings.isOverriddenByConfig('ignorePatterns') ? 'This is being overridden by the `ignorePatterns` setting in the `config/component-manager.php` file.'|t('component-manager'),
+            disabled: settings.isOverriddenByConfig('ignorePatterns'),
             errors: settings.getErrors('ignorePatterns')
         }) }}
     </form>

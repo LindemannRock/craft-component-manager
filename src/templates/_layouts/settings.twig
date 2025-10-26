@@ -33,6 +33,11 @@
                 </a>
             </li>
             <li>
+                <a href="{{ url('component-manager/settings/interface') }}" {% if selectedSettingsItem == 'interface' %}class="sel"{% endif %} data-nav-item="interface">
+                    {{ 'Interface'|t('component-manager') }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ url('component-manager/settings/maintenance') }}" {% if selectedSettingsItem == 'maintenance' %}class="sel"{% endif %} data-nav-item="maintenance">
                     {{ 'Maintenance'|t('component-manager') }}
                 </a>
