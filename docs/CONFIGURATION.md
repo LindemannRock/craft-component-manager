@@ -30,9 +30,10 @@ return [
     // Component organization
     'allowNesting' => true,
     'maxNestingDepth' => 3, // 0 = unlimited
-    
-    // Component files  
+
+    // Component files
     'componentExtension' => 'twig',
+    'tagPrefix' => 'x',
     'defaultSlotName' => 'default',
     
     // Features
@@ -53,7 +54,11 @@ return [
     'enableComponentLibrary' => true,
     'showComponentSource' => true,
     'enableLivePreview' => true,
-    
+    'itemsPerPage' => 100,
+
+    // Logging
+    'logLevel' => 'error',
+
     // Discovery filters
     'ignoreFolders' => [
         'node_modules',
@@ -100,30 +105,27 @@ return [
     
     // Development environment
     'dev' => [
+        'logLevel' => 'debug',
+        'enableCache' => false,
         'enableDebugMode' => true,
         'enableUsageTracking' => true,
-        'enableCache' => false, // Disable cache for live development
-        'showComponentSource' => true,
-        'enableLivePreview' => true,
-        'maxNestingDepth' => 0, // Unlimited nesting in dev
     ],
-    
+
     // Staging environment
     'staging' => [
-        'enableDebugMode' => false,
+        'logLevel' => 'info',
         'enableCache' => true,
-        'cacheDuration' => 3600, // 1 hour
-        'enableUsageTracking' => false,
+        'cacheDuration' => 3600,
+        'enableDebugMode' => true,
     ],
-    
+
     // Production environment
     'production' => [
-        'enableDebugMode' => false,
+        'logLevel' => 'error',
         'enableCache' => true,
-        'cacheDuration' => 86400, // 24 hours
+        'cacheDuration' => 0,
+        'enableDebugMode' => false,
         'enableUsageTracking' => false,
-        'showComponentSource' => false, // Hide source in production
-        'maxNestingDepth' => 3, // Limit nesting for performance
     ],
 ];
 ```
@@ -133,66 +135,132 @@ return [
 All settings support environment variables:
 
 ```php
+use craft\helpers\App;
+
 return [
-    'enableCache' => App::env('COMPONENT_CACHE') === 'true',
-    'enableDebugMode' => App::env('COMPONENT_DEBUG') === 'true',
-    'enablePropValidation' => App::env('COMPONENT_VALIDATION') === 'true',
+    'enableCache' => (bool)App::env('COMPONENT_CACHE') ?: true,
+    'enableDebugMode' => (bool)App::env('COMPONENT_DEBUG') ?: true,
+    'enablePropValidation' => (bool)App::env('COMPONENT_VALIDATION') ?: true,
     'componentPaths' => explode(',', App::env('COMPONENT_PATHS') ?: '_components,components'),
+    'logLevel' => App::env('COMPONENT_LOG_LEVEL') ?: 'error',
 ];
 ```
+
+**Important:**
+- ✅ Use `App::env('VAR_NAME')` - Craft 5 recommended approach
+- ❌ Don't use `getenv('VAR_NAME')` - Not thread-safe
+- ✅ Always import: `use craft\helpers\App;`
 
 ### Setting Descriptions
 
 #### Plugin Settings
 
 - **pluginName**: Display name for the plugin in Craft CP navigation
+  - **Type:** `string`
+  - **Default:** `'Component Manager'`
 
 #### Component Discovery Settings
 
 - **componentPaths**: Array of paths to scan for components (relative to templates folder)
+  - **Type:** `array`
+  - **Default:** `['_components', 'components', 'src/components']`
+  - **Note:** Searched in order, first match wins
 - **defaultPath**: Default path when creating new components
-- **componentExtension**: File extension for component files (default: 'twig')
+  - **Type:** `string`
+  - **Default:** `'_components'`
 
 #### Organization Settings
 
 - **allowNesting**: Enable organizing components in nested folders
+  - **Type:** `bool`
+  - **Default:** `true`
 - **maxNestingDepth**: Maximum folder nesting depth (0 = unlimited)
+  - **Type:** `int`
+  - **Default:** `3`
 
 #### Component File Settings
 
+- **componentExtension**: File extension for component files
+  - **Type:** `string`
+  - **Default:** `'twig'`
+- **tagPrefix**: Component tag prefix (e.g., 'x' creates x:component or 'c' creates c:component)
+  - **Type:** `string`
+  - **Default:** `'x'`
 - **defaultSlotName**: Name for the default/unnamed slot
+  - **Type:** `string`
+  - **Default:** `'default'`
 
 #### Feature Settings
 
 - **enablePropValidation**: Enable prop type validation and required checks
+  - **Type:** `bool`
+  - **Default:** `true`
 - **enableInheritance**: Allow components to extend other components
+  - **Type:** `bool`
+  - **Default:** `true`
 - **enableDocumentation**: Parse and display component documentation
+  - **Type:** `bool`
+  - **Default:** `true`
 - **allowInlineComponents**: Allow defining components inline in templates
+  - **Type:** `bool`
+  - **Default:** `true`
 
 #### Caching Settings
 
 - **enableCache**: Enable component caching for better performance
+  - **Type:** `bool`
+  - **Default:** `true`
 - **cacheDuration**: Cache duration in seconds (0 = no expiration)
+  - **Type:** `int`
+  - **Default:** `0` (no expiration)
 
 #### Development Settings
 
 - **enableDebugMode**: Show helpful error messages and debugging info
-- **enableUsageTracking**: Track component usage statistics (disabled by default)
+  - **Type:** `bool`
+  - **Default:** `true`
+- **enableUsageTracking**: Track component usage statistics
+  - **Type:** `bool`
+  - **Default:** `false`
 
 #### Control Panel Settings
 
 - **enableComponentLibrary**: Enable the CP component library interface
+  - **Type:** `bool`
+  - **Default:** `true`
 - **showComponentSource**: Show component source code in CP
+  - **Type:** `bool`
+  - **Default:** `true`
 - **enableLivePreview**: Enable live component previews in CP
+  - **Type:** `bool`
+  - **Default:** `true`
+- **itemsPerPage**: Number of components per page in CP
+  - **Type:** `int`
+  - **Range:** `10-500`
+  - **Default:** `100`
+
+#### Logging Settings
+
+- **logLevel**: What types of messages to log
+  - **Type:** `string`
+  - **Options:** `'debug'`, `'info'`, `'warning'`, `'error'`
+  - **Default:** `'error'`
+  - **Note:** Debug level requires Craft's `devMode` to be enabled
 
 #### Discovery Filter Settings
 
 - **ignoreFolders**: Array of folder names to ignore during component discovery
+  - **Type:** `array`
+  - **Default:** `['node_modules', '.git', 'vendor', 'dist', 'build']`
 - **ignorePatterns**: Array of file patterns to ignore (supports wildcards)
+  - **Type:** `array`
+  - **Default:** `['*.test.twig', '*.spec.twig', '_*']`
 
 #### Documentation Settings
 
 - **metadataFields**: Array of metadata fields to parse from component comments
+  - **Type:** `array`
+  - **Default:** `['description', 'category', 'version', 'author', 'tags']`
 
 ### Precedence
 
@@ -209,32 +277,27 @@ For production environments:
 
 ```php
 'production' => [
+    'logLevel' => 'error',
     'enableCache' => true,
-    'cacheDuration' => 86400, // 24 hours
+    'cacheDuration' => 0, // Cache until manually cleared - maximum performance
     'enableDebugMode' => false,
     'enableUsageTracking' => false,
-    'showComponentSource' => false,
-    'maxNestingDepth' => 3, // Limit nesting complexity
-    'ignorePatterns' => [
-        '*.test.twig',
-        '*.spec.twig', 
-        '*.dev.twig',
-        '_*',
-    ],
 ],
 ```
 
 ### Security Recommendations
 
 ```php
+use craft\helpers\App;
+
 // Restrict component paths in production
-'componentPaths' => App::env('COMPONENT_PATHS') ? 
-    explode(',', App::env('COMPONENT_PATHS')) : 
+'componentPaths' => App::env('COMPONENT_PATHS') ?
+    explode(',', App::env('COMPONENT_PATHS')) :
     ['_components'], // Restrict to single secure path
 
 // Disable potentially risky features in production
-'allowInlineComponents' => App::env('ALLOW_INLINE_COMPONENTS') === 'true',
-'showComponentSource' => App::env('SHOW_COMPONENT_SOURCE') === 'true',
+'allowInlineComponents' => (bool)App::env('ALLOW_INLINE_COMPONENTS') ?: false,
+'showComponentSource' => (bool)App::env('SHOW_COMPONENT_SOURCE') ?: false,
 ```
 
 ### Advanced Configuration Examples

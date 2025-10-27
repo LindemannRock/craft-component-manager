@@ -3,6 +3,7 @@
 [![Latest Version](https://img.shields.io/packagist/v/lindemannrock/craft-component-manager.svg)](https://packagist.org/packages/lindemannrock/craft-component-manager)
 [![Craft CMS](https://img.shields.io/badge/Craft%20CMS-5.0+-orange.svg)](https://craftcms.com/)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-blue.svg)](https://php.net/)
+[![Logging Library](https://img.shields.io/badge/Logging%20Library-5.0+-green.svg)](https://github.com/LindemannRock/craft-logging-library)
 [![License](https://img.shields.io/packagist/l/lindemannrock/craft-component-manager.svg)](LICENSE)
 
 Advanced component management plugin for Craft CMS 5.x with comprehensive Control Panel interface, automatic component discovery, rich documentation parsing, and professional preview system.
@@ -45,48 +46,11 @@ Advanced component management plugin for Craft CMS 5.x with comprehensive Contro
 
 **Use in production** for component rendering. CP features are being improved but don't affect frontend functionality.
 
-## Logging
-
-Component Manager uses the [LindemannRock Logging Library](https://github.com/LindemannRock/craft-logging-library) for centralized, structured logging across all LindemannRock plugins.
-
-### Log Levels
-- **Error**: Critical errors only (default)
-- **Warning**: Errors and warnings
-- **Info**: General information
-- **Debug**: Detailed debugging (includes performance metrics, requires devMode)
-
-### Configuration
-```php
-// config/component-manager.php
-return [
-    'logLevel' => 'error', // error, warning, info, or debug
-];
-```
-
-**Note:** Debug level requires Craft's `devMode` to be enabled. If set to debug with devMode disabled, it automatically falls back to info level.
-
-### Log Files
-- **Location**: `storage/logs/component-manager-YYYY-MM-DD.log`
-- **Retention**: 30 days (automatic cleanup via Logging Library)
-- **Format**: Structured JSON logs with context data
-- **Web Interface**: View and filter logs in CP at Component Manager → Logs
-
-### Log Management
-Access logs through the Control Panel:
-1. Navigate to Component Manager → Logs
-2. Filter by date, level, or search terms
-3. Download log files for external analysis
-4. View file sizes and entry counts
-5. Auto-cleanup after 30 days (configurable via Logging Library)
-
-**Requires:** `lindemannrock/craft-logging-library` plugin (installed automatically as dependency)
-
-See [docs/LOGGING.md](docs/LOGGING.md) for detailed logging documentation.
-
 ## Requirements
 
 - Craft CMS 5.0 or greater
 - PHP 8.2 or greater
+- [Logging Library](https://github.com/LindemannRock/craft-logging-library) 5.0 or greater (installed automatically as dependency)
 
 ## Installation
 
@@ -115,6 +79,10 @@ In the Control Panel, go to Settings → Plugins and click "Install" for Compone
 ### Config File
 
 Create a `config/component-manager.php` file to override default settings:
+
+```bash
+cp vendor/lindemannrock/craft-component-manager/src/config.php config/component-manager.php
+```
 
 ```php
 <?php
@@ -460,6 +428,44 @@ The plugin includes intelligent caching:
 4. **Cache components** in production
 5. **Use slots** for flexible layouts
 6. **Extend base components** to maintain consistency
+
+## Logging
+
+Component Manager uses the [LindemannRock Logging Library](https://github.com/LindemannRock/craft-logging-library) for centralized logging.
+
+### Log Levels
+- **Error**: Critical errors only (default)
+- **Warning**: Errors and warnings
+- **Info**: General information
+- **Debug**: Detailed debugging (includes performance metrics, requires devMode)
+
+### Configuration
+```php
+// config/component-manager.php
+return [
+    'logLevel' => 'error', // error, warning, info, or debug
+];
+```
+
+**Note:** Debug level requires Craft's `devMode` to be enabled. If set to debug with devMode disabled, it automatically falls back to info level.
+
+### Log Files
+- **Location**: `storage/logs/component-manager-YYYY-MM-DD.log`
+- **Retention**: 30 days (automatic cleanup via Logging Library)
+- **Format**: Structured JSON logs with context data
+- **Web Interface**: View and filter logs in CP at Component Manager → Logs
+
+### Log Management
+Access logs through the Control Panel:
+1. Navigate to Component Manager → Logs
+2. Filter by date, level, or search terms
+3. Download log files for external analysis
+4. View file sizes and entry counts
+5. Auto-cleanup after 30 days (configurable via Logging Library)
+
+**Requires:** `lindemannrock/craft-logging-library` plugin (installed automatically as dependency)
+
+See [docs/LOGGING.md](docs/LOGGING.md) for detailed logging documentation.
 
 ## Migration from performing/twig-components
 

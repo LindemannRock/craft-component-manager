@@ -1,14 +1,5 @@
 <?php
 /**
- * Component Manager plugin for Craft CMS 5.x
- *
- * Advanced component management with folder organization, prop validation, and slots
- *
- * @link      https://lindemannrock.com
- * @copyright Copyright (c) 2025 LindemannRock
- */
-
-/**
  * Component Manager config.php
  *
  * This file exists only as a template for the Component Manager settings.
@@ -23,87 +14,142 @@
  */
 
 return [
-    // Component paths relative to templates folder
-    // These will be searched in order for components
-    'componentPaths' => [
-        '_components',      // templates/_components/
-        'components',       // templates/components/
-        'src/components',   // templates/src/components/
+    // Global settings
+    '*' => [
+        // ========================================
+        // GENERAL SETTINGS
+        // ========================================
+        // Basic plugin configuration
+
+        'pluginName' => 'Component Manager',
+
+        // Logging Settings
+        'logLevel' => 'error',             // Log level: 'debug', 'info', 'warning', 'error'
+
+
+        // ========================================
+        // COMPONENT SETTINGS
+        // ========================================
+        // Component paths, file organization, and naming conventions
+
+        // Component Paths
+        // Paths relative to templates folder, searched in order for components
+        'componentPaths' => [
+            '_components',      // templates/_components/
+            'components',       // templates/components/
+            'src/components',   // templates/src/components/
+        ],
+
+        // Default Path
+        // Default path for new components when creating via Control Panel
+        'defaultPath' => '_components',
+
+        // File Organization
+        'allowNesting' => true,            // Allow nested folder organization (e.g., forms/input.twig)
+        'maxNestingDepth' => 3,            // Maximum nesting depth (0 = unlimited)
+
+        // Component Naming
+        'componentExtension' => 'twig',    // Component file extension
+        'tagPrefix' => 'x',                // Component tag prefix (e.g., x:component or c:component)
+        'defaultSlotName' => 'default',    // Default slot name for component content
+
+
+        // ========================================
+        // FEATURE SETTINGS
+        // ========================================
+        // Component features and capabilities
+
+        // Validation & Type Safety
+        'enablePropValidation' => true,    // Enable prop validation for components
+
+        // Component Capabilities
+        'enableInheritance' => true,       // Allow components to extend other components
+        'allowInlineComponents' => true,   // Allow inline components (defined in templates)
+
+        // Documentation & Tracking
+        'enableDocumentation' => true,     // Enable component documentation generation
+        'enableUsageTracking' => false,    // Enable component usage tracking
+
+        // Custom Metadata
+        // Custom component metadata fields for documentation
+        'metadataFields' => [
+            'description',
+            'category',
+            'version',
+            'author',
+            'tags',
+        ],
+
+
+        // ========================================
+        // INTERFACE SETTINGS
+        // ========================================
+        // Control panel display and library options
+
+        'enableComponentLibrary' => true,  // Enable component library UI in Control Panel
+        'showComponentSource' => true,     // Show component source code in library
+        'enableLivePreview' => true,       // Enable live component preview in Control Panel
+        'itemsPerPage' => 100,             // Number of components per page (10-500)
+
+
+        // ========================================
+        // CACHE SETTINGS
+        // ========================================
+        // Performance and caching configuration
+
+        'enableCache' => true,             // Cache compiled components for better performance
+        'cacheDuration' => 0,              // Cache duration in seconds (0 = until manually cleared)
+
+
+        // ========================================
+        // ADVANCED SETTINGS
+        // ========================================
+        // File exclusions, debugging, and advanced options
+
+        // Debug Mode
+        'enableDebugMode' => true,         // Show helpful error messages (recommended for development)
+
+        // Ignore Folders
+        // Folders to exclude when discovering components
+        'ignoreFolders' => [
+            'node_modules',
+            '.git',
+            'vendor',
+            'dist',
+            'build',
+        ],
+
+        // Ignore Patterns
+        // File patterns to exclude from component discovery
+        'ignorePatterns' => [
+            '*.test.twig',
+            '*.spec.twig',
+            '_*',  // Files starting with underscore
+        ],
     ],
-    
-    // Default path for new components (when creating via CP)
-    'defaultPath' => '_components',
-    
-    // Allow nested folder organization (e.g., forms/input.twig)
-    'allowNesting' => true,
-    
-    // Maximum nesting depth (0 = unlimited)
-    'maxNestingDepth' => 3,
-    
-    // Cache compiled components for better performance
-    'enableCache' => true,
-    
-    // Cache duration in seconds (0 = until manually cleared)
-    'cacheDuration' => 0,
-    
-    // Component tag prefix (e.g., x:component or c:component)
-    'tagPrefix' => 'x',
-    
-    // Enable prop validation
-    'enablePropValidation' => true,
-    
-    // Show helpful error messages in dev mode
-    'enableDebugMode' => true,
-    
-    // Allow components to extend other components
-    'enableInheritance' => true,
-    
-    // Enable component documentation generation
-    'enableDocumentation' => true,
-    
-    // Component file extension
-    'componentExtension' => 'twig',
-    
-    // Ignore these folders when discovering components
-    'ignoreFolders' => [
-        'node_modules',
-        '.git',
-        'vendor',
-        'dist',
-        'build',
+
+    // Dev environment settings
+    'dev' => [
+        'logLevel' => 'debug',             // More verbose logging in dev
+        'enableCache' => false,            // No cache - see changes immediately
+        'enableDebugMode' => true,         // Show all debug messages
+        'enableUsageTracking' => true,     // Track usage during development
     ],
-    
-    // Ignore files matching these patterns
-    'ignorePatterns' => [
-        '*.test.twig',
-        '*.spec.twig',
-        '_*',  // Files starting with underscore
+
+    // Staging environment settings
+    'staging' => [
+        'logLevel' => 'info',              // Moderate logging in staging
+        'enableCache' => true,
+        'cacheDuration' => 3600,           // 1 hour - balance testing/performance
+        'enableDebugMode' => true,         // Keep debug enabled for testing
     ],
-    
-    // Enable component usage tracking
-    'enableUsageTracking' => false,
-    
-    // Allow inline components (defined in templates)
-    'allowInlineComponents' => true,
-    
-    // Default slot name
-    'defaultSlotName' => 'default',
-    
-    // Enable component library UI in CP
-    'enableComponentLibrary' => true,
-    
-    // Show component source in library
-    'showComponentSource' => true,
-    
-    // Enable live component preview
-    'enableLivePreview' => true,
-    
-    // Custom component metadata fields
-    'metadataFields' => [
-        'description',
-        'category',
-        'version',
-        'author',
-        'tags',
+
+    // Production environment settings
+    'production' => [
+        'logLevel' => 'error',             // Only errors in production
+        'enableCache' => true,
+        'cacheDuration' => 0,              // Cache until manually cleared - maximum performance
+        'enableDebugMode' => false,        // Hide debug messages in production
+        'enableUsageTracking' => false,    // Disable usage tracking in production
     ],
 ];
