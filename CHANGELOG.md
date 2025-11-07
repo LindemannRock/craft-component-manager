@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.1.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.0.0...v5.1.0) (2025-11-07)
+
+
+### Features
+
+* Add interface settings page and logging options ([f115ddb](https://github.com/LindemannRock/craft-component-manager/commit/f115ddb9bacce43922b57c3d96ddcfb5fb4c41aa))
+* Integrate logging functionality and update README with logging details ([2c29313](https://github.com/LindemannRock/craft-component-manager/commit/2c29313dea9058fb1498dad3d80cf68851f20b5f))
+
+
+### Bug Fixes
+
+* Enhance logging capabilities and update documentation for logging configuration ([5bf7190](https://github.com/LindemannRock/craft-component-manager/commit/5bf7190e623c000ca9ed50b78639e7e7d112a325))
+
 ## [5.0.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.1...v5.0.0) (2025-10-20)
 
 
