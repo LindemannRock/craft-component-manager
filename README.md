@@ -58,7 +58,13 @@ Advanced component management plugin for Craft CMS 5.x with comprehensive Contro
 
 ```bash
 cd /path/to/project
+```
+
+```bash
 composer require lindemannrock/craft-component-manager
+```
+
+```bash
 ./craft plugin/install component-manager
 ```
 
@@ -66,7 +72,13 @@ composer require lindemannrock/craft-component-manager
 
 ```bash
 cd /path/to/project
+```
+
+```bash
 ddev composer require lindemannrock/craft-component-manager
+```
+
+```bash
 ddev craft plugin/install component-manager
 ```
 
