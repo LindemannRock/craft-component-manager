@@ -137,6 +137,9 @@ class ComponentManager extends Plugin
             }
         );
 
+        // Register Twig extension for plugin name helpers
+        Craft::$app->view->registerTwigExtension(new \lindemannrock\componentmanager\twigextensions\PluginNameExtension());
+
         // Register variable
         Event::on(
             CraftVariable::class,
