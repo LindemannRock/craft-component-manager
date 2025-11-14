@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.1.0...v5.2.0) (2025-11-14)
+
+
+### Features
+
+* Add MIT License file to the project ([8f9cb29](https://github.com/LindemannRock/craft-component-manager/commit/8f9cb29da45c7ad62445c53a08467bf790415e6e))
+* Add Twig extension for plugin name helpers and enhance settings model with display name methods ([fdc31e7](https://github.com/LindemannRock/craft-component-manager/commit/fdc31e798148b31d55425635df25877ac8e8e9ca))
+
 ## [5.1.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.0.0...v5.1.0) (2025-11-07)
 
 
