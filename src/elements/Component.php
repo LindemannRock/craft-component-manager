@@ -26,13 +26,44 @@ class Component extends Element
     // Properties
     // =========================================================================
 
+    /**
+     * @var string|null Component handle (lowercase, used in templates)
+     */
     public ?string $componentName = null;
+
+    /**
+     * @var string|null Absolute path to component file
+     */
     public ?string $path = null;
+
+    /**
+     * @var string|null Path relative to template root
+     */
     public ?string $relativePath = null;
+
+    /**
+     * @var string|null Category label for grouping
+     */
     public ?string $category = null;
+
+    /**
+     * @var string|null Component description text
+     */
     public ?string $description = null;
+
+    /**
+     * @var array|null Component props definition
+     */
     public ?array $props = null;
+
+    /**
+     * @var array|null Component slots definition
+     */
     public ?array $slots = null;
+
+    /**
+     * @var array|null Additional metadata from discovery
+     */
     public ?array $metadata = null;
 
     // Public Methods

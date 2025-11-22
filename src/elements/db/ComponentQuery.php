@@ -17,8 +17,19 @@ use craft\helpers\Db;
  */
 class ComponentQuery extends ElementQuery
 {
+    /**
+     * @var string|null Component handle to filter by
+     */
     public ?string $componentName = null;
+
+    /**
+     * @var string|null Category filter for components
+     */
     public ?string $category = null;
+
+    /**
+     * @var string|null Path filter relative to template root
+     */
     public ?string $path = null;
 
     /**
