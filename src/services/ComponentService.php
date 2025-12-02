@@ -12,12 +12,9 @@ namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
-use craft\web\View;
-use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\ComponentModel;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use Twig\Error\SyntaxError;
 
 /**
@@ -68,7 +65,7 @@ class ComponentService extends Component
         
         if (!$component) {
             if ($settings->enableDebugMode && Craft::$app->getConfig()->getGeneral()->devMode) {
-                throw new \Exception("Component '{$name}' not found. Available components: " . 
+                throw new \Exception("Component '{$name}' not found. Available components: " .
                     implode(', ', array_keys($plugin->discovery->discoverComponents())));
             }
             return '';
@@ -83,7 +80,7 @@ class ComponentService extends Component
                 }
                 $this->logWarning('Component prop validation failed', [
                     'component' => $name,
-                    'errors' => $errors
+                    'errors' => $errors,
                 ]);
             }
         }
@@ -118,7 +115,6 @@ class ComponentService extends Component
             }
             
             return $html;
-            
         } catch (\Exception $e) {
             // Remove from stack
             array_pop($this->_componentStack);
@@ -129,10 +125,9 @@ class ComponentService extends Component
 
             $this->logError('Error rendering component', [
                 'component' => $name,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
             return '';
-            
         } finally {
             // Always remove from stack
             if (!empty($this->_componentStack)) {

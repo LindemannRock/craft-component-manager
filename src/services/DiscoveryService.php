@@ -12,9 +12,9 @@ namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\ComponentModel;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -258,7 +258,7 @@ class DiscoveryService extends Component
                 }
                 $component->metadata['slots'][$slotName] = [
                     'name' => $slotName,
-                    'description' => $slotDescription
+                    'description' => $slotDescription,
                 ];
             }
         }
@@ -412,7 +412,6 @@ class DiscoveryService extends Component
                 } else {
                     $results['errors'][] = "Failed to save component: {$component->name}";
                 }
-                
             } catch (\Exception $e) {
                 $results['errors'][] = "Error processing {$component->name}: " . $e->getMessage();
             }

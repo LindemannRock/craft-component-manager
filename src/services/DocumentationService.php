@@ -8,14 +8,12 @@
 
 namespace lindemannrock\componentmanager\services;
 
+use craft\base\Component;
+use craft\helpers\Json;
+
+use craft\helpers\StringHelper;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\ComponentModel;
-
-use Craft;
-use craft\base\Component;
-use craft\helpers\FileHelper;
-use craft\helpers\Json;
-use craft\helpers\StringHelper;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
@@ -214,10 +212,10 @@ class DocumentationService extends Component
                         'content' => $example['content'] ?? '',
                         'code' => $this->generateExampleCode($example, $componentName),
                     ];
-                    $lastExample = $examples[count($examples)-1];
+                    $lastExample = $examples[count($examples) - 1];
                     $this->logDebug('Created example', [
                         'content' => $lastExample['content'],
-                        'slots' => $lastExample['slots']
+                        'slots' => $lastExample['slots'],
                     ]);
                 }
                 // If we found structured examples, return them
@@ -329,7 +327,6 @@ class DocumentationService extends Component
      */
     protected function generateExampleCode(array $example, string $componentName = 'component'): string
     {
-        
         $code = '{% x:' . $componentName;
         
         if (!empty($example['props'])) {

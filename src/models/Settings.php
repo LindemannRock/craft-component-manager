@@ -205,9 +205,9 @@ class Settings extends Model
             [['allowNesting', 'enableCache', 'enablePropValidation', 'enableDebugMode',
               'enableInheritance', 'enableDocumentation', 'enableUsageTracking',
               'allowInlineComponents', 'enableComponentLibrary', 'showComponentSource',
-              'enableLivePreview'], 'boolean'],
+              'enableLivePreview', ], 'boolean'],
             [['tagPrefix'], 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/',
-             'message' => 'Tag prefix must start with a letter and contain only letters and numbers.'],
+             'message' => 'Tag prefix must start with a letter and contain only letters and numbers.', ],
             [['logLevel'], 'in', 'range' => ['debug', 'info', 'warning', 'error']],
             [['logLevel'], 'validateLogLevel'],
         ];
@@ -233,13 +233,13 @@ class Settings extends Model
                 if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
                     if (Craft::$app->getSession()->get('cm_debug_config_warning') === null) {
                         $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                            'configFile' => 'config/component-manager.php'
+                            'configFile' => 'config/component-manager.php',
                         ]);
                         Craft::$app->getSession()->set('cm_debug_config_warning', true);
                     }
                 } else {
                     $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                        'configFile' => 'config/component-manager.php'
+                        'configFile' => 'config/component-manager.php',
                     ]);
                 }
             } else {
@@ -356,7 +356,7 @@ class Settings extends Model
         // Convert boolean fields
         $booleanFields = ['enablePropValidation', 'enableCache', 'enableDebugMode', 'enableUsageTracking',
                           'allowNesting', 'enableInheritance', 'enableDocumentation', 'allowInlineComponents',
-                          'enableComponentLibrary', 'showComponentSource', 'enableLivePreview'];
+                          'enableComponentLibrary', 'showComponentSource', 'enableLivePreview', ];
 
         foreach ($booleanFields as $field) {
             if (isset($row[$field])) {

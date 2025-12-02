@@ -11,8 +11,6 @@
 namespace lindemannrock\componentmanager\twig;
 
 use lindemannrock\componentmanager\ComponentManager;
-use lindemannrock\componentmanager\twig\ComponentTokenParser;
-use lindemannrock\componentmanager\twig\SlotTokenParser;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

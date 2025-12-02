@@ -166,7 +166,7 @@ class ComponentModel extends Model
                 // Type validation
                 if (isset($config['type'])) {
                     $type = $config['type'];
-                    $valid = match($type) {
+                    $valid = match ($type) {
                         'string' => is_string($value),
                         'int', 'integer' => is_int($value),
                         'float', 'double' => is_float($value),

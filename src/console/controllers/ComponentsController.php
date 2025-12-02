@@ -8,7 +8,6 @@
 
 namespace lindemannrock\componentmanager\console\controllers;
 
-use Craft;
 use craft\console\Controller;
 use lindemannrock\componentmanager\ComponentManager;
 

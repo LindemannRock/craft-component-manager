@@ -8,10 +8,10 @@
 
 namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\componentmanager\ComponentManager;
 use Craft;
 use craft\web\Controller;
 use craft\web\View;
+use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 
@@ -120,7 +120,7 @@ class PreviewController extends Controller
         $this->logDebug('Iframe request', [
             'component' => $componentName,
             'variant' => $variant,
-            'propsJson' => $propsJson
+            'propsJson' => $propsJson,
         ]);
         $this->logDebug('Parsed props', ['props' => $props]);
         
@@ -154,7 +154,7 @@ class PreviewController extends Controller
                 $this->logDebug('Using first example for default', [
                     'props' => $props,
                     'content' => $defaultContent,
-                    'slots' => $slots
+                    'slots' => $slots,
                 ]);
             } else {
                 // Find the matching example by ID
@@ -169,7 +169,7 @@ class PreviewController extends Controller
                             'variant' => $variant,
                             'props' => $props,
                             'content' => $defaultContent,
-                            'slots' => $slots
+                            'slots' => $slots,
                         ]);
                         break;
                     }
@@ -194,8 +194,12 @@ class PreviewController extends Controller
             $mockGlobals->siteUrl = 'https://example.com';
             Craft::$app->view->registerTwigExtension(new class($mockGlobals) extends \Twig\Extension\AbstractExtension {
                 private $globals;
-                public function __construct($globals) { $this->globals = $globals; }
-                public function getGlobals(): array {
+                public function __construct($globals)
+                {
+                    $this->globals = $globals;
+                }
+                public function getGlobals(): array
+                {
                     return ['_globals' => $this->globals];
                 }
             });
@@ -232,8 +236,8 @@ class PreviewController extends Controller
                 </div>';
             } else {
                 $componentHtml = '<div style="padding: 20px; background: #fee; color: #c00; border: 1px solid #c00; border-radius: 4px;">
-                    <strong>Error rendering component:</strong><br>' . 
-                    htmlspecialchars($errorMessage) . 
+                    <strong>Error rendering component:</strong><br>' .
+                    htmlspecialchars($errorMessage) .
                     '</div>';
             }
         }

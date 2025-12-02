@@ -8,15 +8,13 @@
 
 namespace lindemannrock\componentmanager\elements;
 
-use lindemannrock\componentmanager\ComponentManager;
-use lindemannrock\componentmanager\elements\db\ComponentQuery;
-use lindemannrock\componentmanager\records\ComponentRecord;
-
 use Craft;
 use craft\base\Element;
+
 use craft\elements\User;
 use craft\helpers\UrlHelper;
-use craft\elements\conditions\ElementConditionInterface;
+use lindemannrock\componentmanager\elements\db\ComponentQuery;
+use lindemannrock\componentmanager\records\ComponentRecord;
 
 /**
  * Component Element
@@ -287,7 +285,7 @@ class Component extends Element
                 $count = 0;
                 if ($this->metadata && isset($this->metadata['props'])) {
                     $count = is_array($this->metadata['props']) ? count($this->metadata['props']) : 0;
-                } else if (is_array($this->props)) {
+                } elseif (is_array($this->props)) {
                     $count = count($this->props);
                 }
                 return $count > 0 ? $count : '<span class="light">—</span>';
@@ -300,7 +298,7 @@ class Component extends Element
                     if (is_array($this->metadata['slots'])) {
                         $count = count($this->metadata['slots']);
                     }
-                } else if (is_array($this->slots)) {
+                } elseif (is_array($this->slots)) {
                     // Handle old format: ["icon","endIcon","tooltip"] or {"0":"icon","3":"endIcon"}
                     $count = count($this->slots);
                 }

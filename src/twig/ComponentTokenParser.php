@@ -237,15 +237,14 @@ class ComponentTokenParser extends AbstractTokenParser
                 $stream->next(); // consume the slash
                 $name .= '/';
                 $expectingPart = true;
-            }
-            else {
+            } else {
                 break;
             }
         }
         
         if (empty($name)) {
-            throw new SyntaxError('Component name is required after "x:"', 
-                $stream->getCurrent()->getLine(), 
+            throw new SyntaxError('Component name is required after "x:"',
+                $stream->getCurrent()->getLine(),
                 $stream->getSourceContext());
         }
         

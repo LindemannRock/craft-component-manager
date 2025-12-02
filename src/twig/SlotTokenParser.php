@@ -10,7 +10,6 @@
 
 namespace lindemannrock\componentmanager\twig;
 
-use Twig\Error\SyntaxError;
 use Twig\Node\Node;
 use Twig\Node\TextNode;
 use Twig\Token;

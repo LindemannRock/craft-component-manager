@@ -56,8 +56,10 @@
         "class": "lindemannrock\\componentmanager\\ComponentManager"
     },
     "scripts": {
-        "phpstan": "phpstan --memory-limit=1G",
+        "phpstan": "phpstan --ansi --memory-limit=1G",
         "phpstan-pro": "phpstan --memory-limit=1G --pro",
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --fix --ansi",
         "rector": "rector process src",
         "rector-dry-run": "rector process src --dry-run"
     },

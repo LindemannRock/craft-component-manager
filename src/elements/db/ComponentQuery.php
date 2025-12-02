@@ -8,7 +8,6 @@
 
 namespace lindemannrock\componentmanager\elements\db;
 
-use lindemannrock\componentmanager\ComponentManager;
 use craft\elements\db\ElementQuery;
 use craft\helpers\Db;
 

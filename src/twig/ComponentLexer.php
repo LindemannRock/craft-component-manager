@@ -16,7 +16,7 @@ use Twig\TokenStream;
 
 /**
  * Component Lexer
- * 
+ *
  * Preprocesses HTML-like component syntax into Twig tags
  * Converts: <x:button label="Click"> to {% x:button with {label: "Click"} %}
  *

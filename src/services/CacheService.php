@@ -12,8 +12,8 @@ namespace lindemannrock\componentmanager\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
  * Cache Service
@@ -26,9 +26,9 @@ class CacheService extends Component
 {
     use LoggingTrait;
 
-    const CACHE_KEY_PREFIX = 'twig-component-manager-';
-    const COMPONENTS_CACHE_KEY = 'discovered-components';
-    const COMPILED_CACHE_KEY = 'compiled-';
+    public const CACHE_KEY_PREFIX = 'twig-component-manager-';
+    public const COMPONENTS_CACHE_KEY = 'discovered-components';
+    public const COMPILED_CACHE_KEY = 'compiled-';
 
     /**
      * @inheritdoc
@@ -215,7 +215,7 @@ class CacheService extends Component
             } catch (\Exception $e) {
                 $this->logWarning('Failed to warm cache for component', [
                     'component' => $component->name,
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
                 ]);
             }
         }

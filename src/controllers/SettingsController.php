@@ -8,11 +8,11 @@
 
 namespace lindemannrock\componentmanager\controllers;
 
-use lindemannrock\componentmanager\ComponentManager;
-use lindemannrock\componentmanager\models\Settings;
-
 use Craft;
 use craft\web\Controller;
+
+use lindemannrock\componentmanager\ComponentManager;
+use lindemannrock\componentmanager\models\Settings;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
 

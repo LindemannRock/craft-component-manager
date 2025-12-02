@@ -17,21 +17,20 @@ use craft\events\CreateTwigEvent;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\events\RegisterUrlRulesEvent;
 use craft\events\RegisterUserPermissionsEvent;
-use craft\events\TemplateEvent;
 use craft\services\UserPermissions;
+use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
-use craft\web\twig\variables\CraftVariable;
 use lindemannrock\componentmanager\models\Settings;
+use lindemannrock\componentmanager\services\CacheService;
 use lindemannrock\componentmanager\services\ComponentService;
 use lindemannrock\componentmanager\services\DiscoveryService;
-use lindemannrock\componentmanager\services\CacheService;
 use lindemannrock\componentmanager\services\DocumentationService;
 use lindemannrock\componentmanager\twig\ComponentExtension;
 use lindemannrock\componentmanager\twig\ComponentLexer;
 use lindemannrock\componentmanager\variables\ComponentVariable;
-use lindemannrock\logginglibrary\traits\LoggingTrait;
 use lindemannrock\logginglibrary\LoggingLibrary;
+use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\base\Event;
 
 /**
@@ -124,7 +123,7 @@ class ComponentManager extends Plugin
         Event::on(
             View::class,
             View::EVENT_AFTER_CREATE_TWIG,
-            function (CreateTwigEvent $event) {
+            function(CreateTwigEvent $event) {
                 // Work on both frontend and CP
                 if (Craft::$app->getRequest()->getIsSiteRequest() || Craft::$app->getRequest()->getIsCpRequest()) {
                     // Add our custom Twig extensions
@@ -144,7 +143,7 @@ class ComponentManager extends Plugin
         Event::on(
             CraftVariable::class,
             CraftVariable::EVENT_INIT,
-            function (Event $event) {
+            function(Event $event) {
                 /** @var CraftVariable $variable */
                 $variable = $event->sender;
                 $variable->set('componentManager', ComponentVariable::class);
@@ -213,7 +212,7 @@ class ComponentManager extends Plugin
             if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
                 Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
                 $item = LoggingLibrary::addLogsNav($item, $this->handle, [
-                    'componentManager:viewLogs'
+                    'componentManager:viewLogs',
                 ]);
             }
 
