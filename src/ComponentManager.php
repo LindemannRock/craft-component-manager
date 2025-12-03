@@ -106,7 +106,7 @@ class ComponentManager extends Plugin
         } else {
             // Get from database settings if set
             $settings = $this->getSettings();
-            if ($settings && !empty($settings->pluginName)) {
+            if (!empty($settings->pluginName)) {
                 $this->name = $settings->pluginName;
             }
         }
@@ -201,7 +201,7 @@ class ComponentManager extends Plugin
 
             // Add documentation link if enabled
             $settings = $this->getSettings();
-            if ($settings && $settings->enableDocumentation) {
+            if ($settings->enableDocumentation) {
                 $item['subnav']['documentation'] = [
                     'label' => Craft::t('component-manager', 'Documentation'),
                     'url' => 'component-manager/documentation',
@@ -263,12 +263,7 @@ class ComponentManager extends Plugin
     protected function settingsHtml(): ?string
     {
         $settings = $this->getSettings();
-        
-        // Debug: Make sure settings object exists
-        if (!$settings) {
-            $settings = new Settings();
-        }
-        
+
         return Craft::$app->view->renderTemplate(
             'component-manager/settings',
             [

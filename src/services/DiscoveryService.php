@@ -370,6 +370,7 @@ class DiscoveryService extends Component
         $filesystemComponentNames = array_keys($components);
         
         // Get all existing component elements from database
+        /** @var \lindemannrock\componentmanager\elements\Component[] $existingElements */
         $existingElements = \lindemannrock\componentmanager\elements\Component::find()->all();
         
         // Track which components we've processed
@@ -379,17 +380,18 @@ class DiscoveryService extends Component
         foreach ($components as $component) {
             try {
                 // Create or update component element
+                /** @var \lindemannrock\componentmanager\elements\Component|null $element */
                 $element = \lindemannrock\componentmanager\elements\Component::find()
                     ->componentName($component->name)
                     ->one();
-                
+
                 if (!$element) {
                     $element = new \lindemannrock\componentmanager\elements\Component();
                     $isNew = true;
                 } else {
                     $isNew = false;
                 }
-                
+
                 // Set component data - keep in both places for filtering to work
                 $element->componentName = $component->name;
                 $element->title = $component->name;

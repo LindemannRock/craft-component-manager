@@ -52,7 +52,7 @@ class ComponentExtension extends AbstractExtension
     public function getTokenParsers(): array
     {
         return [
-            new ComponentTokenParser($this->plugin),
+            new ComponentTokenParser(),
             new SlotTokenParser(),
         ];
     }

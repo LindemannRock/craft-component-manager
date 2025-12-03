@@ -308,7 +308,7 @@ class Component extends Element
                 return '<code class="light">' . ($this->relativePath ?? $this->path ?? '') . '</code>';
         }
 
-        return parent::getTableAttributeHtml($attribute);
+        return '';
     }
 
     /**

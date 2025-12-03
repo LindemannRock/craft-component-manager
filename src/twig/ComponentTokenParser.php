@@ -32,20 +32,12 @@ class ComponentTokenParser extends AbstractTokenParser
      * @var string|null Component name being parsed
      */
     private ?string $componentName = null;
-    
-    /**
-     * @var ComponentManager
-     */
-    private ComponentManager $plugin;
 
     /**
      * Constructor
-     *
-     * @param ComponentManager $plugin
      */
-    public function __construct(ComponentManager $plugin)
+    public function __construct()
     {
-        $this->plugin = $plugin;
     }
 
     /**
@@ -81,7 +73,7 @@ class ComponentTokenParser extends AbstractTokenParser
         // Check if this is a self-closing tag (immediate end tag)
         if ($stream->test(Token::BLOCK_START_TYPE)) {
             $next = $stream->look(1);
-            if ($next && $next->test(Token::NAME_TYPE) && $next->getValue() === 'endx') {
+            if ($next !== null && $next->test(Token::NAME_TYPE) && $next->getValue() === 'endx') {
                 // Self-closing, no body
                 $stream->next(); // consume block start
                 $stream->expect(Token::NAME_TYPE, 'endx');
@@ -133,8 +125,8 @@ class ComponentTokenParser extends AbstractTokenParser
             // Check for special tags
             if ($stream->test(Token::BLOCK_START_TYPE)) {
                 $next = $stream->look(1);
-                
-                if ($next && $next->test(Token::NAME_TYPE)) {
+
+                if ($next !== null && $next->test(Token::NAME_TYPE)) {
                     $value = $next->getValue();
                     
                     // Check for end of component

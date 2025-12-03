@@ -109,11 +109,7 @@ class PreviewController extends Controller
         // Parse props from JSON
         $props = [];
         if ($propsJson) {
-            try {
-                $props = json_decode($propsJson, true) ?? [];
-            } catch (\Exception $e) {
-                $props = [];
-            }
+            $props = json_decode($propsJson, true) ?? [];
         }
         
         // Debug logging
@@ -223,12 +219,9 @@ class PreviewController extends Controller
             $errorMessage = $e->getMessage();
             
             // Check if it's a template not found error
-            if (strpos($errorMessage, 'Unable to find the template') !== false || strpos($errorMessage, 'not found') !== false) {
+            if (str_contains($errorMessage, 'Unable to find the template') || str_contains($errorMessage, 'not found')) {
                 // Try to get the actual path that was attempted
-                $attemptedPath = '_components/' . $componentName;
-                if ($component) {
-                    $attemptedPath = $component->relativePath ?? $attemptedPath;
-                }
+                $attemptedPath = $component->relativePath ?? '_components/' . $componentName;
                 $componentHtml = '<div style="padding: 20px; background: #fef3c7; color: #92400e; border: 1px solid #f59e0b; border-radius: 4px;">
                     <strong>Component template not found:</strong> ' . htmlspecialchars($componentName) . '<br>
                     <small>Looking for: ' . htmlspecialchars($attemptedPath) . '</small><br>
