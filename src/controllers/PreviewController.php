@@ -17,6 +17,8 @@ use yii\web\Response;
 
 /**
  * Preview Controller - Render components in isolation
+ *
+ * @since 1.0.0
  */
 class PreviewController extends Controller
 {

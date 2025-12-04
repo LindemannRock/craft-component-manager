@@ -13,6 +13,8 @@ use lindemannrock\componentmanager\ComponentManager;
 
 /**
  * Components controller
+ *
+ * @since 1.0.0
  */
 class ComponentsController extends Controller
 {

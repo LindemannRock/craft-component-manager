@@ -22,6 +22,7 @@ use craft\db\ActiveRecord;
  * @property string|null $props
  * @property string|null $slots
  * @property string|null $metadata
+ * @since 1.0.0
  */
 class ComponentRecord extends ActiveRecord
 {

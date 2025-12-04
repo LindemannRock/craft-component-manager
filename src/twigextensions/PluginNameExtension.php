@@ -14,6 +14,8 @@ use Twig\Extension\GlobalsInterface;
 
 /**
  * Plugin Name Twig Extension
+ *
+ * @since 1.0.0
  */
 class PluginNameExtension extends AbstractExtension implements GlobalsInterface
 {

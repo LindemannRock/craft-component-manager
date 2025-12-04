@@ -13,6 +13,8 @@ use craft\helpers\Db;
 
 /**
  * Component Query
+ *
+ * @since 1.0.0
  */
 class ComponentQuery extends ElementQuery
 {

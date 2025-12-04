@@ -17,6 +17,8 @@ use craft\helpers\StringHelper;
 
 /**
  * Install migration.
+ *
+ * @since 1.0.0
  */
 class Install extends Migration
 {

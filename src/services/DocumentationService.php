@@ -20,6 +20,8 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
  * Documentation Service
  *
  * Generates automatic documentation for Twig components
+ *
+ * @since 1.0.0
  */
 class DocumentationService extends Component
 {

@@ -17,6 +17,8 @@ use yii\web\Response;
 
 /**
  * Components Controller
+ *
+ * @since 1.0.0
  */
 class ComponentsController extends Controller
 {

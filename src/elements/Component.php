@@ -18,6 +18,8 @@ use lindemannrock\componentmanager\records\ComponentRecord;
 
 /**
  * Component Element
+ *
+ * @since 1.0.0
  */
 class Component extends Element
 {
