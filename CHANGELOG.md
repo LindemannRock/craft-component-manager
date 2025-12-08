@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.3.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.2.0...v5.3.0) (2025-12-04)
+
+
+### Features
+
+* Add Info Box Component template with icon support ([a227b3f](https://github.com/LindemannRock/craft-component-manager/commit/a227b3f11e46736290e455bf128d4cf531ff37d6))
+* Add PHPStan and EasyCodingStandard configurations; refactor code for consistency ([628200c](https://github.com/LindemannRock/craft-component-manager/commit/628200cb8d5c0df72f5bc710f8f45610d3668ef9))
+* Enhance Component and ComponentQuery classes with additional properties and documentation ([93156b6](https://github.com/LindemannRock/craft-component-manager/commit/93156b67097805e108b3c4816f4c5989de5376ab))
+
+
+### Bug Fixes
+
+* Allow nullable parameters for defineSources and defineActions methods in Component class ([dae44bd](https://github.com/LindemannRock/craft-component-manager/commit/dae44bd4f56bf2dde7a094e6aabde511ed63b68a))
+
+
+### Miscellaneous Chores
+
+* Add [@since](https://github.com/since) 1.0.0 annotation to multiple files for versioning clarity ([29fff68](https://github.com/LindemannRock/craft-component-manager/commit/29fff6809d1afa4e3e58f20d8ef511974cd4a563))
+
 ## [5.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.1.0...v5.2.0) (2025-11-14)
 
 
