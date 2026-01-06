@@ -1,76 +1,78 @@
 {
-    "name": "lindemannrock/craft-component-manager",
-    "description": "Advanced component management for Craft CMS with folder organization, prop validation, and slots",
-    "type": "craft-plugin",
-    "version": "5.3.0",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "craft-plugin",
-        "twig",
-        "components",
-        "component-library",
-        "ui-components",
-        "templates",
-        "design-system"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Bilal Hary Lindemann",
-            "email": "bh@lindemannrock.com",
-            "homepage": "https://lindemannrock.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "support@lindemannrock.com",
-        "issues": "https://github.com/LindemannRock/craft-component-manager/issues",
-        "source": "https://github.com/LindemannRock/craft-component-manager",
-        "docs": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
-        "rss": "https://github.com/LindemannRock/craft-component-manager/commits/main.atom"
-    },
-    "require": {
-        "php": "^8.2",
-        "craftcms/cms": "^5.0.0",
-        "lindemannrock/craft-logging-library": "^5.0"
-    },
-    "require-dev": {
-        "craftcms/phpstan": "dev-main",
-        "craftcms/rector": "dev-main"
-    },
-    "autoload": {
-        "psr-4": {
-            "lindemannrock\\componentmanager\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "Component Manager",
-        "handle": "component-manager",
-        "developer": "LindemannRock",
-        "developerUrl": "https://lindemannrock.com",
-        "developerEmail": "support@lindemannrock.com",
-        "documentationUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
-        "changelogUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/CHANGELOG.md",
-        "class": "lindemannrock\\componentmanager\\ComponentManager"
-    },
-    "scripts": {
-        "phpstan": "phpstan --ansi --memory-limit=1G",
-        "phpstan-pro": "phpstan --memory-limit=1G --pro",
-        "check-cs": "ecs check --ansi",
-        "fix-cs": "ecs check --fix --ansi",
-        "rector": "rector process src",
-        "rector-dry-run": "rector process src --dry-run"
-    },
-    "config": {
-        "sort-packages": true,
-        "platform": {
-            "php": "8.2"
-        },
-        "allow-plugins": {
-            "yiisoft/yii2-composer": true,
-            "craftcms/plugin-installer": true
-        }
-    }
+	"name": "lindemannrock/craft-component-manager",
+	"description": "Advanced component management for Craft CMS with folder organization, prop validation, and slots",
+	"type": "craft-plugin",
+	"version": "5.3.0",
+	"keywords": [
+		"craft",
+		"cms",
+		"craftcms",
+		"craft-plugin",
+		"twig",
+		"components",
+		"component-library",
+		"ui-components",
+		"templates",
+		"design-system"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Bilal Hary Lindemann",
+			"email": "bh@lindemannrock.com",
+			"homepage": "https://lindemannrock.com",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@lindemannrock.com",
+		"issues": "https://github.com/LindemannRock/craft-component-manager/issues",
+		"source": "https://github.com/LindemannRock/craft-component-manager",
+		"docs": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
+		"rss": "https://github.com/LindemannRock/craft-component-manager/commits/main.atom"
+	},
+	"require": {
+		"php": "^8.2",
+		"craftcms/cms": "^5.0.0",
+		"lindemannrock/craft-logging-library": "^5.0",
+		"lindemannrock/craft-plugin-base": "^5.0"
+	},
+	"require-dev": {
+		"craftcms/ecs": "dev-main",
+		"craftcms/phpstan": "dev-main",
+		"craftcms/rector": "dev-main"
+	},
+	"autoload": {
+		"psr-4": {
+			"lindemannrock\\componentmanager\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Component Manager",
+		"handle": "component-manager",
+		"developer": "LindemannRock",
+		"developerUrl": "https://lindemannrock.com",
+		"developerEmail": "support@lindemannrock.com",
+		"documentationUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/README.md",
+		"changelogUrl": "https://github.com/LindemannRock/craft-component-manager/blob/main/CHANGELOG.md",
+		"class": "lindemannrock\\componentmanager\\ComponentManager"
+	},
+	"scripts": {
+		"phpstan": "phpstan --ansi --memory-limit=1G",
+		"phpstan-pro": "phpstan --memory-limit=1G --pro",
+		"check-cs": "ecs check --ansi",
+		"fix-cs": "ecs check --fix --ansi",
+		"rector": "rector process src",
+		"rector-dry-run": "rector process src --dry-run"
+	},
+	"config": {
+		"sort-packages": true,
+		"platform": {
+			"php": "8.2"
+		},
+		"allow-plugins": {
+			"yiisoft/yii2-composer": true,
+			"craftcms/plugin-installer": true
+		}
+	}
 }

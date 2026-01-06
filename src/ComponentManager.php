@@ -21,6 +21,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\componentmanager\models\Settings;
 use lindemannrock\componentmanager\services\CacheService;
 use lindemannrock\componentmanager\services\ComponentService;
@@ -88,6 +89,9 @@ class ComponentManager extends Plugin
     {
         parent::init();
         self::$plugin = $this;
+
+        // Bootstrap the base plugin helper
+        PluginHelper::bootstrap($this, 'componentHelper');
 
         // Configure logging
         $settings = $this->getSettings();

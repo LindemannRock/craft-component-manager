@@ -13,9 +13,9 @@ namespace lindemannrock\componentmanager\models;
 use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
-use craft\db\Query;
-use craft\helpers\Db;
-use craft\helpers\Json;
+use lindemannrock\base\traits\SettingsConfigTrait;
+use lindemannrock\base\traits\SettingsDisplayNameTrait;
+use lindemannrock\base\traits\SettingsPersistenceTrait;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 
 /**
@@ -28,6 +28,9 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
 class Settings extends Model
 {
     use LoggingTrait;
+    use SettingsConfigTrait;
+    use SettingsDisplayNameTrait;
+    use SettingsPersistenceTrait;
 
     /**
      * @inheritdoc
@@ -305,201 +308,76 @@ class Settings extends Model
         }
     }
     
+    // =========================================================================
+    // Trait Configuration Methods
+    // =========================================================================
+
     /**
-     * Load settings from database
-     *
-     * @param Settings|null $settings Optional existing settings instance
-     * @return self
+     * Database table name for settings storage
      */
-    public static function loadFromDatabase(?Settings $settings = null): self
+    protected static function tableName(): string
     {
-        if ($settings === null) {
-            $settings = new self();
-        }
-
-        // Check if table exists first (it won't during initial installation)
-        $tableSchema = Craft::$app->getDb()->getTableSchema('{{%componentmanager_settings}}');
-        if (!$tableSchema) {
-            return $settings;
-        }
-
-        $row = (new Query())
-            ->select('*')
-            ->from('{{%componentmanager_settings}}')
-            ->where(['id' => 1])
-            ->one();
-
-        if (!$row) {
-            return $settings;
-        }
-
-        // Remove system fields
-        unset($row['id'], $row['dateCreated'], $row['dateUpdated'], $row['uid']);
-
-        // Parse JSON fields
-        if (!empty($row['componentPaths'])) {
-            $row['componentPaths'] = Json::decodeIfJson($row['componentPaths']);
-        }
-
-        if (!empty($row['ignorePatterns'])) {
-            $row['ignorePatterns'] = Json::decodeIfJson($row['ignorePatterns']);
-        }
-
-        if (!empty($row['ignoreFolders'])) {
-            $row['ignoreFolders'] = Json::decodeIfJson($row['ignoreFolders']);
-        }
-
-        if (!empty($row['metadataFields'])) {
-            $row['metadataFields'] = Json::decodeIfJson($row['metadataFields']);
-        }
-
-        // Convert boolean fields
-        $booleanFields = ['enablePropValidation', 'enableCache', 'enableDebugMode', 'enableUsageTracking',
-                          'allowNesting', 'enableInheritance', 'enableDocumentation', 'allowInlineComponents',
-                          'enableComponentLibrary', 'showComponentSource', 'enableLivePreview', ];
-
-        foreach ($booleanFields as $field) {
-            if (isset($row[$field])) {
-                $row[$field] = (bool) $row[$field];
-            }
-        }
-
-        // Convert integer fields
-        $integerFields = ['cacheDuration', 'maxNestingDepth', 'itemsPerPage'];
-
-        foreach ($integerFields as $field) {
-            if (isset($row[$field])) {
-                $row[$field] = (int) $row[$field];
-            }
-        }
-
-        // Set attributes from database
-        $settings->setAttributes($row, false);
-
-        return $settings;
+        return 'componentmanager_settings';
     }
-    
+
     /**
-     * Save settings to database
-     *
-     * @return bool
+     * Plugin handle for config file resolution
      */
-    public function saveToDatabase(): bool
+    protected static function pluginHandle(): string
     {
-        $data = [
-            'pluginName' => $this->pluginName,
-            'componentPaths' => Json::encode($this->componentPaths),
-            'defaultPath' => $this->defaultPath,
-            'componentExtension' => $this->componentExtension,
-            'enablePropValidation' => $this->enablePropValidation,
-            'enableCache' => $this->enableCache,
-            'cacheDuration' => $this->cacheDuration,
-            'enableDebugMode' => $this->enableDebugMode,
-            'enableUsageTracking' => $this->enableUsageTracking,
-            'defaultSlotName' => $this->defaultSlotName,
-            'ignorePatterns' => Json::encode($this->ignorePatterns),
-            'ignoreFolders' => Json::encode($this->ignoreFolders),
-            'metadataFields' => Json::encode($this->metadataFields),
-            'allowNesting' => $this->allowNesting,
-            'maxNestingDepth' => $this->maxNestingDepth,
-            'enableInheritance' => $this->enableInheritance,
-            'enableDocumentation' => $this->enableDocumentation,
-            'allowInlineComponents' => $this->allowInlineComponents,
-            'enableComponentLibrary' => $this->enableComponentLibrary,
-            'showComponentSource' => $this->showComponentSource,
-            'enableLivePreview' => $this->enableLivePreview,
-            'logLevel' => $this->logLevel,
-            'itemsPerPage' => $this->itemsPerPage,
-            'dateUpdated' => Db::prepareDateForDb(new \DateTime()),
+        return 'component-manager';
+    }
+
+    /**
+     * Fields that should be cast to boolean
+     */
+    protected static function booleanFields(): array
+    {
+        return [
+            'allowNesting',
+            'enableCache',
+            'enablePropValidation',
+            'enableDebugMode',
+            'enableInheritance',
+            'enableDocumentation',
+            'enableUsageTracking',
+            'allowInlineComponents',
+            'enableComponentLibrary',
+            'showComponentSource',
+            'enableLivePreview',
         ];
-        
-        $result = Craft::$app->getDb()->createCommand()
-            ->update('{{%componentmanager_settings}}', $data, ['id' => 1])
-            ->execute();
-            
-        return $result > 0;
-    }
-    
-    /**
-     * Check if a setting is being overridden by config file
-     * Supports dot notation for nested settings like: componentPaths.0
-     *
-     * @param string $attribute The setting attribute name or dot-notation path
-     * @return bool
-     */
-    public function isOverriddenByConfig(string $attribute): bool
-    {
-        $configPath = \Craft::$app->getPath()->getConfigPath() . '/component-manager.php';
-
-        if (!file_exists($configPath)) {
-            return false;
-        }
-
-        // Load the raw config file instead of using Craft's config which merges with database
-        $rawConfig = require $configPath;
-
-        // Handle dot notation for nested config
-        if (str_contains($attribute, '.')) {
-            $parts = explode('.', $attribute);
-            $current = $rawConfig;
-
-            foreach ($parts as $part) {
-                if (!is_array($current) || !array_key_exists($part, $current)) {
-                    return false;
-                }
-                $current = $current[$part];
-            }
-
-            return true;
-        }
-
-        // Check for the attribute in the config
-        // Use array_key_exists instead of isset to detect null values
-        if (array_key_exists($attribute, $rawConfig)) {
-            return true;
-        }
-
-        // Check environment-specific configs
-        $env = \Craft::$app->getConfig()->env;
-        if ($env && is_array($rawConfig[$env] ?? null) && array_key_exists($attribute, $rawConfig[$env])) {
-            return true;
-        }
-
-        // Check wildcard config
-        if (is_array($rawConfig['*'] ?? null) && array_key_exists($attribute, $rawConfig['*'])) {
-            return true;
-        }
-
-        return false;
     }
 
     /**
-     * Get display name (singular, without "Manager")
+     * Fields that should be cast to integer
      */
-    public function getDisplayName(): string
+    protected static function integerFields(): array
     {
-        $name = str_replace([' Manager', ' manager'], '', $this->pluginName);
-        $singular = preg_replace('/s$/', '', $name) ?: $name;
-        return $singular;
+        return [
+            'maxNestingDepth',
+            'cacheDuration',
+            'itemsPerPage',
+        ];
     }
 
-    public function getFullName(): string
+    /**
+     * Fields that should be JSON encoded/decoded
+     */
+    protected static function jsonFields(): array
     {
-        return $this->pluginName;
+        return [
+            'componentPaths',
+            'ignoreFolders',
+            'ignorePatterns',
+            'metadataFields',
+        ];
     }
 
-    public function getPluralDisplayName(): string
+    /**
+     * Fields to exclude from database save
+     */
+    protected static function excludeFromSave(): array
     {
-        return str_replace([' Manager', ' manager'], '', $this->pluginName);
-    }
-
-    public function getLowerDisplayName(): string
-    {
-        return strtolower($this->getDisplayName());
-    }
-
-    public function getPluralLowerDisplayName(): string
-    {
-        return strtolower($this->getPluralDisplayName());
+        return ['tagPrefix'];
     }
 }
