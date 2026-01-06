@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.3.0...v5.4.0) (2026-01-06)
+
+
+### Features
+
+* migrate to shared base plugin ([97d3085](https://github.com/LindemannRock/craft-component-manager/commit/97d3085f96c4e694e170d2ff93893d888a000bd2))
+
 ## [5.3.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.2.0...v5.3.0) (2025-12-04)
 
 
