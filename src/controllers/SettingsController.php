@@ -199,7 +199,7 @@ class SettingsController extends Controller
             // Clear component cache when settings change
             $plugin->cache->clearCache();
 
-            Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Settings saved successfully'));
+            Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Settings saved.'));
         } else {
             $this->logError('Failed to save settings to database');
             Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings'));
