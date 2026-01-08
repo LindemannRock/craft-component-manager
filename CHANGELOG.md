@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.0...v5.4.1) (2026-01-08)
+
+
+### Bug Fixes
+
+* update success message for settings save action ([d0d3f0d](https://github.com/LindemannRock/craft-component-manager/commit/d0d3f0d59b0580b0ed56c18178fbf289df0c3c8b))
+
 ## [5.4.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.3.0...v5.4.0) (2026-01-06)
 
 
