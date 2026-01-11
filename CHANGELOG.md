@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.1...v5.4.2) (2026-01-11)
+
+
+### Bug Fixes
+
+* update plugin name retrieval in logging configuration ([a0f220c](https://github.com/LindemannRock/craft-component-manager/commit/a0f220cafbea10e9adca76180f83a693face656f))
+
 ## [5.4.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.0...v5.4.1) (2026-01-08)
 
 
