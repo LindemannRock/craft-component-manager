@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.3](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.2...v5.4.3) (2026-01-16)
+
+
+### Bug Fixes
+
+* update PluginHelper bootstrap to include download permissions for logging ([d872122](https://github.com/LindemannRock/craft-component-manager/commit/d87212262a7ade5a611b222e5828a56fa7f197e7))
+
 ## [5.4.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.1...v5.4.2) (2026-01-11)
 
 
