@@ -90,30 +90,14 @@ class ComponentManager extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        // Bootstrap the base plugin helper
-        PluginHelper::bootstrap($this, 'componentHelper');
-
-        // Configure logging
-        $settings = $this->getSettings();
-        LoggingLibrary::configure([
-            'pluginHandle' => $this->handle,
-            'pluginName' => $settings->getFullName(),
-            'logLevel' => $settings->logLevel ?? 'error',
-            'itemsPerPage' => $settings->itemsPerPage ?? 100,
-            'permissions' => ['componentManager:viewLogs'],
-        ]);
-
-        // Override plugin name from config if available
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
-        if (isset($configFileSettings['pluginName'])) {
-            $this->name = $configFileSettings['pluginName'];
-        } else {
-            // Get from database settings if set
-            $settings = $this->getSettings();
-            if (!empty($settings->pluginName)) {
-                $this->name = $settings->pluginName;
-            }
-        }
+        // Bootstrap base module (logging + Twig extension)
+        PluginHelper::bootstrap(
+            $this,
+            'componentHelper',
+            ['componentManager:viewLogs'],
+            ['componentManager:downloadLogs']
+        );
+        PluginHelper::applyPluginNameFromConfig($this);
 
         // Register services
         $this->setComponents([
