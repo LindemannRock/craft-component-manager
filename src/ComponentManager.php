@@ -90,16 +90,7 @@ class ComponentManager extends Plugin
         parent::init();
         self::$plugin = $this;
 
-        // Bootstrap base module (logging + Twig extension)
-        PluginHelper::bootstrap(
-            $this,
-            'componentHelper',
-            ['componentManager:viewLogs'],
-            ['componentManager:downloadLogs']
-        );
-        PluginHelper::applyPluginNameFromConfig($this);
-
-        // Register services
+        // Register services first (needed by ComponentExtension)
         $this->setComponents([
             'components' => ComponentService::class,
             'discovery' => DiscoveryService::class,
@@ -107,22 +98,32 @@ class ComponentManager extends Plugin
             'documentation' => DocumentationService::class,
         ]);
 
-        // Register Twig extension and lexer when Twig is created
+        // Register Twig extension using Craft's registerTwigExtension
+        // This queues the extension to be added when Twig is created
+        Craft::$app->view->registerTwigExtension(new ComponentExtension($this));
+
+        // Also need to set the custom lexer via event (can't be queued)
         Event::on(
             View::class,
             View::EVENT_AFTER_CREATE_TWIG,
             function(CreateTwigEvent $event) {
                 // Work on both frontend and CP
                 if (Craft::$app->getRequest()->getIsSiteRequest() || Craft::$app->getRequest()->getIsCpRequest()) {
-                    // Add our custom Twig extensions
-                    $event->twig->addExtension(new ComponentExtension($this));
-                    // Skip HighlightExtension for now
-                    
                     // Set our custom lexer for HTML tag preprocessing
                     $event->twig->setLexer(new ComponentLexer($event->twig));
                 }
             }
         );
+
+        // Bootstrap base module (logging + Twig extension)
+        // NOTE: This may trigger Twig creation, so Twig event handlers must be registered above
+        PluginHelper::bootstrap(
+            $this,
+            'componentHelper',
+            ['componentManager:viewLogs'],
+            ['componentManager:downloadLogs']
+        );
+        PluginHelper::applyPluginNameFromConfig($this);
 
         // Register Twig extension for plugin name helpers
         Craft::$app->view->registerTwigExtension(new \lindemannrock\componentmanager\twigextensions\PluginNameExtension());
