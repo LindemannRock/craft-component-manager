@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.4.4](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.3...v5.4.4) (2026-01-26)
+
+
+### Bug Fixes
+
+* use registerTwigExtension for proper Twig loading order ([a485bc6](https://github.com/LindemannRock/craft-component-manager/commit/a485bc6b65a868d54f3eb72d40624390ff8b6e2b))
+
 ## [5.4.3](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.2...v5.4.3) (2026-01-16)
 
 
