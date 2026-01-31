@@ -157,7 +157,7 @@ class ComponentManager extends Plugin
                     'heading' => Craft::t('component-manager', 'Component Manager'),
                     'permissions' => [
                         'componentManager:viewLogs' => [
-                            'label' => Craft::t('component-manager', 'View logs'),
+                            'label' => Craft::t('component-manager', 'View system logs'),
                         ],
                     ],
                 ];
@@ -329,10 +329,6 @@ class ComponentManager extends Plugin
                     'component-manager/settings/interface' => 'component-manager/settings/interface',
                     'component-manager/settings/maintenance' => 'component-manager/settings/maintenance',
                     'component-manager/settings/save' => 'component-manager/settings/save',
-
-                    // Logging routes
-                    'component-manager/logs' => 'logging-library/logs/index',
-                    'component-manager/logs/download' => 'logging-library/logs/download',
                 ]);
             }
         );
