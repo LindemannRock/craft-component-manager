@@ -21,6 +21,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\componentmanager\models\Settings;
 use lindemannrock\componentmanager\services\CacheService;
@@ -191,21 +192,10 @@ class ComponentManager extends Plugin
             // Use Craft's built-in puzzle-piece icon for components
             $item['icon'] = '@app/icons/puzzle-piece.svg';
 
-            $item['subnav'] = [
-                'components' => [
-                    'label' => Craft::t('component-manager', 'Components'),
-                    'url' => 'component-manager',
-                ],
-            ];
-
-            // Add documentation link if enabled
             $settings = $this->getSettings();
-            if ($settings->enableDocumentation) {
-                $item['subnav']['documentation'] = [
-                    'label' => Craft::t('component-manager', 'Documentation'),
-                    'url' => 'component-manager/documentation',
-                ];
-            }
+            $user = Craft::$app->getUser();
+            $sections = $this->getCpSections($settings);
+            $item['subnav'] = CpNavHelper::buildSubnav($user, $settings, $sections);
 
             // Add logs section using logging library
             if (PluginHelper::isPluginEnabled('logging-library')) {
@@ -214,15 +204,64 @@ class ComponentManager extends Plugin
                 ]);
             }
 
-            if (Craft::$app->getUser()->checkPermission('accessPlugin-component-manager')) {
-                $item['subnav']['settings'] = [
-                    'label' => Craft::t('component-manager', 'Settings'),
-                    'url' => 'component-manager/settings',
-                ];
+            // Hide from nav if no accessible subnav items
+            if (empty($item['subnav'])) {
+                return null;
             }
         }
 
         return $item;
+    }
+
+    /**
+     * Get CP sections for nav + default route resolution
+     *
+     * @param Settings $settings
+     * @param bool $includeComponents
+     * @param bool $includeLogs
+     * @return array
+     * @since 5.5.0
+     */
+    public function getCpSections(Settings $settings, bool $includeComponents = true, bool $includeLogs = false): array
+    {
+        $sections = [];
+
+        if ($includeComponents) {
+            $sections[] = [
+                'key' => 'components',
+                'label' => Craft::t('component-manager', 'Components'),
+                'url' => 'component-manager',
+                'permissionsAll' => ['accessPlugin-component-manager'],
+            ];
+        }
+
+        if ($settings->enableDocumentation) {
+            $sections[] = [
+                'key' => 'documentation',
+                'label' => Craft::t('component-manager', 'Documentation'),
+                'url' => 'component-manager/documentation',
+                'permissionsAll' => ['accessPlugin-component-manager'],
+            ];
+        }
+
+        if ($includeLogs) {
+            $sections[] = [
+                'key' => 'logs',
+                'label' => Craft::t('component-manager', 'Logs'),
+                'url' => 'component-manager/logs',
+                'permissionsAll' => ['componentManager:viewSystemLogs'],
+                'when' => fn() => PluginHelper::isPluginEnabled('logging-library'),
+            ];
+        }
+
+        $sections[] = [
+            'key' => 'settings',
+            'label' => Craft::t('component-manager', 'Settings'),
+            'url' => 'component-manager/settings',
+            'permissionsAll' => ['accessPlugin-component-manager'],
+        ];
+
+        return $sections;
     }
     
     /**

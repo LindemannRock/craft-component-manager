@@ -11,6 +11,7 @@ namespace lindemannrock\componentmanager\controllers;
 use Craft;
 
 use craft\web\Controller;
+use lindemannrock\base\helpers\CpNavHelper;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
 use yii\web\Response;
@@ -39,6 +40,17 @@ class ComponentsController extends Controller
     public function actionIndex(): Response
     {
         $plugin = ComponentManager::getInstance();
+        $user = Craft::$app->getUser();
+        $settings = $plugin->getSettings();
+
+        if (!$user->checkPermission('accessPlugin-component-manager')) {
+            $sections = $plugin->getCpSections($settings, false, true);
+            $route = CpNavHelper::firstAccessibleRoute($user, $settings, $sections);
+            if ($route) {
+                return $this->redirect($route);
+            }
+            $this->requirePermission('accessPlugin-component-manager');
+        }
         
         // Force discovery of components
         $plugin->discovery->discoverComponents();
