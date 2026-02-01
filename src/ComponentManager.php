@@ -120,8 +120,8 @@ class ComponentManager extends Plugin
         PluginHelper::bootstrap(
             $this,
             'componentHelper',
-            ['componentManager:viewLogs'],
-            ['componentManager:downloadLogs']
+            ['componentManager:viewSystemLogs'],
+            ['componentManager:downloadSystemLogs']
         );
         PluginHelper::applyPluginNameFromConfig($this);
 
@@ -157,7 +157,17 @@ class ComponentManager extends Plugin
                     'heading' => Craft::t('component-manager', 'Component Manager'),
                     'permissions' => [
                         'componentManager:viewLogs' => [
-                            'label' => Craft::t('component-manager', 'View system logs'),
+                            'label' => Craft::t('component-manager', 'View logs'),
+                            'nested' => [
+                                'componentManager:viewSystemLogs' => [
+                                    'label' => Craft::t('component-manager', 'View system logs'),
+                                    'nested' => [
+                                        'componentManager:downloadSystemLogs' => [
+                                            'label' => Craft::t('component-manager', 'Download system logs'),
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                 ];
@@ -197,11 +207,10 @@ class ComponentManager extends Plugin
                 ];
             }
 
-            // Add logs section using logging library (only if installed and enabled)
-            if (Craft::$app->getPlugins()->isPluginInstalled('logging-library') &&
-                Craft::$app->getPlugins()->isPluginEnabled('logging-library')) {
+            // Add logs section using logging library
+            if (PluginHelper::isPluginEnabled('logging-library')) {
                 $item = LoggingLibrary::addLogsNav($item, $this->handle, [
-                    'componentManager:viewLogs',
+                    'componentManager:viewSystemLogs',
                 ]);
             }
 
