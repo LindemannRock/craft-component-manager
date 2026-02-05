@@ -35,6 +35,9 @@ class CacheController extends Controller
 
     /**
      * Clear component cache
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionClear(): Response
     {

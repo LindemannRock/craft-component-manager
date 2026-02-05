@@ -55,21 +55,25 @@ class ComponentManager extends Plugin
 
     /**
      * @var ComponentManager|null Singleton plugin instance
+     * @since 1.0.0
      */
     public static ?ComponentManager $plugin = null;
 
     /**
      * @var string Plugin schema version for migrations
+     * @since 1.0.0
      */
     public string $schemaVersion = '1.0.0';
 
     /**
      * @var bool Whether the plugin exposes a control panel settings page
+     * @since 1.0.0
      */
     public bool $hasCpSettings = true;
 
     /**
      * @var bool Whether the plugin registers a control panel section
+     * @since 1.0.0
      */
     public bool $hasCpSection = true;
 
@@ -330,6 +334,7 @@ class ComponentManager extends Plugin
      * Get component paths
      *
      * @return array
+     * @since 1.0.0
      */
     public function getComponentPaths(): array
     {

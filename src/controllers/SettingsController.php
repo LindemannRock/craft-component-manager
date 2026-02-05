@@ -36,6 +36,9 @@ class SettingsController extends Controller
 
     /**
      * Settings index - redirect to general
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -44,6 +47,9 @@ class SettingsController extends Controller
     
     /**
      * General settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionGeneral(): Response
     {
@@ -59,6 +65,9 @@ class SettingsController extends Controller
     
     /**
      * Paths settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionPaths(): Response
     {
@@ -74,6 +83,9 @@ class SettingsController extends Controller
     
     /**
      * Features settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionFeatures(): Response
     {
@@ -89,6 +101,9 @@ class SettingsController extends Controller
     
     /**
      * Discovery settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionDiscovery(): Response
     {
@@ -104,6 +119,9 @@ class SettingsController extends Controller
     
     /**
      * Component Library settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionLibrary(): Response
     {
@@ -119,6 +137,9 @@ class SettingsController extends Controller
     
     /**
      * Interface settings
+     *
+     * @return Response
+     * @since 5.1.0
      */
     public function actionInterface(): Response
     {
@@ -134,6 +155,9 @@ class SettingsController extends Controller
 
     /**
      * Maintenance settings
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionMaintenance(): Response
     {
@@ -149,6 +173,9 @@ class SettingsController extends Controller
 
     /**
      * Save settings
+     *
+     * @return Response|null
+     * @since 1.0.0
      */
     public function actionSave(): ?Response
     {

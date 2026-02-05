@@ -51,6 +51,7 @@ class ComponentService extends Component
      * @param array $slots Additional slots
      * @return string
      * @throws \Exception
+     * @since 1.0.0
      */
     public function render(string $name, array $props = [], ?string $content = null, array $slots = []): string
     {
@@ -181,6 +182,7 @@ class ComponentService extends Component
      * Get component usage statistics
      *
      * @return array
+     * @since 1.0.0
      */
     public function getUsageStats(): array
     {
@@ -201,6 +203,7 @@ class ComponentService extends Component
      * Get current component stack (for debugging)
      *
      * @return array
+     * @since 1.0.0
      */
     public function getComponentStack(): array
     {
@@ -212,6 +215,7 @@ class ComponentService extends Component
      *
      * @param string $name
      * @return array Validation results
+     * @since 1.0.0
      */
     public function validateComponent(string $name): array
     {

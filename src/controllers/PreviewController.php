@@ -40,6 +40,9 @@ class PreviewController extends Controller
     
     /**
      * Render a component with given props
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionRender(): Response
     {
@@ -87,6 +90,9 @@ class PreviewController extends Controller
     
     /**
      * Render component preview in iframe
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionIframe(): Response
     {

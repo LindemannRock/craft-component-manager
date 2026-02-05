@@ -43,6 +43,7 @@ class CacheService extends Component
      * Get cached components
      *
      * @return array|null
+     * @since 1.0.0
      */
     public function getComponents(): ?array
     {
@@ -61,6 +62,7 @@ class CacheService extends Component
      *
      * @param array $components
      * @return bool
+     * @since 1.0.0
      */
     public function setComponents(array $components): bool
     {
@@ -81,6 +83,7 @@ class CacheService extends Component
      *
      * @param string $name
      * @return string|null
+     * @since 1.0.0
      */
     public function getCompiled(string $name): ?string
     {
@@ -100,6 +103,7 @@ class CacheService extends Component
      * @param string $name
      * @param string $compiled
      * @return bool
+     * @since 1.0.0
      */
     public function setCompiled(string $name, string $compiled): bool
     {
@@ -119,6 +123,7 @@ class CacheService extends Component
      * Clear all cache
      *
      * @return bool
+     * @since 1.0.0
      */
     public function clearCache(): bool
     {
@@ -140,6 +145,7 @@ class CacheService extends Component
      * Clear components cache
      *
      * @return bool
+     * @since 1.0.0
      */
     public function clearComponents(): bool
     {
@@ -151,6 +157,7 @@ class CacheService extends Component
      * Clear compiled cache
      *
      * @return bool
+     * @since 1.0.0
      */
     public function clearCompiled(): bool
     {
@@ -170,6 +177,7 @@ class CacheService extends Component
      * Get cache statistics
      *
      * @return array
+     * @since 1.0.0
      */
     public function getStats(): array
     {
@@ -200,6 +208,7 @@ class CacheService extends Component
      * Warm the cache
      *
      * @return int Number of components cached
+     * @since 1.0.0
      */
     public function warmCache(): int
     {

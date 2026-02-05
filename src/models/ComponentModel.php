@@ -23,61 +23,73 @@ class ComponentModel extends Model
 {
     /**
      * @var string Component name (e.g., "forms/input")
+     * @since 1.0.0
      */
     public string $name = '';
     
     /**
      * @var string Full file path
+     * @since 1.0.0
      */
     public string $path = '';
     
     /**
      * @var string Relative path from base
+     * @since 1.0.0
      */
     public string $relativePath = '';
     
     /**
      * @var string Base path
+     * @since 1.0.0
      */
     public string $basePath = '';
     
     /**
      * @var string|null Component description
+     * @since 1.0.0
      */
     public ?string $description = null;
     
     /**
      * @var string|null Component category
+     * @since 1.0.0
      */
     public ?string $category = null;
     
     /**
      * @var array Component props definition
+     * @since 1.0.0
      */
     public array $props = [];
     
     /**
      * @var array Available slots
+     * @since 1.0.0
      */
     public array $slots = [];
     
     /**
      * @var string|null Parent component
+     * @since 1.0.0
      */
     public ?string $extends = null;
     
     /**
      * @var array Component metadata
+     * @since 1.0.0
      */
     public array $metadata = [];
     
     /**
      * @var int Usage count
+     * @since 1.0.0
      */
     public int $usageCount = 0;
     
     /**
      * @var array Example usage
+     * @since 1.0.0
      */
     public array $examples = [];
 
@@ -85,6 +97,7 @@ class ComponentModel extends Model
      * Get the component's namespace (folder path)
      *
      * @return string|null
+     * @since 1.0.0
      */
     public function getNamespace(): ?string
     {
@@ -100,6 +113,7 @@ class ComponentModel extends Model
      * Get the component's base name (without namespace)
      *
      * @return string
+     * @since 1.0.0
      */
     public function getBaseName(): string
     {
@@ -111,6 +125,7 @@ class ComponentModel extends Model
      * Get required props
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredProps(): array
     {
@@ -127,6 +142,7 @@ class ComponentModel extends Model
      * Get optional props
      *
      * @return array
+     * @since 1.0.0
      */
     public function getOptionalProps(): array
     {
@@ -146,6 +162,7 @@ class ComponentModel extends Model
      *
      * @param array $props
      * @return array Validation errors
+     * @since 1.0.0
      */
     public function validateProps(array $props): array
     {
@@ -206,6 +223,7 @@ class ComponentModel extends Model
      *
      * @param string $name
      * @return mixed
+     * @since 1.0.0
      */
     public function getPropDefault(string $name): mixed
     {
@@ -220,6 +238,7 @@ class ComponentModel extends Model
      *
      * @param array $props
      * @return array
+     * @since 1.0.0
      */
     public function applyDefaults(array $props): array
     {

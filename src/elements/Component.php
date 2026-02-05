@@ -28,41 +28,49 @@ class Component extends Element
 
     /**
      * @var string|null Component handle (lowercase, used in templates)
+     * @since 1.0.0
      */
     public ?string $componentName = null;
 
     /**
      * @var string|null Absolute path to component file
+     * @since 1.0.0
      */
     public ?string $path = null;
 
     /**
      * @var string|null Path relative to template root
+     * @since 1.0.0
      */
     public ?string $relativePath = null;
 
     /**
      * @var string|null Category label for grouping
+     * @since 1.0.0
      */
     public ?string $category = null;
 
     /**
      * @var string|null Component description text
+     * @since 1.0.0
      */
     public ?string $description = null;
 
     /**
      * @var array|null Component props definition
+     * @since 1.0.0
      */
     public ?array $props = null;
 
     /**
      * @var array|null Component slots definition
+     * @since 1.0.0
      */
     public ?array $slots = null;
 
     /**
      * @var array|null Additional metadata from discovery
+     * @since 1.0.0
      */
     public ?array $metadata = null;
 
@@ -341,6 +349,7 @@ class Component extends Element
      * Get a human-readable display name for the component
      *
      * @return string
+     * @since 1.0.0
      */
     public function getDisplayName(): string
     {

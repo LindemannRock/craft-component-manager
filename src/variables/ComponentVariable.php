@@ -25,6 +25,7 @@ class ComponentVariable
      * Get all discovered components
      *
      * @return array
+     * @since 1.0.0
      */
     public function all(): array
     {
@@ -36,6 +37,7 @@ class ComponentVariable
      *
      * @param string $name
      * @return \lindemannrock\componentmanager\models\ComponentModel|null
+     * @since 1.0.0
      */
     public function get(string $name)
     {
@@ -47,6 +49,7 @@ class ComponentVariable
      *
      * @param string $name
      * @return bool
+     * @since 1.0.0
      */
     public function exists(string $name): bool
     {
@@ -58,6 +61,7 @@ class ComponentVariable
      *
      * @param string $category
      * @return array
+     * @since 1.0.0
      */
     public function byCategory(string $category): array
     {
@@ -68,6 +72,7 @@ class ComponentVariable
      * Get all categories
      *
      * @return array
+     * @since 1.0.0
      */
     public function categories(): array
     {
@@ -78,6 +83,7 @@ class ComponentVariable
      * Get component usage statistics
      *
      * @return array
+     * @since 1.0.0
      */
     public function usage(): array
     {
@@ -89,6 +95,7 @@ class ComponentVariable
      *
      * @param string $name
      * @return array
+     * @since 1.0.0
      */
     public function validate(string $name): array
     {
@@ -99,6 +106,7 @@ class ComponentVariable
      * Get cache statistics
      *
      * @return array
+     * @since 1.0.0
      */
     public function cacheStats(): array
     {
@@ -109,6 +117,7 @@ class ComponentVariable
      * Clear the component cache
      *
      * @return bool
+     * @since 1.0.0
      */
     public function clearCache(): bool
     {
@@ -119,6 +128,7 @@ class ComponentVariable
      * Warm the component cache
      *
      * @return int
+     * @since 1.0.0
      */
     public function warmCache(): int
     {

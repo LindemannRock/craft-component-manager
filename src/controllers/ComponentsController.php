@@ -36,6 +36,9 @@ class ComponentsController extends Controller
 
     /**
      * Components index - list all discovered components using element index
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -66,6 +69,9 @@ class ComponentsController extends Controller
     
     /**
      * Documentation - view component documentation
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionDocumentation(): Response
     {
@@ -91,6 +97,10 @@ class ComponentsController extends Controller
     
     /**
      * Component detail page
+     *
+     * @param string $componentName
+     * @return Response
+     * @since 1.0.0
      */
     public function actionDetail(string $componentName): Response
     {
@@ -126,6 +136,9 @@ class ComponentsController extends Controller
     
     /**
      * Export documentation as markdown
+     *
+     * @return Response
+     * @since 1.0.0
      */
     public function actionExportDocumentation(): Response
     {

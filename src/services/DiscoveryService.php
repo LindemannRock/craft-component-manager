@@ -53,6 +53,7 @@ class DiscoveryService extends Component
      *
      * @param bool $force Force re-discovery
      * @return array
+     * @since 1.0.0
      */
     public function discoverComponents(bool $force = false): array
     {
@@ -300,6 +301,7 @@ class DiscoveryService extends Component
      *
      * @param string $name
      * @return ComponentModel|null
+     * @since 1.0.0
      */
     public function getComponent(string $name): ?ComponentModel
     {
@@ -312,6 +314,7 @@ class DiscoveryService extends Component
      *
      * @param string $category
      * @return array
+     * @since 1.0.0
      */
     public function getComponentsByCategory(string $category): array
     {
@@ -331,6 +334,7 @@ class DiscoveryService extends Component
      * Get all component categories
      *
      * @return array
+     * @since 1.0.0
      */
     public function getCategories(): array
     {
@@ -349,6 +353,8 @@ class DiscoveryService extends Component
 
     /**
      * Clear discovery cache
+     *
+     * @since 1.0.0
      */
     public function clearCache(): void
     {
@@ -360,6 +366,7 @@ class DiscoveryService extends Component
      * Sync discovered components to database
      *
      * @return array
+     * @since 1.0.0
      */
     public function syncToDatabase(): array
     {
