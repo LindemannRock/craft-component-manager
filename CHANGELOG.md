@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.4.5](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.4...v5.4.5) (2026-02-05)
+
+
+### Bug Fixes
+
+* update log permission label for clarity ([49403df](https://github.com/LindemannRock/craft-component-manager/commit/49403dfaec93ae9c2d148f279b166eaa2f589be5))
+* update log permissions for clarity and structure ([1f001bb](https://github.com/LindemannRock/craft-component-manager/commit/1f001bb09ba961090dde16d0fe7628e28125d0bc))
+
 ## [5.4.4](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.3...v5.4.4) (2026-01-26)
 
 
