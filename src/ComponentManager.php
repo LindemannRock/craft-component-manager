@@ -158,8 +158,9 @@ class ComponentManager extends Plugin
             UserPermissions::class,
             UserPermissions::EVENT_REGISTER_PERMISSIONS,
             function(RegisterUserPermissionsEvent $event) {
+                $settings = $this->getSettings();
                 $event->permissions[] = [
-                    'heading' => Craft::t('component-manager', 'Component Manager'),
+                    'heading' => $settings->getFullName(),
                     'permissions' => [
                         'componentManager:viewLogs' => [
                             'label' => Craft::t('component-manager', 'View logs'),
