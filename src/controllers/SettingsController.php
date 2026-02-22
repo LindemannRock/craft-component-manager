@@ -220,9 +220,6 @@ class SettingsController extends Controller
         if ($settings->saveToDatabase()) {
             $this->logInfo('Settings saved successfully');
 
-            // Update the plugin's cached settings (CRITICAL - forces Craft to refresh)
-            $plugin->setSettings($settings->getAttributes());
-
             // Clear component cache when settings change
             $plugin->cache->clearCache();
 
