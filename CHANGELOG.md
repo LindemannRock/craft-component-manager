@@ -1,5 +1,20 @@
 # Changelog
 
+## [5.4.6](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.5...v5.4.6) (2026-02-23)
+
+
+### Bug Fixes
+
+* **ComponentManager:** update permission heading to use settings full name ([8adadc0](https://github.com/LindemannRock/craft-component-manager/commit/8adadc08c80ea4fa0cb0442710fd8d7977b988b2))
+* **ComponentManager:** update setSettings method to no-op ([30bf35a](https://github.com/LindemannRock/craft-component-manager/commit/30bf35aafe81f2c568e17223f9df17577a40f55a))
+* **SettingsController:** validate and sanitize settings section parameter ([68f645d](https://github.com/LindemannRock/craft-component-manager/commit/68f645de236cf5ed7b7653e70a8a094d884aa7d0))
+
+
+### Miscellaneous Chores
+
+* add .gitattributes with export-ignore for Packagist distribution ([e0303bf](https://github.com/LindemannRock/craft-component-manager/commit/e0303bf3d3e2018a204e02678aca16b931c83ea0))
+* switch to Craft License for commercial release ([5120000](https://github.com/LindemannRock/craft-component-manager/commit/5120000e45690e98459d5c10084635b65f9ef847))
+
 ## [5.4.5](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.4...v5.4.5) (2026-02-05)
 
 
