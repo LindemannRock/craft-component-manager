@@ -38,7 +38,6 @@ class SettingsController extends Controller
      * Settings index - redirect to general
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionIndex(): Response
     {
@@ -49,7 +48,6 @@ class SettingsController extends Controller
      * General settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionGeneral(): Response
     {
@@ -67,7 +65,6 @@ class SettingsController extends Controller
      * Paths settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionPaths(): Response
     {
@@ -85,7 +82,6 @@ class SettingsController extends Controller
      * Features settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionFeatures(): Response
     {
@@ -103,7 +99,6 @@ class SettingsController extends Controller
      * Discovery settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionDiscovery(): Response
     {
@@ -121,7 +116,6 @@ class SettingsController extends Controller
      * Component Library settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionLibrary(): Response
     {
@@ -157,7 +151,6 @@ class SettingsController extends Controller
      * Maintenance settings
      *
      * @return Response
-     * @since 1.0.0
      */
     public function actionMaintenance(): Response
     {
@@ -175,13 +168,15 @@ class SettingsController extends Controller
      * Save settings
      *
      * @return Response|null
-     * @since 1.0.0
      */
     public function actionSave(): ?Response
     {
         $this->requirePostRequest();
 
         $plugin = ComponentManager::getInstance();
+        $section = $this->_validSettingsSection(
+            $this->request->getBodyParam('section', 'general'),
+        );
 
         // Load current settings from database
         $settings = Settings::loadFromDatabase();
@@ -202,24 +197,28 @@ class SettingsController extends Controller
             }
         }
 
-        // Validate
-        if (!$settings->validate()) {
+        $attributesToValidate = $this->_validationAttributesForSection($section);
+        $attributesToValidate = array_values(array_filter(
+            $attributesToValidate,
+            fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),
+        ));
+
+        // Validate only current section attributes
+        if (!$settings->validate($attributesToValidate)) {
             $this->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
             Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings.'));
 
-            // Get the section to re-render the correct template with errors
-            $section = $this->_validSettingsSection(
-                $this->request->getBodyParam('section', 'general'),
-            );
             $template = "component-manager/settings/{$section}";
 
             return $this->renderTemplate($template, [
                 'settings' => $settings,
+                'plugin' => $plugin,
+                'pluginName' => $plugin->name,
             ]);
         }
 
-        // Save settings to database
-        if ($settings->saveToDatabase()) {
+        // Save only current section attributes
+        if ($settings->saveToDatabase($attributesToValidate)) {
             $this->logInfo('Settings saved successfully');
 
             // Clear component cache when settings change
@@ -246,5 +245,33 @@ class SettingsController extends Controller
         $allowed = ['general', 'paths', 'features', 'discovery', 'library', 'interface', 'maintenance'];
 
         return in_array($section, $allowed, true) ? $section : 'general';
+    }
+
+    /**
+     * Get settings attributes that belong to a section
+     *
+     * @param string $section
+     * @return array<int, string>
+     */
+    private function _validationAttributesForSection(string $section): array
+    {
+        return match ($section) {
+            'general' => ['pluginName', 'defaultSlotName', 'logLevel'],
+            'paths' => ['componentPaths', 'defaultPath', 'componentExtension'],
+            'features' => [
+                'enablePropValidation',
+                'enableCache',
+                'cacheDuration',
+                'enableDebugMode',
+                'enableUsageTracking',
+                'enableInheritance',
+                'enableDocumentation',
+                'allowInlineComponents',
+            ],
+            'discovery' => ['allowNesting', 'maxNestingDepth', 'ignoreFolders', 'ignorePatterns'],
+            'library' => ['enableComponentLibrary', 'showComponentSource', 'enableLivePreview', 'metadataFields'],
+            'interface' => ['itemsPerPage'],
+            default => [],
+        };
     }
 }

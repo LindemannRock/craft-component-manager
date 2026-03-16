@@ -40,7 +40,6 @@ class DocumentationService extends Component
      * Generate documentation for all components
      *
      * @return array
-     * @since 1.0.0
      */
     public function generateAllDocumentation(): array
     {
@@ -60,7 +59,6 @@ class DocumentationService extends Component
      *
      * @param ComponentModel $component Component model from discovery
      * @return array
-     * @since 1.0.0
      */
     public function generateComponentDocumentation(ComponentModel $component): array
     {
@@ -453,7 +451,6 @@ class DocumentationService extends Component
      * Generate markdown documentation for all components
      *
      * @return string
-     * @since 1.0.0
      */
     public function generateMarkdownDocumentation(): string
     {

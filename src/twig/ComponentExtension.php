@@ -32,7 +32,6 @@ class ComponentExtension extends AbstractExtension
      * Constructor
      *
      * @param ComponentManager $plugin
-     * @since 1.0.0
      */
     public function __construct(ComponentManager $plugin)
     {
@@ -80,7 +79,6 @@ class ComponentExtension extends AbstractExtension
      * @param string|null $content
      * @param array $slots
      * @return string
-     * @since 1.0.0
      */
     public function renderComponent(string $name, array $props = [], ?string $content = null, array $slots = []): string
     {
@@ -92,7 +90,6 @@ class ComponentExtension extends AbstractExtension
      *
      * @param string $name
      * @return bool
-     * @since 1.0.0
      */
     public function hasComponent(string $name): bool
     {
@@ -104,7 +101,6 @@ class ComponentExtension extends AbstractExtension
      *
      * @param string $name
      * @return array
-     * @since 1.0.0
      */
     public function getComponentProps(string $name): array
     {
@@ -117,7 +113,6 @@ class ComponentExtension extends AbstractExtension
      *
      * @param string $name
      * @return array
-     * @since 1.0.0
      */
     public function getComponentSlots(string $name): array
     {

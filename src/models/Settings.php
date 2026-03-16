@@ -43,89 +43,75 @@ class Settings extends Model
 
     /**
      * @var string The public-facing name of the plugin
-     * @since 1.0.0
      */
     public string $pluginName = 'Component Manager';
-    
+
     /**
      * @var array Component paths relative to templates folder
-     * @since 1.0.0
      */
     public array $componentPaths = [
         '_components',
         'components',
         'src/components',
     ];
-    
+
     /**
      * @var string Default path for new components
-     * @since 1.0.0
      */
     public string $defaultPath = '_components';
-    
+
     /**
      * @var bool Allow nested folder organization
-     * @since 1.0.0
      */
     public bool $allowNesting = true;
-    
+
     /**
      * @var int Maximum nesting depth (0 = unlimited)
-     * @since 1.0.0
      */
     public int $maxNestingDepth = 3;
-    
+
     /**
      * @var bool Cache compiled components
-     * @since 1.0.0
      */
     public bool $enableCache = true;
-    
+
     /**
      * @var int Cache duration in seconds
-     * @since 1.0.0
      */
     public int $cacheDuration = 0;
-    
+
     /**
      * @var string Component tag prefix
-     * @since 1.0.0
      */
     public string $tagPrefix = 'x';
-    
+
     /**
      * @var bool Enable prop validation
-     * @since 1.0.0
      */
     public bool $enablePropValidation = true;
-    
+
     /**
      * @var bool Show helpful error messages
-     * @since 1.0.0
      */
     public bool $enableDebugMode = true;
-    
+
     /**
      * @var bool Allow component inheritance
-     * @since 1.0.0
      */
     public bool $enableInheritance = true;
-    
+
     /**
      * @var bool Enable documentation generation
-     * @since 1.0.0
      */
     public bool $enableDocumentation = true;
-    
+
     /**
      * @var string Component file extension
-     * @since 1.0.0
      */
     public string $componentExtension = 'twig';
-    
+
     /**
      * @var array Folders to ignore
-     * @since 1.0.0
      */
     public array $ignoreFolders = [
         'node_modules',
@@ -134,56 +120,48 @@ class Settings extends Model
         'dist',
         'build',
     ];
-    
+
     /**
      * @var array File patterns to ignore
-     * @since 1.0.0
      */
     public array $ignorePatterns = [
         '*.test.twig',
         '*.spec.twig',
         '_*',
     ];
-    
+
     /**
      * @var bool Enable usage tracking
-     * @since 1.0.0
      */
     public bool $enableUsageTracking = false;
-    
+
     /**
      * @var bool Allow inline components
-     * @since 1.0.0
      */
     public bool $allowInlineComponents = true;
-    
+
     /**
      * @var string Default slot name
-     * @since 1.0.0
      */
     public string $defaultSlotName = 'default';
-    
+
     /**
      * @var bool Enable component library UI
-     * @since 1.0.0
      */
     public bool $enableComponentLibrary = true;
-    
+
     /**
      * @var bool Show component source
-     * @since 1.0.0
      */
     public bool $showComponentSource = true;
-    
+
     /**
      * @var bool Enable live preview
-     * @since 1.0.0
      */
     public bool $enableLivePreview = true;
-    
+
     /**
      * @var array Custom metadata fields
-     * @since 1.0.0
      */
     public array $metadataFields = [
         'description',
@@ -282,7 +260,6 @@ class Settings extends Model
      * Set component paths from string (for form submission)
      *
      * @param string|array $value
-     * @since 1.0.0
      */
     public function setComponentPaths($value): void
     {
@@ -297,7 +274,6 @@ class Settings extends Model
      * Set ignore patterns from string (for form submission)
      *
      * @param string|array $value
-     * @since 1.0.0
      */
     public function setIgnorePatterns($value): void
     {
@@ -312,7 +288,6 @@ class Settings extends Model
      * Set ignore folders from string (for form submission)
      *
      * @param string|array $value
-     * @since 1.0.0
      */
     public function setIgnoreFolders($value): void
     {
@@ -327,7 +302,6 @@ class Settings extends Model
      * Set metadata fields from string (for form submission)
      *
      * @param string|array $value
-     * @since 1.0.0
      */
     public function setMetadataFields($value): void
     {

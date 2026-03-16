@@ -22,7 +22,6 @@ class ComponentsController extends Controller
      * Sync components from filesystem to database
      *
      * @return int
-     * @since 1.0.0
      */
     public function actionSync(): int
     {
@@ -49,7 +48,6 @@ class ComponentsController extends Controller
      * Clear component cache and sync
      *
      * @return int
-     * @since 1.0.0
      */
     public function actionRefresh(): int
     {

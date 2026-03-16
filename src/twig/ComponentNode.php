@@ -31,7 +31,6 @@ class ComponentNode extends Node
      * @param array $slots
      * @param int $lineno
      * @param string|null $tag
-     * @since 1.0.0
      */
     public function __construct(string $componentName, ?Node $props, ?Node $body, array $slots, int $lineno, ?string $tag = null)
     {

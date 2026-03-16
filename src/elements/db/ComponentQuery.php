@@ -20,19 +20,16 @@ class ComponentQuery extends ElementQuery
 {
     /**
      * @var string|null Component handle to filter by
-     * @since 1.0.0
      */
     public ?string $componentName = null;
 
     /**
      * @var string|null Category filter for components
-     * @since 1.0.0
      */
     public ?string $category = null;
 
     /**
      * @var string|null Path filter relative to template root
-     * @since 1.0.0
      */
     public ?string $path = null;
 
@@ -41,7 +38,6 @@ class ComponentQuery extends ElementQuery
      *
      * @param string|null $value
      * @return static self reference
-     * @since 1.0.0
      */
     public function componentName(?string $value): static
     {
@@ -54,7 +50,6 @@ class ComponentQuery extends ElementQuery
      *
      * @param string|null $value
      * @return static self reference
-     * @since 1.0.0
      */
     public function category(?string $value): static
     {
@@ -67,7 +62,6 @@ class ComponentQuery extends ElementQuery
      *
      * @param string|null $value
      * @return static self reference
-     * @since 1.0.0
      */
     public function path(?string $value): static
     {
