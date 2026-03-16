@@ -49,7 +49,6 @@ class PluginNameHelper
 {
     /**
      * @return string
-     * @since 5.2.0
      */
     public function getDisplayName(): string
     {
@@ -58,7 +57,6 @@ class PluginNameHelper
 
     /**
      * @return string
-     * @since 5.2.0
      */
     public function getPluralDisplayName(): string
     {
@@ -67,7 +65,6 @@ class PluginNameHelper
 
     /**
      * @return string
-     * @since 5.2.0
      */
     public function getFullName(): string
     {
@@ -76,7 +73,6 @@ class PluginNameHelper
 
     /**
      * @return string
-     * @since 5.2.0
      */
     public function getLowerDisplayName(): string
     {
@@ -85,7 +81,6 @@ class PluginNameHelper
 
     /**
      * @return string
-     * @since 5.2.0
      */
     public function getPluralLowerDisplayName(): string
     {
@@ -95,7 +90,6 @@ class PluginNameHelper
     /**
      * @param string $name
      * @return string|null
-     * @since 5.2.0
      */
     public function __get(string $name): ?string
     {
