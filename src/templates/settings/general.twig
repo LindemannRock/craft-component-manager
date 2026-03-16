@@ -37,7 +37,8 @@
             value: settings.pluginName ?? 'Component Manager',
             placeholder: 'Component Manager',
             warning: settings.isOverriddenByConfig('pluginName') ? 'This is being overridden by the `pluginName` setting in the `config/component-manager.php` file.'|t('component-manager'),
-            disabled: settings.isOverriddenByConfig('pluginName')
+            disabled: settings.isOverriddenByConfig('pluginName'),
+            errors: settings.getErrors('pluginName')
         }) }}
 
         {{ forms.textField({
@@ -76,7 +77,8 @@
             value: settings.logLevel,
             options: logOptions,
             warning: settings.isOverriddenByConfig('logLevel') ? 'This is being overridden by the <code>logLevel</code> setting in the <code>config/component-manager.php</code> file.'|t('component-manager')|raw : null,
-            disabled: settings.isOverriddenByConfig('logLevel')
+            disabled: settings.isOverriddenByConfig('logLevel'),
+            errors: settings.getErrors('logLevel')
         }) }}
     </form>
 
