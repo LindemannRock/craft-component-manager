@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.5.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.6...v5.5.0) (2026-03-17)
+
+
+### Features
+
+* **component-manager:** add install experience configuration ([3308997](https://github.com/LindemannRock/craft-component-manager/commit/330899775360fd7d3fba440fd1b4662a13a2a3ca))
+* **icon:** replace existing icon with new SVG design ([f26b6a2](https://github.com/LindemannRock/craft-component-manager/commit/f26b6a2b9aa702858f106e355c32afbb39ea5b6c))
+
+
+### Bug Fixes
+
+* **settings:** add error handling for plugin settings fields ([66731f3](https://github.com/LindemannRock/craft-component-manager/commit/66731f33d40ea9b003a017fc1318d32c9b1b1aac))
+
 ## [5.4.6](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.5...v5.4.6) (2026-02-23)
 
 
