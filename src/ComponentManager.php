@@ -122,7 +122,19 @@ class ComponentManager extends Plugin
             $this,
             'componentHelper',
             ['componentManager:viewSystemLogs'],
-            ['componentManager:downloadSystemLogs']
+            ['componentManager:downloadSystemLogs'],
+            [
+                'installExperience' => [
+                    'headline' => 'Component Manager',
+                    'body' => 'Organize components, validate props, and document your design system from one control panel workspace.',
+                    'ctaLabel' => 'Open Component Manager',
+                    'ctaUrl' => 'component-manager',
+                    'redirectUri' => 'component-manager',
+                    'sidebarColor' => '#0EA5E9',
+                    'uiColor' => '#0EA5E9',
+                    'confettiPreset' => 'surprise',
+                ],
+            ]
         );
         PluginHelper::applyPluginNameFromConfig($this);
 
