@@ -130,8 +130,6 @@ class ComponentManager extends Plugin
                     'ctaLabel' => 'Open Component Manager',
                     'ctaUrl' => 'component-manager',
                     'redirectUri' => 'component-manager',
-                    'sidebarColor' => '#0EA5E9',
-                    'uiColor' => '#0EA5E9',
                     'confettiPreset' => 'surprise',
                 ],
             ]
