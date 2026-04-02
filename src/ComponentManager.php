@@ -69,6 +69,11 @@ class ComponentManager extends Plugin
     public bool $hasCpSettings = true;
 
     /**
+     * @var bool Whether the plugin settings page is accessible when allowAdminChanges is false
+     */
+    public bool $hasReadOnlyCpSettings = true;
+
+    /**
      * @var bool Whether the plugin registers a control panel section
      */
     public bool $hasCpSection = true;
@@ -125,9 +130,9 @@ class ComponentManager extends Plugin
             ['componentManager:downloadSystemLogs'],
             [
                 'installExperience' => [
-                    'headline' => 'Component Manager',
-                    'body' => 'Organize components, validate props, and document your design system from one control panel workspace.',
-                    'ctaLabel' => 'Open Component Manager',
+                    'headline' => Craft::t('component-manager', 'Component Manager'),
+                    'body' => Craft::t('component-manager', 'Organize components, validate props, and document your design system from one control panel workspace.'),
+                    'ctaLabel' => Craft::t('component-manager', 'Open Component Manager'),
                     'ctaUrl' => 'component-manager',
                     'redirectUri' => 'component-manager',
                     'confettiPreset' => 'surprise',
@@ -276,6 +281,14 @@ class ComponentManager extends Plugin
      * @inheritdoc
      */
     public function getSettingsResponse(): mixed
+    {
+        return Craft::$app->controller->redirect('component-manager/settings');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getReadOnlySettingsResponse(): mixed
     {
         return Craft::$app->controller->redirect('component-manager/settings');
     }
