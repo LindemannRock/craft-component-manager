@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.5.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.0...v5.5.1) (2026-04-05)
+
+
+### Bug Fixes
+
+* read-only settings and localization support ([808985f](https://github.com/LindemannRock/craft-component-manager/commit/808985fe9f1aa09a0cc28a2dd0437fbb244dc46f))
+
 ## [5.5.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.6...v5.5.0) (2026-03-17)
 
 
