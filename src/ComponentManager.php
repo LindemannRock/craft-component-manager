@@ -309,18 +309,7 @@ class ComponentManager extends Plugin
         // Load settings from database
         $settings = Settings::loadFromDatabase();
 
-        // Then apply config file overrides
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('component-manager');
-        if ($configFileSettings) {
-            // Apply all config file settings
-            foreach ($configFileSettings as $key => $value) {
-                if (property_exists($settings, $key)) {
-                    $settings->$key = $value;
-                }
-            }
-        }
-
-        return $settings;
+        return PluginHelper::applyConfigOverridesToSettings($settings, 'component-manager');
     }
 
     /**
