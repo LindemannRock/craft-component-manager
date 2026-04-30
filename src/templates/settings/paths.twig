@@ -23,11 +23,9 @@
 {% block content %}
     <h2>{{ 'Paths & Files'|t('component-manager') }}</h2>
     
-    <form method="post" accept-charset="UTF-8">
-        {{ csrfInput() }}
-        {{ actionInput('component-manager/settings/save') }}
-        {{ redirectInput('component-manager/settings/paths') }}
-        {{ hiddenInput('section', 'paths') }}
+    {{ actionInput('component-manager/settings/save') }}
+    {{ redirectInput('component-manager/settings/paths') }}
+    {{ hiddenInput('section', 'paths') }}
 
         {{ forms.textareaField({
             label: 'Component Paths'|t('component-manager'),
@@ -67,7 +65,6 @@
             disabled: settings.isOverriddenByConfig('componentExtension'),
             errors: settings.getErrors('componentExtension')
         }) }}
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

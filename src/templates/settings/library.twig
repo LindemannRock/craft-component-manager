@@ -23,11 +23,9 @@
 {% block content %}
     <h2>{{ 'Component Library'|t('component-manager') }}</h2>
     
-    <form method="post" accept-charset="UTF-8">
-        {{ csrfInput() }}
-        {{ actionInput('component-manager/settings/save') }}
-        {{ redirectInput('component-manager/settings/library') }}
-        {{ hiddenInput('section', 'library') }}
+    {{ actionInput('component-manager/settings/save') }}
+    {{ redirectInput('component-manager/settings/library') }}
+    {{ hiddenInput('section', 'library') }}
 
         {{ forms.lightswitchField({
             label: 'Enable Component Library'|t('component-manager'),
@@ -74,7 +72,6 @@
             disabled: settings.isOverriddenByConfig('metadataFields'),
             errors: settings.getErrors('metadataFields')
         }) }}
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

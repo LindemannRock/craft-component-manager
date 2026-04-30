@@ -23,11 +23,9 @@
 {% block content %}
     <h2>{{ 'General Settings'|t('component-manager') }}</h2>
     
-    <form method="post" accept-charset="UTF-8">
-        {{ csrfInput() }}
-        {{ actionInput('component-manager/settings/save') }}
-        {{ redirectInput('component-manager/settings/general') }}
-        {{ hiddenInput('section', 'general') }}
+    {{ actionInput('component-manager/settings/save') }}
+    {{ redirectInput('component-manager/settings/general') }}
+    {{ hiddenInput('section', 'general') }}
 
         {{ forms.textField({
             label: 'Plugin name'|t('component-manager'),
@@ -80,7 +78,6 @@
             disabled: settings.isOverriddenByConfig('logLevel'),
             errors: settings.getErrors('logLevel')
         }) }}
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

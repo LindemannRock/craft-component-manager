@@ -23,11 +23,9 @@
 {% block content %}
     <h2>{{ 'Discovery Settings'|t('component-manager') }}</h2>
     
-    <form method="post" accept-charset="UTF-8">
-        {{ csrfInput() }}
-        {{ actionInput('component-manager/settings/save') }}
-        {{ redirectInput('component-manager/settings/discovery') }}
-        {{ hiddenInput('section', 'discovery') }}
+    {{ actionInput('component-manager/settings/save') }}
+    {{ redirectInput('component-manager/settings/discovery') }}
+    {{ hiddenInput('section', 'discovery') }}
 
         {{ forms.lightswitchField({
             label: 'Allow Nesting'|t('component-manager'),
@@ -78,7 +76,6 @@
             disabled: settings.isOverriddenByConfig('ignorePatterns'),
             errors: settings.getErrors('ignorePatterns')
         }) }}
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}

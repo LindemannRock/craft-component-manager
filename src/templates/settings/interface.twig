@@ -23,11 +23,9 @@
 {% block content %}
     <h2>{{ 'Interface Settings'|t('component-manager') }}</h2>
 
-    <form method="post" accept-charset="UTF-8">
-        {{ csrfInput() }}
-        {{ actionInput('component-manager/settings/save') }}
-        {{ redirectInput('component-manager/settings/interface') }}
-        {{ hiddenInput('section', 'interface') }}
+    {{ actionInput('component-manager/settings/save') }}
+    {{ redirectInput('component-manager/settings/interface') }}
+    {{ hiddenInput('section', 'interface') }}
 
         {{ forms.textField({
             label: 'Items Per Page'|t('component-manager'),
@@ -44,7 +42,6 @@
                 'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/component-manager.php</code>.'|t('component-manager')|raw : null,
             errors: settings.getErrors('itemsPerPage')
         }) }}
-    </form>
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}
