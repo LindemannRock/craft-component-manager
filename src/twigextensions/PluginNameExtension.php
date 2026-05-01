@@ -15,13 +15,12 @@ use Twig\Extension\GlobalsInterface;
 /**
  * Plugin Name Twig Extension
  *
- * @since 1.0.0
+ * @since 5.2.0
  */
 class PluginNameExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
-     * @return string
-     * @since 5.2.0
+     * @inheritdoc
      */
     public function getName(): string
     {
@@ -30,7 +29,6 @@ class PluginNameExtension extends AbstractExtension implements GlobalsInterface
 
     /**
      * @return array
-     * @since 5.2.0
      */
     public function getGlobals(): array
     {
