@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.5.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.1...v5.5.2) (2026-05-06)
+
+
+### Bug Fixes
+
+* apply config overrides through shared settings helper ([d348682](https://github.com/LindemannRock/craft-component-manager/commit/d348682dec34cd4b7ff3162903522a79957df0a5))
+* drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([dc76459](https://github.com/LindemannRock/craft-component-manager/commit/dc7645907aba75a7c4accd4c84e27d268f901bcd))
+* update plugin name instructions in settings template ([478c6a9](https://github.com/LindemannRock/craft-component-manager/commit/478c6a941569cb0f6197d374bc24d21d32487f3e))
+
 ## [5.5.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.0...v5.5.1) (2026-04-05)
 
 
