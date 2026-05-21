@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.6.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.2...v5.6.0) (2026-05-21)
+## [5.6.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.2...v5.6.0) - 2026-05-21
 
 
 ### Added
@@ -9,7 +9,7 @@
 * add pre-commit hook for ECS and PHPStan code quality checks ([d5a0907](https://github.com/LindemannRock/craft-component-manager/commit/d5a09078c97d43d0ffece57f0609400ae398467a))
 * **i18n:** add translation issue template for reporting language problems ([bfa09b0](https://github.com/LindemannRock/craft-component-manager/commit/bfa09b0e88938a7057aef31e26b05085569b627f))
 
-## [5.5.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.1...v5.5.2) (2026-05-06)
+## [5.5.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.1...v5.5.2) - 2026-05-06
 
 
 ### Bug Fixes
@@ -18,14 +18,14 @@
 * drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([dc76459](https://github.com/LindemannRock/craft-component-manager/commit/dc7645907aba75a7c4accd4c84e27d268f901bcd))
 * update plugin name instructions in settings template ([478c6a9](https://github.com/LindemannRock/craft-component-manager/commit/478c6a941569cb0f6197d374bc24d21d32487f3e))
 
-## [5.5.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.0...v5.5.1) (2026-04-05)
+## [5.5.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.0...v5.5.1) - 2026-04-05
 
 
 ### Bug Fixes
 
 * read-only settings and localization support ([808985f](https://github.com/LindemannRock/craft-component-manager/commit/808985fe9f1aa09a0cc28a2dd0437fbb244dc46f))
 
-## [5.5.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.6...v5.5.0) (2026-03-17)
+## [5.5.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.6...v5.5.0) - 2026-03-17
 
 
 ### Features
@@ -38,7 +38,7 @@
 
 * **settings:** add error handling for plugin settings fields ([66731f3](https://github.com/LindemannRock/craft-component-manager/commit/66731f33d40ea9b003a017fc1318d32c9b1b1aac))
 
-## [5.4.6](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.5...v5.4.6) (2026-02-23)
+## [5.4.6](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.5...v5.4.6) - 2026-02-23
 
 
 ### Bug Fixes
@@ -53,7 +53,7 @@
 * add .gitattributes with export-ignore for Packagist distribution ([e0303bf](https://github.com/LindemannRock/craft-component-manager/commit/e0303bf3d3e2018a204e02678aca16b931c83ea0))
 * switch to Craft License for commercial release ([5120000](https://github.com/LindemannRock/craft-component-manager/commit/5120000e45690e98459d5c10084635b65f9ef847))
 
-## [5.4.5](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.4...v5.4.5) (2026-02-05)
+## [5.4.5](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.4...v5.4.5) - 2026-02-05
 
 
 ### Bug Fixes
@@ -61,42 +61,42 @@
 * update log permission label for clarity ([49403df](https://github.com/LindemannRock/craft-component-manager/commit/49403dfaec93ae9c2d148f279b166eaa2f589be5))
 * update log permissions for clarity and structure ([1f001bb](https://github.com/LindemannRock/craft-component-manager/commit/1f001bb09ba961090dde16d0fe7628e28125d0bc))
 
-## [5.4.4](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.3...v5.4.4) (2026-01-26)
+## [5.4.4](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.3...v5.4.4) - 2026-01-26
 
 
 ### Bug Fixes
 
 * use registerTwigExtension for proper Twig loading order ([a485bc6](https://github.com/LindemannRock/craft-component-manager/commit/a485bc6b65a868d54f3eb72d40624390ff8b6e2b))
 
-## [5.4.3](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.2...v5.4.3) (2026-01-16)
+## [5.4.3](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.2...v5.4.3) - 2026-01-16
 
 
 ### Bug Fixes
 
 * update PluginHelper bootstrap to include download permissions for logging ([d872122](https://github.com/LindemannRock/craft-component-manager/commit/d87212262a7ade5a611b222e5828a56fa7f197e7))
 
-## [5.4.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.1...v5.4.2) (2026-01-11)
+## [5.4.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.1...v5.4.2) - 2026-01-11
 
 
 ### Bug Fixes
 
 * update plugin name retrieval in logging configuration ([a0f220c](https://github.com/LindemannRock/craft-component-manager/commit/a0f220cafbea10e9adca76180f83a693face656f))
 
-## [5.4.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.0...v5.4.1) (2026-01-08)
+## [5.4.1](https://github.com/LindemannRock/craft-component-manager/compare/v5.4.0...v5.4.1) - 2026-01-08
 
 
 ### Bug Fixes
 
 * update success message for settings save action ([d0d3f0d](https://github.com/LindemannRock/craft-component-manager/commit/d0d3f0d59b0580b0ed56c18178fbf289df0c3c8b))
 
-## [5.4.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.3.0...v5.4.0) (2026-01-06)
+## [5.4.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.3.0...v5.4.0) - 2026-01-06
 
 
 ### Features
 
 * migrate to shared base plugin ([97d3085](https://github.com/LindemannRock/craft-component-manager/commit/97d3085f96c4e694e170d2ff93893d888a000bd2))
 
-## [5.3.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.2.0...v5.3.0) (2025-12-04)
+## [5.3.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.2.0...v5.3.0) - 2025-12-04
 
 
 ### Features
@@ -115,7 +115,7 @@
 
 * Add [@since](https://github.com/since) 1.0.0 annotation to multiple files for versioning clarity ([29fff68](https://github.com/LindemannRock/craft-component-manager/commit/29fff6809d1afa4e3e58f20d8ef511974cd4a563))
 
-## [5.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.1.0...v5.2.0) (2025-11-14)
+## [5.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.1.0...v5.2.0) - 2025-11-14
 
 
 ### Features
@@ -123,7 +123,7 @@
 * Add MIT License file to the project ([8f9cb29](https://github.com/LindemannRock/craft-component-manager/commit/8f9cb29da45c7ad62445c53a08467bf790415e6e))
 * Add Twig extension for plugin name helpers and enhance settings model with display name methods ([fdc31e7](https://github.com/LindemannRock/craft-component-manager/commit/fdc31e798148b31d55425635df25877ac8e8e9ca))
 
-## [5.1.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.0.0...v5.1.0) (2025-11-07)
+## [5.1.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.0.0...v5.1.0) - 2025-11-07
 
 
 ### Features
@@ -136,14 +136,14 @@
 
 * Enhance logging capabilities and update documentation for logging configuration ([5bf7190](https://github.com/LindemannRock/craft-component-manager/commit/5bf7190e623c000ca9ed50b78639e7e7d112a325))
 
-## [5.0.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.1...v5.0.0) (2025-10-20)
+## [5.0.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.1...v5.0.0) - 2025-10-20
 
 
 ### Miscellaneous Chores
 
 * bump version scheme to match Craft 5 ([c42a566](https://github.com/LindemannRock/craft-component-manager/commit/c42a566c6ce88cae9b2ce5278b4411fee6b870c8))
 
-## [1.2.1](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.0...v1.2.1) (2025-10-16)
+## [1.2.1](https://github.com/LindemannRock/craft-component-manager/compare/v1.2.0...v1.2.1) - 2025-10-16
 
 
 ### Bug Fixes
@@ -151,42 +151,42 @@
 * add table existence checks before loading settings and categories ([c1869e8](https://github.com/LindemannRock/craft-component-manager/commit/c1869e8eb910c13f6e4c8d2477beec449d97884b))
 * update installation instructions for Composer and DDEV ([948d318](https://github.com/LindemannRock/craft-component-manager/commit/948d318de2691c92b73f5928d27f041b968b2895))
 
-## [1.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.2...v1.2.0) (2025-10-16)
+## [1.2.0](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.2...v1.2.0) - 2025-10-16
 
 
 ### Features
 
 * rename plugin from Twig Component Manager to Component Manager ([5186b96](https://github.com/LindemannRock/craft-component-manager/commit/5186b960b65119c75d08965c2f4d7f97165c2c1a))
 
-## [1.1.2](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.1...v1.1.2) (2025-09-24)
+## [1.1.2](https://github.com/LindemannRock/craft-component-manager/compare/v1.1.1...v1.1.2) - 2025-09-24
 
 
 ### Bug Fixes
 
 * update repository references and paths in README and composer.json ([3822a56](https://github.com/LindemannRock/craft-component-manager/commit/3822a5605c972ac50351e66fff1bd84f99778a03))
 
-## [1.1.1](https://github.com/LindemannRock/component-manager/compare/v1.1.0...v1.1.1) (2025-09-15)
+## [1.1.1](https://github.com/LindemannRock/component-manager/compare/v1.1.0...v1.1.1) - 2025-09-15
 
 
 ### Bug Fixes
 
 * update copyright notice and format in LICENSE file ([7f68bec](https://github.com/LindemannRock/component-manager/commit/7f68bec40bae681a23ffb9091f86caf8283e012c))
 
-## [1.1.0](https://github.com/LindemannRock/component-manager/compare/v1.0.1...v1.1.0) (2025-09-14)
+## [1.1.0](https://github.com/LindemannRock/component-manager/compare/v1.0.1...v1.1.0) - 2025-09-14
 
 
 ### Features
 
 * add plugin credit component and integrate it into settings and documentation templates ([dee7562](https://github.com/LindemannRock/component-manager/commit/dee7562b7e89510ec0383be27d05a4d872a45bec))
 
-## [1.0.1](https://github.com/LindemannRock/component-manager/compare/v1.0.0...v1.0.1) (2025-09-10)
+## [1.0.1](https://github.com/LindemannRock/component-manager/compare/v1.0.0...v1.0.1) - 2025-09-10
 
 
 ### Bug Fixes
 
 * update requirements in README for clarity ([27495a4](https://github.com/LindemannRock/component-manager/commit/27495a477ed2868a40d969da02a370ebbead44f6))
 
-## 1.0.0 (2025-09-02)
+## 1.0.0 - 2025-09-02
 
 
 ### Features
