@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.6.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.2...v5.6.0) (2026-05-21)
+
+
+### Added
+
+* add issue templates for bug reports, feature requests, and questions ([3958b67](https://github.com/LindemannRock/craft-component-manager/commit/3958b67dc2bb9be8a290e761cbb73e7ef59b64a3))
+* add pre-commit hook for ECS and PHPStan code quality checks ([d5a0907](https://github.com/LindemannRock/craft-component-manager/commit/d5a09078c97d43d0ffece57f0609400ae398467a))
+* **i18n:** add translation issue template for reporting language problems ([bfa09b0](https://github.com/LindemannRock/craft-component-manager/commit/bfa09b0e88938a7057aef31e26b05085569b627f))
+
 ## [5.5.2](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.1...v5.5.2) (2026-05-06)
 
 
