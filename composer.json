@@ -63,7 +63,10 @@
 		"check-cs": "ecs check --ansi",
 		"fix-cs": "ecs check --fix --ansi",
 		"rector": "rector process src",
-		"rector-dry-run": "rector process src --dry-run"
+		"rector-dry-run": "rector process src --dry-run",
+		"install-hooks": "git config core.hooksPath .githooks 2>/dev/null || true",
+		"post-install-cmd": "@install-hooks",
+		"post-update-cmd": "@install-hooks"
 	},
 	"config": {
 		"sort-packages": true,
@@ -72,7 +75,8 @@
 		},
 		"allow-plugins": {
 			"yiisoft/yii2-composer": true,
-			"craftcms/plugin-installer": true
+			"craftcms/plugin-installer": true,
+			"php-http/discovery": true
 		}
 	}
 }
