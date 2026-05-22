@@ -62,6 +62,10 @@
 		"phpstan-pro": "phpstan --memory-limit=1G --pro",
 		"check-cs": "ecs check --ansi",
 		"fix-cs": "ecs check --fix --ansi",
+		"ci": [
+			"@phpstan",
+			"@check-cs"
+		],
 		"rector": "rector process src",
 		"rector-dry-run": "rector process src --dry-run",
 		"install-hooks": "git config core.hooksPath .githooks 2>/dev/null || true",
