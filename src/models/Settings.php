@@ -10,9 +10,11 @@
 
 namespace lindemannrock\componentmanager\models;
 
-use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
+use lindemannrock\base\traits\ItemsPerPageSettingsTrait;
+use lindemannrock\base\traits\LogLevelSettingsTrait;
+use lindemannrock\base\traits\PluginNameSettingsTrait;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
 use lindemannrock\base\traits\SettingsPersistenceTrait;
@@ -27,7 +29,10 @@ use lindemannrock\logginglibrary\traits\LoggingTrait;
  */
 class Settings extends Model
 {
+    use ItemsPerPageSettingsTrait;
+    use LogLevelSettingsTrait;
     use LoggingTrait;
+    use PluginNameSettingsTrait;
     use SettingsConfigTrait;
     use SettingsDisplayNameTrait;
     use SettingsPersistenceTrait;
@@ -172,18 +177,6 @@ class Settings extends Model
     ];
 
     /**
-     * @var string Log level (error, warning, info, debug)
-     * @since 5.1.0
-     */
-    public string $logLevel = 'error';
-
-    /**
-     * @var int Items per page in CP element index
-     * @since 5.1.0
-     */
-    public int $itemsPerPage = 100;
-
-    /**
      * @inheritdoc
      */
     public function behaviors(): array
@@ -201,59 +194,34 @@ class Settings extends Model
      */
     public function rules(): array
     {
-        return [
+        return array_merge([
             [['componentPaths', 'defaultPath', 'tagPrefix', 'componentExtension'], 'required'],
             [['componentPaths', 'ignoreFolders', 'ignorePatterns', 'metadataFields'], 'each', 'rule' => ['string']],
             [['defaultPath', 'tagPrefix', 'componentExtension', 'defaultSlotName'], 'string'],
             [['maxNestingDepth', 'cacheDuration'], 'integer', 'min' => 0],
-            [['itemsPerPage'], 'integer', 'min' => 10, 'max' => 500],
             [['allowNesting', 'enableCache', 'enablePropValidation', 'enableDebugMode',
               'enableInheritance', 'enableDocumentation', 'enableUsageTracking',
               'allowInlineComponents', 'enableComponentLibrary', 'showComponentSource',
               'enableLivePreview', ], 'boolean'],
             [['tagPrefix'], 'match', 'pattern' => '/^[a-zA-Z][a-zA-Z0-9]*$/',
              'message' => 'Tag prefix must start with a letter and contain only letters and numbers.', ],
-            [['logLevel'], 'in', 'range' => ['debug', 'info', 'warning', 'error']],
-            [['logLevel'], 'validateLogLevel'],
-        ];
+        ], $this->pluginNameSettingsRules(), $this->logLevelSettingsRules(), $this->itemsPerPageSettingsRules());
     }
 
     /**
-     * Validate log level - debug requires devMode
+     * Attribute labels for validation error messages.
      *
-     * @since 5.1.0
+     * Trait helpers merge in `pluginName`, `logLevel`, and `itemsPerPage` — translated
+     * via `lindemannrock-base`. Other properties fall through to Yii's auto-generated
+     * English labels.
      */
-    public function validateLogLevel($attribute, $params, $validator)
+    public function attributeLabels(): array
     {
-        $logLevel = $this->$attribute;
-
-        // Reset session warning when devMode is true - allows warning to show again if devMode changes
-        if (Craft::$app->getConfig()->getGeneral()->devMode && !Craft::$app->getRequest()->getIsConsoleRequest()) {
-            Craft::$app->getSession()->remove('cm_debug_config_warning');
-        }
-
-        // Debug level is only allowed when devMode is enabled
-        if ($logLevel === 'debug' && !Craft::$app->getConfig()->getGeneral()->devMode) {
-            $this->$attribute = 'info';
-
-            if ($this->isOverriddenByConfig('logLevel')) {
-                if (!Craft::$app->getRequest()->getIsConsoleRequest()) {
-                    if (Craft::$app->getSession()->get('cm_debug_config_warning') === null) {
-                        $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                            'configFile' => 'config/component-manager.php',
-                        ]);
-                        Craft::$app->getSession()->set('cm_debug_config_warning', true);
-                    }
-                } else {
-                    $this->logWarning('Log level "debug" from config file changed to "info" because devMode is disabled', [
-                        'configFile' => 'config/component-manager.php',
-                    ]);
-                }
-            } else {
-                $this->logWarning('Log level automatically changed from "debug" to "info" because devMode is disabled');
-                $this->saveToDatabase();
-            }
-        }
+        return array_merge(
+            $this->pluginNameSettingsLabel(),
+            $this->logLevelSettingsLabel(),
+            $this->itemsPerPageSettingsLabel(),
+        );
     }
     
     /**
