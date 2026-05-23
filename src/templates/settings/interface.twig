@@ -27,21 +27,10 @@
     {{ redirectInput('component-manager/settings/interface') }}
     {{ hiddenInput('section', 'interface') }}
 
-        {{ forms.textField({
-            label: 'Items Per Page'|t('component-manager'),
-            instructions: 'Number of components to show per page'|t('component-manager'),
-            id: 'itemsPerPage',
-            name: 'settings[itemsPerPage]',
-            value: settings.itemsPerPage,
-            type: 'number',
-            min: 10,
-            max: 500,
-            required: true,
-            disabled: settings.isOverriddenByConfig('itemsPerPage'),
-            warning: settings.isOverriddenByConfig('itemsPerPage') ?
-                'This is being overridden by the <code>itemsPerPage</code> setting in <code>config/component-manager.php</code>.'|t('component-manager')|raw : null,
-            errors: settings.getErrors('itemsPerPage')
-        }) }}
+        {% include 'lindemannrock-base/_partials/field-items-per-page' with {
+            settings: settings,
+            pluginHandle: 'component-manager',
+        } only %}
 
     {% include 'lindemannrock-base/_components/plugin-credit' %}
 {% endblock %}
