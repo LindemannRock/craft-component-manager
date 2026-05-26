@@ -10,6 +10,7 @@
 
 namespace lindemannrock\componentmanager\models;
 
+use Craft;
 use craft\base\Model;
 use craft\behaviors\EnvAttributeParserBehavior;
 use lindemannrock\base\traits\ItemsPerPageSettingsTrait;
@@ -208,16 +209,30 @@ class Settings extends Model
         ], $this->pluginNameSettingsRules(), $this->logLevelSettingsRules(), $this->itemsPerPageSettingsRules());
     }
 
-    /**
-     * Attribute labels for validation error messages.
-     *
-     * Trait helpers merge in `pluginName`, `logLevel`, and `itemsPerPage` — translated
-     * via `lindemannrock-base`. Other properties fall through to Yii's auto-generated
-     * English labels.
-     */
     public function attributeLabels(): array
     {
-        return array_merge(
+        return array_merge([
+            'defaultSlotName' => Craft::t('component-manager', 'Default Slot Name'),
+            'allowNesting' => Craft::t('component-manager', 'Allow Nesting'),
+            'maxNestingDepth' => Craft::t('component-manager', 'Max Nesting Depth'),
+            'ignoreFolders' => Craft::t('component-manager', 'Ignore Folders'),
+            'ignorePatterns' => Craft::t('component-manager', 'Ignore Patterns'),
+            'enablePropValidation' => Craft::t('component-manager', 'Enable Prop Validation'),
+            'enableCache' => Craft::t('component-manager', 'Enable Cache'),
+            'cacheDuration' => Craft::t('component-manager', 'Cache Duration'),
+            'enableDebugMode' => Craft::t('component-manager', 'Enable Debug Mode'),
+            'enableUsageTracking' => Craft::t('component-manager', 'Enable Usage Tracking'),
+            'enableInheritance' => Craft::t('component-manager', 'Enable Inheritance'),
+            'enableDocumentation' => Craft::t('component-manager', 'Enable Documentation'),
+            'allowInlineComponents' => Craft::t('component-manager', 'Allow Inline Components'),
+            'componentPaths' => Craft::t('component-manager', 'Component Paths'),
+            'defaultPath' => Craft::t('component-manager', 'Default Path'),
+            'componentExtension' => Craft::t('component-manager', 'Component Extension'),
+            'enableComponentLibrary' => Craft::t('component-manager', 'Enable Component Library'),
+            'showComponentSource' => Craft::t('component-manager', 'Show Component Source'),
+            'enableLivePreview' => Craft::t('component-manager', 'Enable Live Preview'),
+            'metadataFields' => Craft::t('component-manager', 'Metadata Fields'),
+        ],
             $this->pluginNameSettingsLabel(),
             $this->logLevelSettingsLabel(),
             $this->itemsPerPageSettingsLabel(),
