@@ -227,7 +227,7 @@ class SettingsController extends Controller
             Craft::$app->getSession()->setNotice(Craft::t('component-manager', 'Settings saved.'));
         } else {
             $this->logError('Failed to save settings to database');
-            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings'));
+            Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings.'));
             return null;
         }
 
