@@ -15,11 +15,11 @@ return [
     // Navigation
     'Components' => 'Componentes',
     'Documentation' => 'Documentação',
-    'Logs' => 'Logs',
+    'Logs' => 'Registos',
     'Settings' => 'Definições',
-    'View logs' => 'Ver logs',
-    'View system logs' => 'Ver logs de sistema',
-    'Download system logs' => 'Transferir logs de sistema',
+    'View logs' => 'Ver registos',
+    'View system logs' => 'Ver registos do sistema',
+    'Download system logs' => 'Descarregar registos do sistema',
 
     // Common
     'Yes' => 'Sim',
