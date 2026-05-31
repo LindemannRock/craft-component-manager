@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'Kunne ikke lagre innstillingene.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'Komponentdokumentasjon er deaktivert. Aktiver den i plugin-innstillingene.',
     'Component cache cleared successfully.' => 'Komponent-cachen er tømt.',
+    'Component not found' => 'Komponent ikke funnet',
 
     // Settings: General
     'General' => 'Generelt',

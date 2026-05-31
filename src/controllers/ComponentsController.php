@@ -107,7 +107,7 @@ class ComponentsController extends Controller
         $component = $plugin->discovery->getComponent($componentName);
         
         if (!$component) {
-            throw new \yii\web\NotFoundHttpException('Component not found');
+            throw new \yii\web\NotFoundHttpException(Craft::t('component-manager', 'Component not found'));
         }
         
         // Generate documentation for this specific component

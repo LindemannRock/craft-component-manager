@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'Instellingen konden niet worden opgeslagen.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'Componentdocumentatie is uitgeschakeld. Schakel deze in via de plugin-instellingen.',
     'Component cache cleared successfully.' => 'Componentcache is gewist.',
+    'Component not found' => 'Component niet gevonden',
 
     // Settings: General
     'General' => 'Algemeen',

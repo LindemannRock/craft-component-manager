@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'No se pudo guardar la configuración.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'La documentación de componentes está desactivada. Actívela en la configuración del plugin.',
     'Component cache cleared successfully.' => 'Caché de componentes vaciada correctamente.',
+    'Component not found' => 'Componente no encontrado',
 
     // Settings: General
     'General' => 'General',

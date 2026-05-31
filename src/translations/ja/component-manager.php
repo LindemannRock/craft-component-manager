@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => '設定を保存できませんでした。',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'コンポーネントドキュメントは無効です。プラグイン設定で有効にしてください。',
     'Component cache cleared successfully.' => 'コンポーネントキャッシュを削除しました。',
+    'Component not found' => 'コンポーネントが見つかりません',
 
     // Settings: General
     'General' => '一般',

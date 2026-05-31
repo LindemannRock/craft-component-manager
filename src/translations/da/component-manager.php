@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'Indstillingerne kunne ikke gemmes.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'Komponentdokumentation er deaktiveret. Aktiver den i plugin-indstillingerne.',
     'Component cache cleared successfully.' => 'Komponentcachen er tømt.',
+    'Component not found' => 'Komponent ikke fundet',
 
     // Settings: General
     'General' => 'Generelt',

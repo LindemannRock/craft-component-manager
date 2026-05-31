@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'تعذر حفظ الإعدادات.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'وثائق المكونات معطّلة. قم بتفعيلها في إعدادات الإضافة.',
     'Component cache cleared successfully.' => 'تم مسح Cache المكونات بنجاح.',
+    'Component not found' => 'لم يتم العثور على المكون',
 
     // Settings: General
     'General' => 'عام',

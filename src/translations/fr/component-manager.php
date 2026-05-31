@@ -53,6 +53,7 @@ return [
     'Could not save settings.' => 'Impossible d\'enregistrer les paramètres.',
     'Component documentation is disabled. Enable it in the plugin settings.' => 'La documentation des composants est désactivée. Activez-la dans les paramètres du plugin.',
     'Component cache cleared successfully.' => 'Cache des composants vidé avec succès.',
+    'Component not found' => 'Composant introuvable',
 
     // Settings: General
     'General' => 'Général',
