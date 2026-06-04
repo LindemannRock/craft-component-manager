@@ -405,11 +405,22 @@ Each component has a dedicated preview page with:
 Manage components via CLI:
 
 ```bash
+# See available Component Manager console commands
+ddev craft component-manager/help
+
+# Focused help for component sync
+ddev craft component-manager/help components/sync
+
+# Native Craft/Yii signature help
+ddev craft help component-manager/components/sync
+```
+
+```bash
 # Sync filesystem components to database
-php craft component-manager/components/sync
+ddev craft component-manager/components/sync
 
 # Clear cache and re-sync all components
-php craft component-manager/components/refresh
+ddev craft component-manager/components/refresh
 ```
 
 ### Settings
