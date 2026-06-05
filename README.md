@@ -434,6 +434,10 @@ Configure the plugin at **Components → Settings** (accessible via main navigat
 - **Library** - Component library display options
 - **Maintenance** - Cache management and cleanup tools
 
+Control Panel saves validate only the active settings section. Invalid numeric
+values, such as negative cache duration or nesting depth values, are shown inline
+and are not saved.
+
 ## Performance
 
 ### Caching

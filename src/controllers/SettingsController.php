@@ -9,8 +9,9 @@
 namespace lindemannrock\componentmanager\controllers;
 
 use Craft;
+use craft\base\Model;
 use craft\web\Controller;
-
+use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\componentmanager\ComponentManager;
 use lindemannrock\componentmanager\models\Settings;
 use lindemannrock\logginglibrary\traits\LoggingTrait;
@@ -184,27 +185,23 @@ class SettingsController extends Controller
         // Get only the posted settings (fields from the current page)
         $settingsData = Craft::$app->getRequest()->getBodyParam('settings', []);
 
-        // Only update fields that were posted and are not overridden by config
-        foreach ($settingsData as $key => $value) {
-            if (!$settings->isOverriddenByConfig($key) && property_exists($settings, $key)) {
-                // Check for setter method first (handles array conversions, etc.)
-                $setterMethod = 'set' . ucfirst($key);
-                if (method_exists($settings, $setterMethod)) {
-                    $settings->$setterMethod($value);
-                } else {
-                    $settings->$key = $value;
-                }
-            }
-        }
+        $result = SettingsPostHelper::apply(
+            model: $settings,
+            postedValues: is_array($settingsData) ? $settingsData : [],
+            allowedAttributes: $this->_validationAttributesForSection($section),
+            isOverridden: fn(string $attribute): bool => $settings->isOverriddenByConfig($attribute),
+            adapters: [
+                'componentPaths' => self::multilineArrayAdapter(...),
+                'ignoreFolders' => self::multilineArrayAdapter(...),
+                'ignorePatterns' => self::multilineArrayAdapter(...),
+                'metadataFields' => self::multilineArrayAdapter(...),
+            ],
+        );
 
-        $attributesToValidate = $this->_validationAttributesForSection($section);
-        $attributesToValidate = array_values(array_filter(
-            $attributesToValidate,
-            fn(string $attribute): bool => !$settings->isOverriddenByConfig($attribute),
-        ));
+        $attributesToValidate = $result->attributesToValidate;
 
         // Validate only current section attributes
-        if (!$settings->validate($attributesToValidate)) {
+        if ($result->hasErrors || !$settings->validate($attributesToValidate)) {
             $this->logError('Settings validation failed', ['errors' => $settings->getErrors()]);
             Craft::$app->getSession()->setError(Craft::t('component-manager', 'Could not save settings.'));
 
@@ -273,5 +270,26 @@ class SettingsController extends Controller
             'interface' => ['itemsPerPage'],
             default => [],
         };
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private static function multilineArrayAdapter(mixed $value, string $attribute, Model $model): array
+    {
+        if (is_array($value)) {
+            return $value;
+        }
+
+        if (!is_scalar($value) && !$value instanceof \Stringable) {
+            return [];
+        }
+
+        $lines = preg_split('/\R/', (string)$value);
+        if ($lines === false) {
+            return [];
+        }
+
+        return array_values(array_filter(array_map('trim', $lines), static fn(string $line): bool => $line !== ''));
     }
 }
