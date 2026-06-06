@@ -25,7 +25,10 @@ final class HelpController extends AbstractHelpController
         return [
             'title' => 'Component Manager',
             'pluginHandle' => 'component-manager',
-            'commandPrefix' => 'ddev craft',
+            'commandPrefixes' => [
+                'php craft',
+                'ddev craft',
+            ],
             'summary' => 'Use these commands to sync filesystem components into the database and refresh cached component discovery data.',
             'common' => [
                 'components/sync',
