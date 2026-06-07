@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.7.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.6.0...v5.7.0) (2026-06-07)
+## [5.7.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.6.0...v5.7.0) - 2026-06-07
 
 
 ### Added
