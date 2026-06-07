@@ -1,5 +1,24 @@
 # Changelog
 
+## [5.7.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.6.0...v5.7.0) (2026-06-07)
+
+
+### Added
+
+* add act static analysis script for CI workflow ([1feff79](https://github.com/LindemannRock/craft-component-manager/commit/1feff798ec303953d0dd1b9be901c8c34832a677))
+* **cli:** add HelpController for cli command assistance ([9d84be5](https://github.com/LindemannRock/craft-component-manager/commit/9d84be51554f46cdad973b9b58e6d4540c5cfd14))
+* **i18n:** add new translation keys for settings and features ([2c45e4a](https://github.com/LindemannRock/craft-component-manager/commit/2c45e4a7fcf2e5362fd90b2ae0cca25c4fc213ba))
+* **i18n:** add new translation keys for settings and features ([e62e70a](https://github.com/LindemannRock/craft-component-manager/commit/e62e70a9732005b5e0a0ed39f7f00b31be7a38d7))
+
+
+### Fixed
+
+* correct component not found exception message to use translation ([7907a3a](https://github.com/LindemannRock/craft-component-manager/commit/7907a3a20d158077132875cb40e8f0a916d4bae6))
+* **i18n:** correct Portuguese confirmation messages for cache clearing ([b0c6273](https://github.com/LindemannRock/craft-component-manager/commit/b0c627329b3624e6efab67ab115f5e05ad3ab625))
+* **i18n:** correct Portuguese translations for logs and settings ([8295265](https://github.com/LindemannRock/craft-component-manager/commit/82952659549efabe4727d18c58eba6b9536a55d9))
+* **i18n:** correct punctuation in Japanese translation strings ([24e7fe1](https://github.com/LindemannRock/craft-component-manager/commit/24e7fe139350a7e4c157c37afd6fa06d96389f18))
+* **settings:** correct error message for failed settings save ([edcc86e](https://github.com/LindemannRock/craft-component-manager/commit/edcc86ec8df478d0d2531769a3da4ca60c2994a1))
+
 ## [5.6.0](https://github.com/LindemannRock/craft-component-manager/compare/v5.5.2...v5.6.0) - 2026-05-21
 
 
